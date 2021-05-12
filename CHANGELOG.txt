@@ -1,0 +1,198 @@
+0.24-dev
+-revise module for transcrypt.
+
+0.24    2021-04-28
+-revise rect move/inflate args processing.
+-revise rect attributes.
+-revise ndarray shape for inheritance.
+-add env check.
+-revise quit method to stop mixer.
+-revise quit method to stop timers.
+-update time set_timer for event argument.
+-revise app to use webkit2.
+-update for python 2/3 compatibility.
+
+0.23    2021-04-06
+-update event handling.
+-update surface get_at to return color object.
+-refactor surface colorkey methods.
+-revise sprite blit process.
+-update mask for optimization.
+-update ndarray and bitset for optimization.
+-update time wait to properly delay callback.
+-revise requestanimationframe shim.
+-update clock with performance time.
+-update clock tick with performance time.
+-update asynchronous loop process to optimize.
+-update for python 2/3 compatibility.
+
+0.22    2019-04-06
+-add display set_callback method.
+-update Canvas handling of callback change.
+-add time set_timer method.
+-update sprite to revise member groups.
+-update sprite argument handling.
+-update sprite collide_mask to use mask.overlap.
+-refactor rect for optimization.
+-update display setup to accept callback function or object with run method.
+-update rect to define __slots__.
+-add mouse set_cursor and get_cursor methods.
+-add surface toDataURL method.
+-update mouse set_cursor to use custom image.
+-update surface set_at to optimize.
+-update mouse set_cursor to use cursor data.
+-update transform rotozoom to optimize.
+-update display update method (_update) to optimize.
+-update surface blit method (_blit_clear) to optimize.
+-update draw arc of nonequal dimension to process properly.
+-update draw ellipse to use float scale argument.
+-update draw arc to optimize.
+-update asynchronous loop process to optimize.
+-refactor time clock object.
+-revise with absolute import statements.
+-add display methods getAbsoluteLeft/getAbsoluteTop/getScrollLeft/getScrollTop.
+-add touch event support.
+-update font with minor rendering adjustment.
+-update font to include initiation from a file.
+-update event peek option of all types.
+-update event methods to optimize.
+-update color constructor to accept hex '#rrggbb' argument.
+-update draw methods to optimize context state change.
+-update draw methods to optimize with optional rect return.
+-add app.py to launch app in webkit on desktop.
+
+0.21    2015-04-12
+-update font to improve fonts access.
+-add rect.contains method.
+-update image load methods for imagedata objects.
+-add display.setup_images method.
+-add key.name method.
+-add mask.toString method.
+-update display.update to properly handle clipping.
+-update surface.blit with clipping.
+-update rect union methods to process properly.
+-add rect iter method.
+-add rect collide methods - collidelistall, collidedict, and collidedictall.
+-add sprite collide methods - collide_rect_ratio, collide_circle, and collide_circle_ratio.
+-refactor to isolate pyjs.
+-refactor for optimization.
+-correct event.pump to maintain queue.
+-update IE9+ compatibility files in pyjs_changes.zip.
+-add mousewheel event listener.
+-release under MIT license.
+
+0.20    2014-11-09
+-add rect union methods.
+-update methods to use rect intersection.
+-correct surface subsurface rect access.
+-add rect rectPool to utilize a rect pool.
+-update sprite draw for performance.
+-update sprite collide methods processing.
+-add rect clamp methods.
+-update display setup callback function.
+-update display repaint process.
+-add mixer.
+
+0.19    2014-08-20
+-update bitset array to avoid js reserved work.
+-update quit function to terminate program iteration.
+-update transform.rotozoom for correct scaling.
+-add env.pyjs_mode with strict/optimized bool attributes to check pyjs-S/-O mode.
+-correct modifier keys keyevent detect with pyjs -S compilation (worked in -O) with sets membership testing of onKeyDown keycode that appears due to js/pyjs numeric difference.
+-update display event to properly clear modifier keys held with onMouseLeave event.
+-update display set_caption/get_caption to access Canvas element id.
+-add display.get_active method.
+-restructure event handler to isolate from UserEvent and JEvent objects.
+-update display.update for performance.
+-update event eventtype list as a set object.
+-update rect inflate/inflate_ip positioning.
+
+0.18    2014-02-27
+-update Pyjsarray typedarray constructor for Chrome compatibility.
+-update Surface constructor to int convert argument.
+-update Transform.rotate positioning.
+-update Transform rotate/flip to restore context.
+-add Textbox/Textarea resize method.
+-update Surface.resize for width/height attributes.
+-update Canvas.resize to align elements.
+-update Canvas to subclass Surface.
+-update Canvas with buffered surface optional.
+-add display.is_canvas and update Canvas blit.
+-update Surface constructor to take optional arguments.
+-update Event.poll noevent return.
+-update Surface.get_at to return color tuple.
+-update Rect attribute positioning.
+-add Rect equality and nonzero methods.
+-add util.Pyjs_Mode to check Pyjs compilation mode.
+-add Color object.
+-update to use Color object.
+-update Rect constructor.
+-update draw methods with minor adjustments.
+-update Mask.fill method.
+-update to use Rect object.
+-update Sprite group update to account for member changes.
+-update util.Timer for output to textarea rather than console logger.
+-update Surfarray array2d PyImageInteger processing.
+-update Surfarray make_surface method.
+-add draw.ellipse method.
+-update Pyjsarray Typedarray constructor when type not implemented.
+-change license from GPL to LGPL.
+
+0.17    2013-11-01
+-update Pyjsarray ImageData object for IE compatibility.
+-add util.call to call unbound methods.
+-update Surface.blit to int convert argument.
+-update Rect.inflate and Rect.inflate_ip for proper positioning.
+-add Textbox/Textarea and display.textbox_init for text input.
+-update mouse positioning with page scroll position.
+-update Surfarray.blit_array.
+-add Pyjsarray Ndarray methods.
+
+0.16    2013-09-01
+-add Surfarray using Pyjsarray.
+-update Pyjsarray with Ndarray and ImageData objects.
+-update image.load
+-update display.update rect processing
+-add display.update_rect method
+-update display.update/display.update_rect/surface._blit_clear rect clipping
+
+0.15    2013-07-30
+-add Mask using Pyjsarray and Pyjsbitset.
+-add Pyjsarray and Pyjsbitset based on JavaScript TypedArray object.
+-add Surface get_at/set_at using Canvas getImageData and putImageData.
+-update Surface.subarray.
+-update Canvas and Surface to use pyjamas.Canvas.HTML5Canvas.
+-update Rect.createIntersection.
+-update pyjs_changes.zip - Pyjs git update for HTML5canvas usage.
+
+0.14    2013-05-15
+-add Font rendering to canvas.
+-update Event so key event works in IE browser.
+-update Display.update rect argument for pyjs -O compilation.
+-update Event key handling for IE browser.
+-update Sprite Group __contains__ to work with pyjs.
+-update Surface.blit to take rect argument and return rect.
+-update Surface.fill color argument.
+-update pyjs_changes.zip.
+
+0.13    2013-05-04
+-add key events to Canvas.
+-update Event for process JS key events.
+-update Mouse methods variable.
+
+0.12    2013-04-29
+-add mouse events to Canvas.
+-update Event to process JS mouse events.
+-update Mouse.get_pressed and Mouse.get_pos for JS mouse events.
+-update Time.wait to use JS Timeout.
+
+0.11    2013-04-26
+-update Sprite.clear to allow callable argument.
+-update Surface._blit_clear with clipping.
+-update Surface.blits to directly call drawImage.
+-update Surface.fill rect argument.
+-update Draw.arc, Transform.rotate, and Rect with int() division.
+
+0.10    2013-04-24
+-initial release
+
