@@ -23,7 +23,7 @@ Compile Python script using the command 'transcrypt script' that will compile to
 </html>
 
 
-Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. The app can also run on the desktop using the app.py script, check instructions within the script.
+Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. To run on a local HTTP server, use command 'python3 -m http.server' and browse to localhost:8000. The app can also run on the desktop using the app.py script, check instructions within the script.
 
 Further information is available on the Pyjsdl project page (https://gatc.ca/projects/pyjsdl/) and in the API documentation (https://gatc.ca/projects/pyjsdl/doc/).
 
