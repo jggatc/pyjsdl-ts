@@ -173,10 +173,12 @@ Example of font file declaration:
         self._nonimplemented_methods()
 
     def __str__(self):
-        return "%s(%r)" % (self.__class__, self.__dict__)
+        return "{}({})" % (self.__class__, self.__dict__)
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__, self.__dict__)
+        return "{}({})" % (self.__class__, self.__dict__)
+
+    # __pragma__ ('kwargs')
 
     def render(self, text, antialias=True, color=(0,0,0), background=None, surface=None):      #optional surface for text rendering
         """
@@ -192,7 +194,7 @@ Example of font file declaration:
         if background:
             surf.setFillStyle(Color(background))
             surf.fillRect(0,0,w,h)
-        surf.setFont('%s %dpx %s' % (self.fontstyle, self.fontsize, self.fontname))
+        surf.setFont('{} {}px {}'.format(self.fontstyle, self.fontsize, self.fontname))
 #        if antialias: pass
         surf.setFillStyle(Color(color))
         surf.setTextAlign('center')
@@ -207,12 +209,14 @@ Example of font file declaration:
             surf.stroke()
         return surf
 
+    # __pragma__ ('nokwargs')
+
     def size(self, text):
         """
         Return size x,y of a surface for of given text.
         """
         if _surf:   #>IE9 - use exception if HTML5Canvas not implemented
-            _surf.setFont('%s %dpx %s' % (self.fontstyle, self.fontsize, self.fontname))
+            _surf.setFont('{} {}px {}'.format(self.fontstyle, self.fontsize, self.fontname))
             x = _surf.measureText(text)
         else:   #estimate
             x = self._size_estimate(text)
@@ -299,7 +303,7 @@ Example of font file declaration:
             return {'a': 0.6, 'b': 0.6, 'c': 0.5, 'd': 0.6, 'e': 0.6, 'f': 0.3, 'g': 0.6, 'h': 0.6, 'i': 0.2, 'j': 0.2, 'k': 0.5, 'l': 0.2, 'm': 0.8, 'n': 0.6, 'o': 0.6, 'p': 0.6, 'q': 0.6, 'r': 0.3, 's': 0.5, 't': 0.3, 'u': 0.6, 'v': 0.5, 'w': 0.7, 'x': 0.5, 'y': 0.5, 'z': 0.5, 'A': 0.7, 'B': 0.7, 'C': 0.7, 'D': 0.7, 'E': 0.7, 'F': 0.6, 'G': 0.8, 'H': 0.7, 'I': 0.3, 'J': 0.5, 'K': 0.7, 'L': 0.6, 'M': 0.8, 'N': 0.7, 'O': 0.8, 'P': 0.7, 'Q': 0.8, 'R': 0.7, 'S': 0.7, 'T': 0.6, 'U': 0.7, 'V': 0.7, 'W': 0.9, 'X': 0.7, 'Y': 0.7, 'Z': 0.6, '0': 0.6, '1': 0.6, '2': 0.6, '3': 0.6, '4': 0.6, '5': 0.6, '6': 0.6, '7': 0.6, '8': 0.6, '9': 0.6, '.': 0.3, ',': 0.3, ':': 0.3, ';': 0.3, '?': 0.6, '~': 0.6, '!': 0.3, '@': 1, '#': 0.6, '$': 0.6, '%': 0.9, '^': 0.5, '&': 0.7, '=': 0.6, '+': 0.6, '-': 0.3, '*': 0.4, '/': 0.3, '\\': 0.3, '_': 0.6, '<': 0.6, '>': 0.6, '(': 0.3, ')': 0.3, '{': 0.3, '}': 0.3, '[': 0.3, ']': 0.3, "'": 0.2, '"': 0.4, ' ': 0.3}
         else:
             fontsize = 10
-            _surf.setFont('%dpx %s' % (fontsize, font))     #generated font='arial'
+            _surf.setFont('{}px {}'.format(fontsize, font))     #generated font='arial'
             char_size = {}
             for char in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;?~!@#$%^&=+-*/\_<>(){}[]\'\" ':
                 char_size[char] = float(_surf.measureText(char)/fontsize)
