@@ -76,9 +76,9 @@ class App(object):
 
     def webview_setup(self):
         self.web = WebKit2.WebView()
-        uri = 'http://%s:%d/%s' % (self.config.server_ip,
-                                   self.config.server_port,
-                                   self.config.app_uri)
+        uri = 'http://{}:{}/{}'.format(self.config.server_ip,
+                                       self.config.server_port,
+                                       self.config.app_uri)
         self.web.load_uri(uri)
         self.window.add(self.web)
 
@@ -115,7 +115,7 @@ class Config(object):
             cfg_setting = self.read_ini()
         else:
             self.create_ini()
-            print('Enter configuration info in %s.' % self.config_name)
+            print('Enter configuration info in {}.'.format(self.config_name))
             sys.exit()
         for setting in cfg_setting:
             if setting == 'app_uri':

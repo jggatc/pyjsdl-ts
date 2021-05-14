@@ -659,7 +659,7 @@ class Ndarray(object):
         sl = len(self._shape)
         for d in range(1, sl):
             s = s.replace(' '+'['*d, '\n'+' '*(sl+8-d)+'['*d)
-        return 'Ndarray({}, dtype={})' % (s, repr(self._dtype))
+        return 'Ndarray({}, dtype={})'.format(s, repr(self._dtype))
 
     def __len__(self):
         return self._shape[0]

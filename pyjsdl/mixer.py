@@ -218,15 +218,8 @@ class Mixer:
             else:
                 self._channels[id] = channel
                 self._channel_pool.append(id)
-#            try:
-#                if self._channels[id]._sound:
-#                    channel._sound = self._channels[id]._sound
-#                    self._channels[id] = channel
-#            except KeyError:
-#                self._channels[id] = channel
-#                self._channel_pool.append(id)
         else:
-            raise AttributeError("Channel not available.")
+            raise AttributeError('Channel not available.')
 
     def _register_sound(self, sound):
         self._sounds[sound._id] = sound

@@ -46,10 +46,10 @@ class Sprite(object):
             self.add(*groups)
 
     def __str__(self):
-        return "%s(in %d groups)" % (self.__class__, len(self._groups))
+        return '{}(in {} groups)'.format(self.__class__, len(self._groups))
 
     def __repr__(self):
-        return "%s(in %d groups)" % (self.__class__, len(self._groups))
+        return '{}(in {} groups)'.format(self.__class__, len(self._groups))
 
     def add(self, *groups):
         """
@@ -149,10 +149,10 @@ class Group(object):
         self._sprites_drawn = dict()
 
     def __str__(self):
-        return "%s(%d sprites)" % (self.__class__, len(self._sprites))
+        return '{}({} sprites)'.format(self.__class__, len(self._sprites))
 
     def __repr__(self):
-        return "%s(%d sprites)" % (self.__class__, len(self._sprites))
+        return '{}({} sprites)'.format(self.__class__, len(self._sprites))
 
     def __iter__(self):
         return iter(self._sprites.values())
@@ -225,7 +225,7 @@ class Group(object):
         surface._blits((sprite.image,sprite.rect) for sprite in self._sprites.values())
         if self._clear_active:
             rectPool.extend(list(self._sprites_drawn.values()))
-                ### list not req?
+                #list not req?
             self._sprites_drawn.clear()
             for sprite in self._sprites.keys():
                 self._sprites_drawn[sprite] = rectPool.copy(self._sprites[sprite].rect)
@@ -336,7 +336,7 @@ class RenderUpdates(Group):
                 else:
                     self.changed_areas.append(rectPool.copy(self._sprites[sprite].rect))
             self.changed_areas.extend(list(self._sprites_drawn.values()))
-                ### list() not req?
+                #list() not req?
             self._sprites_drawn.clear()
             for sprite in self._sprites.keys():
                 self._sprites_drawn[sprite] = rectPool.copy(self._sprites[sprite].rect)

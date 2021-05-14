@@ -173,10 +173,10 @@ Example of font file declaration:
         self._nonimplemented_methods()
 
     def __str__(self):
-        return "{}({})" % (self.__class__, self.__dict__)
+        return '{}({})'.format(self.__class__, self.__dict__)
 
     def __repr__(self):
-        return "{}({})" % (self.__class__, self.__dict__)
+        return '{}({})'.format(self.__class__, self.__dict__)
 
     # __pragma__ ('kwargs')
 

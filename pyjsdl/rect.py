@@ -83,10 +83,10 @@ class Rect(object):
     # __pragma__ ('noopov')
 
     def __str__(self):
-        return "<rect({}, {}, {}, {})>".format(self.x, self.y, self.width, self.height)
+        return '<rect({}, {}, {}, {})>'.format(self.x, self.y, self.width, self.height)
 
     def __repr__(self):
-        return "{}({}, {}, {}, {})".format(self.__class__.__name__, self.x, self.y, self.width, self.height)
+        return '{}({}, {}, {}, {})'.format(self.__class__.__name__, self.x, self.y, self.width, self.height)
 
     def __getitem__(self, key):
         return getattr(self, ('x','y','width','height')[key])

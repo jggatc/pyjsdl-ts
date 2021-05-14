@@ -1,7 +1,7 @@
 #Pyjsdl - Copyright (C) 2013 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-#import base64      ###
+#import base64
 from pyjsdl.surface import Surface
 from pyjsdl.rect import Rect
 from pyjsdl.time import Time
@@ -47,7 +47,7 @@ class Canvas(Surface, MouseWheelHandler):
         self.sinkEvents(Event.ONMOUSEDOWN | Event.ONMOUSEUP| Event.ONMOUSEMOVE | Event.ONMOUSEOUT | Event.ONMOUSEWHEEL | Event.ONKEYDOWN | Event.ONKEYPRESS | Event.ONKEYUP)
         self.modKey = env.event.modKey
         self.specialKey = env.event.specialKey
-#        self.event._initiate_touch_listener(self)      ###
+#        self.event._initiate_touch_listener(self)
 #        self._touch_callback = self.event.touchlistener.callback
         self._rect_list = []
         self._rect_len = 0
@@ -91,7 +91,7 @@ class Canvas(Surface, MouseWheelHandler):
                 self.event.keyPress[keycode] = False
 
     def onMouseWheel(self, event):
-        return      ###
+        return
         if event.type == 'mousewheel':
             #update for changes in mousewheel implementation
             if hasattr(event, 'wheelDeltaX'):
@@ -223,7 +223,7 @@ class Canvas(Surface, MouseWheelHandler):
                         data = base64.b64encode(image[1].getvalue())
                     if not data.startswith('data:'):
                         ext = name.strip().split('.')[-1]
-                        data = "data:%s;base64,%s" %(ext, data)
+                        data = 'data:{};base64,{}'.format(ext, data)
                         #data:[<mediatype>][;base64],<data>
                     image_list.append(data)
                     self.image_list.append(name)
@@ -349,7 +349,7 @@ class Display(object):
         env.set_env('canvas', self.canvas)
         self.frame = document.body
         env.set_env('frame', self.frame)
-#        self.panel = panel     ###
+#        self.panel = panel
         self.vpanel = None
         self.textbox = None
         self.textarea = None
@@ -505,10 +505,6 @@ class Display(object):
             return self.canvas.getID()
         else:
             return self.id
-#        try:
-#            return self.canvas.getID()
-#        except (TypeError, AttributeError):
-#            return self.id
 
     def _nonimplemented_methods(self):
         """

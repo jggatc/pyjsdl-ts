@@ -54,11 +54,11 @@ class Timer(object):
             if print_result:
                 if self.log_type == 'console':
                     self.log_num += 1
-                    entry = "Time %d: %s" % (self.log_num, t_ave)
+                    entry = 'Time {}: {}'.format(self.log_num, t_ave)
                     print(entry)
                 else:
                     self.log_num += 1
-                    entry = "Time %d: %s" % (self.log_num, t_ave)
+                    entry = 'Time {}: {}'.format(self.log_num, t_ave)
                     self.print_log(entry)
             return t_ave
 
@@ -152,7 +152,8 @@ def call(obj, func, args=()):
     Argument obj is the object, func is the unbound method, and optional args is a tuple of arguments for the method.
     Returns the method's return value.
     """
-    return JS("@{{func}}.apply(@{{obj}}, @{{args}}['getArray']());")
+    __pragma__('js', {},
+        "return func.apply(obj, args);")
 
 
 # __pragma__ ('skip')

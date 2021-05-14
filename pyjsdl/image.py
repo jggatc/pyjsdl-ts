@@ -4,6 +4,7 @@
 from pyjsdl.pylib import os
 from pyjsdl.surface import Surface, Surf
 from pyjsdl import env
+import pyjsdl
 
 __docformat__ = 'restructuredtext'
 
@@ -50,8 +51,7 @@ class Image(object):
         try:
             image = self.images[img_file]
         except KeyError:
-            raise
-#            raise pyjsdl.error("Failed to retrieve image file %s" % img_file)
+            raise pyjsdl.error('Failed to retrieve image file {}'.format(img_file))
         return image
 
     def convert_image(self, image):

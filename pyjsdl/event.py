@@ -312,7 +312,7 @@ class Event(object):
 
 class UserEvent(object):
 
-#    __slots__ = ['type', 'attr']   ###
+#    __slots__ = ['type', 'attr']
 
     # __pragma__ ('kwargs')
 
@@ -352,7 +352,7 @@ class UserEvent(object):
 
     def toString(self):
         event_name = env.event.event_name(self.type)
-        return "<Event({}-{} {})>" % (self.type, event_name, repr(self.attr))
+        return '<Event({}-{} {})>'.format(self.type, event_name, repr(self.attr))
 
 
 class JEvent(object):
@@ -420,7 +420,7 @@ class JEvent(object):
 
     def toString(self):
         event_name = env.event.event_name(self.type)
-        return "<Event({}-{} {})>" % (self.type, event_name, repr(self.attr))
+        return '<Event({}-{} {})>'.format(self.type, event_name, repr(self.attr))
 
     def getEvent(self):
         """
