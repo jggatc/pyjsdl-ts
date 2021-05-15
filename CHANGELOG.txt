@@ -3,6 +3,7 @@
 -revise sprite orderedupdates.
 -revise font render.
 -update surface blit for rect arg.
+-add sprite group alias.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.
