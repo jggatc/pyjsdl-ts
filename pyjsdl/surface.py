@@ -146,6 +146,9 @@ class Surface(HTML5Canvas):
         surface.drawImage(self.canvas, x, y, width, height, 0, 0, width, height)
         return surface
 
+    # __pragma__ ('opov')
+    #req if position == rect
+
     def blit(self, surface, position, area=None):
         """
         Draw given surface on this surface at position.
@@ -164,6 +167,8 @@ class Surface(HTML5Canvas):
         changed_rect = surface_rect.clip(rect)
         rectPool.append(rect)
         return changed_rect
+
+    # __pragma__ ('noopov')
 
     def _blits(self, surfaces):
         ctx = self.impl.canvasContext

@@ -2,6 +2,7 @@
 -revise module for transcrypt.
 -revise sprite orderedupdates.
 -revise font render.
+-update surface blit for rect arg.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.
