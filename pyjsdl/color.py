@@ -8,6 +8,8 @@ __docformat__ = 'restructuredtext'
 
 class Color(_Color):
 
+    # __pragma__ ('opov')
+
     def __init__(self, *color):
         """
         Return Color object.
@@ -30,7 +32,7 @@ class Color(_Color):
         ln = len(color)
         if ln == 1:
             _color = color[0]
-            if isinstance(_color, (tuple,list)):
+            if isinstance(_color, (tuple,list,Color)):
                 ln = len(_color)
         else:
             _color = color
@@ -42,6 +44,8 @@ class Color(_Color):
             if hasattr(_color, 'startswith') and _color.startswith('#'):
                 _color = '0x' + _color[1:]
             self.r,self.g,self.b,self.a = (_color>>16) & 0xff, (_color>>8) & 0xff, _color & 0xff, (_color>>24) & 0xff
+
+    # __pragma__ ('noopov')
 
     def __str__(self):
         return 'rgba({}, {}, {}, {})'.format(self.r, self.g, self.b, self.a/255.0)
