@@ -208,8 +208,7 @@ class Surface(HTML5Canvas):
         return imagedata.data[index]
 
     def _setPixel(self, imagedata, index, dat):
-        data = str(dat)
-        imagedata.data[index]=data
+        imagedata.data[index] = dat
         return
 
     def replace_color(self, color, new_color=None):
