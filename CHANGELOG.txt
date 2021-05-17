@@ -7,6 +7,7 @@
 -revise surface setpixel.
 -revise color arg processing.
 -refactor sprite collide methods.
+-revise imageloader processing.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.

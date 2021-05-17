@@ -4,21 +4,22 @@ class ImageLoader:
         self.imagelist = imagelist
         self.callback = callback
         self.images = []
-        self.imgnum = len(self.imagelist)
-        for img in self.imagelist:
-            self.load(img)
+        self.image_toload = len(self.imagelist)
+        for image in self.imagelist:
+            self.load(image)
 
     def load(self, imageurl):
-        img = __new__(Image())
-        self.images.append(img)
-        img.addEventListener('load', self.loaded, False)
-        img.src = imageurl
+        image = __new__(Image())
+        self.images.append(image)
+        image.addEventListener('load', self.loaded, False)
+        image.src = imageurl
 
     def loaded(self):
-        if len(self.images) == self.imgnum:
+        self.image_toload -= 1
+        if not self.image_toload:
             self.callback.onImagesLoaded(self.images)
 
 
-def loadImages(imagelist,callback):
-    ImageLoader(imagelist,callback)
+def loadImages(imagelist, callback):
+    ImageLoader(imagelist, callback)
 
