@@ -57,10 +57,11 @@ class Surface(HTML5Canvas):
         self._nonimplemented_methods()
 
     def __str__(self):
-        return '{}({},{})'.format(self.__class__, self.width, self.height)
+        s = '<{}({}x{})>'
+        return s.format(self.__class__.__name__, self.width, self.height)
 
     def __repr__(self):
-        return '{}({},{})'.format(self.__class__, self.width, self.height)
+        return self.__str__()
 
     def get_size(self):
         """
@@ -147,7 +148,6 @@ class Surface(HTML5Canvas):
         return surface
 
     # __pragma__ ('opov')
-    #req if position == rect
 
     def blit(self, surface, position, area=None):
         """

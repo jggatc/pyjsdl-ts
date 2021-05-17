@@ -46,10 +46,11 @@ class Sprite(object):
             self.add(*groups)
 
     def __str__(self):
-        return '{}(in {} groups)'.format(self.__class__, len(self._groups))
+        s = '<{}(in {} groups)>'
+        return s.format(self.__class__.__name__, len(self._groups))
 
     def __repr__(self):
-        return '{}(in {} groups)'.format(self.__class__, len(self._groups))
+        return self.__str__()
 
     def add(self, *groups):
         """
@@ -149,10 +150,11 @@ class Group(object):
         self._sprites_drawn = dict()
 
     def __str__(self):
-        return '{}({} sprites)'.format(self.__class__, len(self._sprites))
+        s = '<{}({} sprites)>'
+        return s.format(self.__class__.__name__, len(self._sprites))
 
     def __repr__(self):
-        return '{}({} sprites)'.format(self.__class__, len(self._sprites))
+        return self.__str__()
 
     def __iter__(self):
         return iter(self._sprites.values())
