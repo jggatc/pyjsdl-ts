@@ -156,6 +156,72 @@ def call(obj, func, args=()):
         "return func.apply(obj, args);")
 
 
+def id(obj):
+    return obj._identity
+
+
+class Dict:
+    """
+    Dictionary object.
+
+    Dict can use an object key as Transcrypt is restricted to str keys.
+    Object requires an unique identifier _identity attribute (int/str).
+    """
+
+    def __init__(self):
+        self._dk = {}
+        self._dv = {}
+
+    def __str__(self):
+        s = ['{}: {}'.format(k,v) for k,v in self.items()]
+        return '{{}}'.format(', '.join(s))
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __iter__(self):
+        for k in self._dk.keys():
+            yield self._dk[k]
+
+    def __getitem__(self, key):
+        return self._dv[id(key)]
+
+    def __setitem__(self, key, val):
+        self._dk[id(key)] = key
+        self._dv[id(key)] = val
+
+    def get(self, key):
+        """
+        Get value by object key.
+        """
+        return self.__getitem__(key)
+
+    def setdefault(self, key, val=None):
+        """
+        Set value of object key.
+        """
+        self.__setitem__(key, val)
+
+    def keys(self):
+        """
+        Retrieve object keys.
+        """
+        return self._dk.values()
+
+    def values(self):
+        """
+        Retrieve values.
+        """
+        return self._dv.values()
+
+    def items(self):
+        """
+        Retrieve object key, value items.
+        """
+        for k in self._dk.keys():
+            yield (self._dk[k], self._dv[k])
+
+
 # __pragma__ ('skip')
 
 #code modified from pyjs

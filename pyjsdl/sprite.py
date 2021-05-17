@@ -12,6 +12,8 @@ if sys.version_info < (3,):
     from pyjsdl.util import _next as next
 # __pragma__ ('noskip')
 
+from pyjsdl.util import Dict
+
 __docformat__ = 'restructuredtext'
 
 
@@ -703,16 +705,17 @@ def groupcollide(group1, group2, dokill1, dokill2):
     **pyjsdl.sprite.groupcollide**
     
     Return dictionary of sprites in group1 with list of sprites in group2 that intersect.
+    Use dictionary get method to retrieve intersecting sprites for a sprite key.
     The dokill argument is a bool, True removes sprites that collide from all groups.
     """
-    collide = {}
+    collide = Dict()
     collision = False
     for sprite1 in group1:
         for sprite2 in group2:
             if sprite1.rect.intersects(sprite2.rect):
                 if sprite1 not in collide.keys():
-                    collide[sprite1] = []
-                collide[sprite1].append(sprite2)
+                    collide.setdefault(sprite1, [])
+                collide.get(sprite1).append(sprite2)
                 collision = True
     if collision:
         if dokill1:
@@ -720,7 +723,7 @@ def groupcollide(group1, group2, dokill1, dokill2):
                 sprite1.kill()
         if dokill2:
             for sprite1 in collide.keys():
-                for sprite2 in collide[sprite1]:
+                for sprite2 in collide.get(sprite1):
                     sprite2.kill()
     return collide
 
