@@ -203,8 +203,8 @@ class Group(object):
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
                 if str(spriteID) in self._sprites.keys():
-                    self._sprites.pop(spriteID, None)
-                    sprite._groups.pop(id(self), None)
+                    del self._sprites[spriteID]
+                    del sprite._groups[id(self)]
             else:
                 self.remove(*sprite)
         return None
@@ -252,7 +252,7 @@ class Group(object):
         Empty group.
         """
         for sprite in self._sprites.values():
-            sprite._groups.pop(id(self), None)
+            del sprite._groups[id(self)]
         self._sprites.clear()
         return None
 
@@ -424,8 +424,8 @@ class OrderedUpdates(RenderUpdates):
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
                 if str(spriteID) in self._sprites.keys():
-                    self._sprites.pop(spriteID, None)
-                    sprite._groups.pop(id(self), None)
+                    del self._sprites[spriteID]
+                    del sprite._groups[id(self)]
                     self._orderedsprites.remove(sprite)
             else:
                 self.remove(*sprite)
@@ -551,8 +551,8 @@ class LayeredUpdates(OrderedUpdates):
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
                 if str(spriteID) in self._sprites.keys():
-                    self._sprites.pop(spriteID, None)
-                    sprite._groups.pop(id(self), None)
+                    del self._sprites[spriteID]
+                    del sprite._groups[id(self)]
                     for layer in self._layers:
                         if spriteID in self._layer[layer]['sprite']:
                             break
@@ -566,7 +566,7 @@ class LayeredUpdates(OrderedUpdates):
                         self._layer[_layer]['index'][1] -= 1
                     if (self._layer[layer]['index'][0]
                             == self._layer[layer]['index'][1]):
-                        self._layer.pop(layer, None)
+                        del self._layer[layer]
                         self._layers.remove(layer)
                     self._orderedsprites.remove(sprite)
             else:
