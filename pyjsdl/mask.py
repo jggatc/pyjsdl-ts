@@ -7,7 +7,7 @@ from pyjsdl.color import Color
 import sys
 
 if sys.version_info < (3,):
-    range = xrange
+    from pyjsdl.util import _range as range
 # __pragma__ ('noskip')
 
 __docformat__ = 'restructuredtext'
@@ -110,7 +110,7 @@ class Mask(object):
         return self.toString()
 
     def __repr__(self):
-        return '{}({})'.format(self.__class__, self.__dict__)
+        return '{}({})'.format(self.__class__, repr(self.__dict__))
 
     def get_size(self):
         """

@@ -29,8 +29,12 @@ from math import ceil as _ceil
 # __pragma__ ('skip')
 import sys
 
-if sys.version_info < (3,):
+def _compat():
+    global range
     range = xrange
+
+if sys.version_info < (3,):
+    _compat()
 # __pragma__ ('noskip')
 
 
