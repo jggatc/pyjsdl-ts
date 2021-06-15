@@ -70,17 +70,23 @@ class Canvas(Surface, MouseWheelHandler):
         _wnd = requestAnimationFrameInit()
 
     def onMouseMove(self, event):
-        event.pos = (event.x, event.y)
-        self.event.mouseMove['x'], self.event.mouseMove['y'] = event.x, event.y
+        r = self._canvas.getBoundingClientRect()
+        event.pos = ( event.clientX - round(r.left),
+                      event.clientY - round(r.top) )
+        self.event.mouseMove['x'], self.event.mouseMove['y'] = event.pos
         self.event._updateQueue(event)
 
     def onMouseDown(self, event):
-        event.pos = (event.x, event.y)
+        r = self._canvas.getBoundingClientRect()
+        event.pos = ( event.clientX - round(r.left),
+                      event.clientY - round(r.top) )
         self.event.mousePress[event.button] = True
         self.event._updateQueue(event)
 
     def onMouseUp(self, event):
-        event.pos = (event.x, event.y)
+        r = self._canvas.getBoundingClientRect()
+        event.pos = ( event.clientX - round(r.left),
+                      event.clientY - round(r.top) )
         self.event.mousePress[event.button] = False
         self.event._updateQueue(event)
 
