@@ -7,7 +7,7 @@ from pyjsdl.rect import Rect
 from pyjsdl.time import Time
 from pyjsdl.color import Color
 from pyjsdl import env
-from pyjsdl.pyjsobj import DOM, Window, RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, MouseWheelHandler, eventGetMouseWheelVelocityY, Event, requestAnimationFrameInit
+from pyjsdl.pyjsobj import DOM, Window, RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
 
 __docformat__ = 'restructuredtext'
 
@@ -18,11 +18,10 @@ _img = None
 _wnd = None
 
 
-class Canvas(Surface, MouseWheelHandler):
+class Canvas(Surface):
 
     def __init__(self, size, buffered):
         Surface.__init__(self, size)
-        MouseWheelHandler.__init__(self, True)
         if isinstance(buffered, bool):
             self._bufferedimage = buffered
         else:
@@ -99,65 +98,14 @@ class Canvas(Surface, MouseWheelHandler):
                 self.event.keyPress[keycode] = False
 
     def onMouseWheel(self, event):
-        return
-        if event.type == 'mousewheel':
-            #update for changes in mousewheel implementation
-            if hasattr(event, 'wheelDeltaX'):
-                self.onMouseWheel = self._onMouseWheel
-                self._onMouseWheel(sender, velocity)
-            else:
-                self.onMouseWheel = self._onMouseWheelY
-                DOM.eventGetMouseWheelVelocityY = eventGetMouseWheelVelocityY
-                self._onMouseWheelY(sender, eventGetMouseWheelVelocityY(event))
-        else:       #DOMMouseScroll
-            self.onMouseWheel = self._onMouseScroll
-            self._onMouseScroll(sender, velocity)
-
-    def _onMouseWheel(self, event):
-        if not event.wheelDeltaX:
-            if velocity < 0:
-                button = 4
-                events = velocity / -3
-            else:
-                button = 5
-                events = velocity / 3
+        event.preventDefault()
+        r = self._canvas.getBoundingClientRect()
+        event.pos = ( event.clientX - round(r.left),
+                      event.clientY - round(r.top) )
+        if event.deltaY < 0:
+            event.btn = 4
         else:
-            if velocity < 0:
-                button = 6
-                events = velocity / -3
-            else:
-                button = 7
-                events = velocity / 3
-        event.btn = button
-        event.pos = (self.event.mouseMove['x'], self.event.mouseMove['y'])
-        for evt in range(events):
-            self.event._updateQueue(event)
-
-    def _onMouseWheelY(self, event):
-        if velocity < 0:
-            button = 4
-            events = velocity / -3
-        else:
-            button = 5
-            events = velocity / 3
-        event.btn = button
-        event.pos = (self.event.mouseMove['x'], self.event.mouseMove['y'])
-        for evt in range(events):
-            self.event._updateQueue(event)
-
-    def _onMouseScroll(self, sender, velocity):
-        if velocity > 1 or velocity < -1:
-            if velocity < 0:
-                button = 4
-            else:
-                button = 5
-        else:
-            if velocity < 0:
-                button = 6
-            else:
-                button = 7
-        event.btn = button
-        event.pos = (self.event.mouseMove['x'], self.event.mouseMove['y'])
+            event.btn = 5
         self.event._updateQueue(event)
 
     def onKeyDown(self, event):

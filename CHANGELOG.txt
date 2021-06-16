@@ -13,6 +13,7 @@
 -add cursors get_cursor_types.
 -add canvas contextmenu handler.
 -revise mouseevent positioning.
+-add mouse wheel event.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.
