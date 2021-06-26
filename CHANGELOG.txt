@@ -14,6 +14,7 @@
 -add canvas contextmenu handler.
 -revise mouseevent positioning.
 -add mouse wheel event.
+-add vector object.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.
