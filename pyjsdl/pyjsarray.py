@@ -101,7 +101,7 @@ class TypedArray(object):
     def __iter__(self):
         index = 0
         while index < self._data.length:
-            yield self[index]
+            yield self[index]   # __:opov
             index += 1
 
     def __getitem__(self, index):
@@ -366,7 +366,7 @@ class CanvasPixelArray(TypedArray):
         """
         if not self._superArray:
             for index in range(len(data)):
-                self[index+offset] = data[index]
+                self[index+offset] = data[index]   # __:opov 
         else:
             self._superArray.set(data, offset+self._superIndex[0])
 
@@ -604,18 +604,25 @@ class Ndarray(object):
             vmax = len(str(max(self._data)))
             vmin = len(str(min(self._data)))
             vlen = {True:vmax, False:vmin}[vmax>vmin]
-            vfmt = '{val:{vlen}d}'
         else:
-            vlen = max([len(f'{v:0.4f}') for v in self._data])
-            vfmt = '{val:{vlen}.4f}'
-        return vlen, vfmt
+            vlen = max(len('{}'.format(round(v,4))) for v in self._data)
+        return vlen
 
-    def _array_str(self, array, vlen, vfmt, vstr):
+    def _array_str(self, array, vlen, vstr):
         if len(array._shape) == 1:
+            s = []
             if 'int' in self._dtype:
-                s = [f'{val:{vlen}d}' for val in array]
+                for val in array:
+                    sv = '{}'.format(val)
+                    sv = '{}{}'.format((vlen-len(sv))*' ', sv)   # __:opov
+                    s.append(sv)
             else:
-                s = [f'{val:{vlen}.4f}' for val in array]
+                for val in array:
+                    sv = '{}'.format(round(val,4))
+                    if '.' not in sv:
+                        sv = '{}.0000'.format(sv)
+                    sv = '{}{}'.format((vlen-len(sv))*' ', sv)   # __:opov
+                    s.append(sv)
             vstr.append('[{}]'.format(' '.join(s)))
         else:
             for i, a in enumerate(array):
@@ -623,12 +630,14 @@ class Ndarray(object):
                     vstr.append('[')
                 else:
                     vstr.append(' '*(len(self._shape)-len(a._shape)))   # __:opov
-                self._array_str(a, vlen, vfmt, vstr)
+                self._array_str(a, vlen, vstr)
                 if i < len(array)-1:
                     vstr.append('\n')
                 else:
+                    # __pragma__ ('opov')
                     if vstr[-1] == ']\n':
                         vstr[-1] = ']'
+                    # __pragma__ ('noopov')
                     if array._shape != self._shape:
                         vstr.append(']\n')
                     else:
@@ -636,15 +645,15 @@ class Ndarray(object):
         return vstr
 
     def __str__(self):
-        vlen, vfmt = self._array_dim()
-        vstr = self._array_str(self, vlen, vfmt, [])
+        vlen = self._array_dim()
+        vstr = self._array_str(self, vlen, [])
         return ''.join(vstr)
 
     def __repr__(self):
         s = str(self.tolist())
         sl = len(self._shape)
         for d in range(1, sl):
-            s = s.replace(' '+'['*d, '\n'+' '*(sl+8-d)+'['*d)
+            s = s.replace(' '+'['*d, '\n'+' '*(sl+8-d)+'['*d)   # __:opov
         return 'Ndarray({}, dtype={})'.format(s, repr(self._dtype))
 
     def __len__(self):
@@ -1292,7 +1301,8 @@ class Ndarray(object):
         Return array as a list.
         """
         def to_list(array, l):
-            if hasattr(array[0], '__iter__'):
+            _array = array[0]   # __:opov
+            if hasattr(_array, '__iter__'):
                 if len(l) == 0:
                     _l = l
                 else:
@@ -1638,7 +1648,6 @@ class BitSet(object):
         for dat in range(len(bitset._data)):
             intersect = bitset._data[dat] & self._data[dat]     # __:opov
             if intersect:
-#            if bitset._data[dat] & self._data[dat]:
                 return True
         return False
 
