@@ -85,11 +85,6 @@ class TypedArray(object):
 
     # __pragma__ ('nokwargs')
 
-    filter = lambda self,func: self._array(self._data.filter(func))
-    map = lambda self,func: self._array(self._data.map(func))
-    reduce = lambda self,acc: self._array(self._data.reduce(acc))
-    slice = lambda self,i,j: self._array(self._data.slice(i,j))
-
     def _array(self, array):
         typedarray = self.__class__()
         typedarray._data = array
@@ -113,6 +108,18 @@ class TypedArray(object):
 
     def __len__(self):
         return self._data.length
+
+    def filter(self, func):
+        return self._array(self._data.filter(func))
+
+    def map(self, func):
+        return self._array(self._data.map(func))
+
+    def reduce(self, acc):
+        return self._array(self._data.reduce(acc))
+
+    def slice(self, i, j):
+        return self._array(self._data.slice(i,j))
 
     def set(self, data, offset=0):
         """
