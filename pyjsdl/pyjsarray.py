@@ -109,16 +109,28 @@ class TypedArray(object):
     def __len__(self):
         return self._data.length
 
-    def filter(self, func):
-        return self._array(self._data.filter(func))
+    def filter(self, function):
+        """
+        Return typedarray filtered by function parameter.
+        """
+        return self._array(self._data.filter(function))
 
-    def map(self, func):
-        return self._array(self._data.map(func))
+    def map(self, function):
+        """
+        Return typedarray of applying function across elements.
+        """
+        return self._array(self._data.map(function))
 
-    def reduce(self, acc):
-        return self._array(self._data.reduce(acc))
+    def reduce(self, function):
+        """
+        Return result of applying accumlator function parameter.
+        """
+        return self._array(self._data.reduce(function))
 
     def slice(self, i, j):
+        """
+        Return typedarray from indices i,j.
+        """
         return self._array(self._data.slice(i,j))
 
     def set(self, data, offset=0):
