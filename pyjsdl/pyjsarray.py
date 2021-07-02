@@ -191,14 +191,11 @@ class Uint8ClampedArray(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Uint8ClampedArray']
+        typedarray = TypedArray.__obj['Uint8ClampedArray']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):     #-O/-S:TypeError/AttributeError
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Uint8Array(TypedArray):
@@ -207,14 +204,11 @@ class Uint8Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Uint8Array']
+        typedarray = TypedArray.__obj['Uint8Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Uint16Array(TypedArray):
@@ -223,14 +217,11 @@ class Uint16Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Uint16Array']
+        typedarray = TypedArray.__obj['Uint16Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Uint32Array(TypedArray):
@@ -239,14 +230,11 @@ class Uint32Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Uint32Array']
+        typedarray = TypedArray.__obj['Uint32Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Int8Array(TypedArray):
@@ -255,14 +243,11 @@ class Int8Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Int8Array']
+        typedarray = TypedArray.__obj['Int8Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Int16Array(TypedArray):
@@ -271,14 +256,11 @@ class Int16Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Int16Array']
+        typedarray = TypedArray.__obj['Int16Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Int32Array(TypedArray):
@@ -287,14 +269,11 @@ class Int32Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Int32Array']
+        typedarray = TypedArray.__obj['Int32Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Float32Array(TypedArray):
@@ -303,17 +282,11 @@ class Float32Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Float32Array']
+        typedarray = TypedArray.__obj['Float32Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
-
-    def __getitem__(self, index):
-        return self._data[index]
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class Float64Array(TypedArray):
@@ -322,17 +295,11 @@ class Float64Array(TypedArray):
     """
 
     def __init__(self, data=None, offset=None, length=None):
-        try:
-            typedarray = TypedArray.__obj['Float64Array']
+        typedarray = TypedArray.__obj['Float64Array']
+        if typedarray != None:
             TypedArray.__init__(self, data, offset, length, typedarray)
-        except (TypeError, AttributeError):
-            if isUndefined(typedarray):
-                raise NotImplementedError("TypedArray data type not implemented")
-            else:
-                raise
-
-    def __getitem__(self, index):
-        return self._data[index]
+        else:
+            raise NotImplementedError("TypedArray data type not implemented")
 
 
 class CanvasPixelArray(TypedArray):
@@ -426,6 +393,7 @@ class Ndarray(object):
                 'uint32'    Uint32Array
                 'float32'   Float32Array
                 'float64'   Float64Array
+        Operator and index functionality requires __pragma__ ('opov'). 
         """
         self._dtype = self.__dtypes[dtype]
         typedarray = self.__typedarray[self._dtype]
@@ -463,8 +431,6 @@ class Ndarray(object):
     def getshape(self):
         """
         Return array shape.
-        Ndarray.shape accessible with compilation in --strict mode,
-        and with --enable-descriptor-proto option in --optimized mode.
         """
         return self._shape
 
@@ -473,8 +439,6 @@ class Ndarray(object):
         Set shape of array.
         Argument is new shape.
         Raises TypeError if shape is not appropriate.
-        Ndarray.shape accessible with compilation in --strict mode,
-        and with --enable-descriptor-proto option in --optimized mode.
         """
         if isinstance(dim[0], tuple):
             dim = dim[0]
@@ -1166,9 +1130,6 @@ class Ndarray(object):
         Arguments include operator and int/array.
         Operators: 'add', 'sub', 'mul', 'div', etc.
         Return array of the operation.
-        Note: operator special methods not called in
-        Pyjs --optimized mode unless build with
-        the --enable-operator-funcs option.
         """
         return getattr(self, '__'+operator+'__')(other)
 
@@ -1178,7 +1139,6 @@ class Ndarray(object):
         Arguments include operator and int/array.
         Operators: 'lt', 'le', 'eq', 'ne', 'gt', 'ge'.
         Return comparison array.
-        Note: comparison special methods not called.
         """
         return getattr(self, '__'+operator+'__')(other)
 
@@ -1368,11 +1328,10 @@ class ImageData(object):
         The argument required is the ImageData instance to be accessed.
         """
         self._imagedata = imagedata
-        self.data = Uint8ClampedArray()
-#        if not isUndefined(TypedArray.__obj['Uint8ClampedArray']):
-#            self.data = Uint8ClampedArray()
-#        else:
-#            self.data = CanvasPixelArray()
+        if TypedArray.__obj['Uint8ClampedArray'] != None:
+            self.data = Uint8ClampedArray()
+        else:
+            self.data = CanvasPixelArray()
         self.data._data = imagedata.data
         self.width = imagedata.width
         self.height = imagedata.height
@@ -1394,7 +1353,7 @@ class ImageMatrix(Ndarray):
         self._imagedata = ImageData(imagedata)
         if isinstance(self._imagedata.data, Uint8ClampedArray):
             Ndarray.__init__(self, self._imagedata.data, 'uint8c')
-        else:     #ie10 supports typedarray, not uint8clampedarray
+        else:
             Ndarray.__init__(self, self._imagedata.data, 'uint8')
         self.setshape(self._imagedata.height,self._imagedata.width,4)
 
@@ -1498,7 +1457,6 @@ class BitSet(object):
     def __init__(self, width=None):
         if self._bitmask is None:
             self._bitmask = dict([(self._bit-i-1,1<<i) for i in range(self._bit-1,-1,-1)])
-            self._bitmask[self._bit-1] = int(self._bitmask[self._bit-1])      #pyjs [1<<0] = 1L
         if width:
             self._width = abs(width)
         else:
@@ -1757,20 +1715,4 @@ def typeOf(obj):
     Return typeof obj.
     """
     return typeof(obj)
-
-
-#depreciated
-PyTypedArray = TypedArray
-PyUint8ClampedArray = Uint8ClampedArray
-PyUint8Array = Uint8Array
-PyUint16Array = Uint16Array
-PyUint32Array = Uint32Array
-PyInt8Array = Int8Array
-PyInt16Array = Int16Array
-PyInt32Array = Int32Array
-PyFloat32Array = Float32Array
-PyFloat64Array = Float64Array
-PyCanvasPixelArray = CanvasPixelArray
-PyImageData = ImageData
-PyImageMatrix = ImageMatrix
 
