@@ -21,9 +21,6 @@ __docformat__ = 'restructuredtext'
 __doc__ = 'Surface pixel manipulation'
 
 
-# __pragma__ ('opov')
-
-
 def array(surface):
     """
     Return data array of the Surface argument.
@@ -94,14 +91,14 @@ def blit_array(surface, array):
     """
     try:
         imagedata = array.getImageData()
-    except (TypeError, AttributeError):     #-O/-S: TypeError/AttributeError
+    except TypeError:
         imagedata = surface.getImageData(0, 0, surface.width, surface.height)
         if len(array._shape) == 2:
             array2d = ImageMatrix(imagedata)
             for y in range(array2d.getHeight()):
                 for x in range(array2d.getWidth()):
-                    value = array[x,y]
-                    array2d[y,x] = (value>>16 & 0xff, value>>8 & 0xff, value & 0xff, 255)
+                    value = array[x,y]      # __:opov
+                    array2d[y,x] = (value>>16 & 0xff, value>>8 & 0xff, value & 0xff, 255)      # __:opov
             imagedata = array2d.getImageData()
         else:
             imagedata.data.set(array.getArray())
@@ -128,7 +125,8 @@ class ImageMatrixRGB(ImageMatrix):
         index = list(index)
         index[0], index[1] = index[1], index[0]
         index = tuple(index)
-        return ImageMatrix.__setitem__(self, index, value)
+        ImageMatrix.__setitem__(self, index, value)
+        return None
 
 
 class ImageRGB(Ndarray):
@@ -143,19 +141,21 @@ class ImageRGB(Ndarray):
         array.setshape(self._imagedata.height,self._imagedata.width,4)
         try:
             data = Uint8ClampedArray(self._imagedata.height*self._imagedata.width*3)
-        except NotImplementedError:     #ie10 supports typedarray, not uint8clampedarray
+        except NotImplementedError:
             data = Uint8Array(self._imagedata.height*self._imagedata.width*3)
         index = 0
         for x in range(self._imagedata.width):
             for y in range(self._imagedata.height):
                 for i in range(3):
-                    data[index] = array[y,x,i]
+                    data[index] = array[y,x,i]      # __:opov
                     index += 1
         try:
             Ndarray.__init__(self, data, 'uint8c')
         except NotImplementedError:
             Ndarray.__init__(self, data, 'uint8')
         self.setshape(self._imagedata.width,self._imagedata.height,3)
+
+    # __pragma__ ('opov')
 
     def getImageData(self):
         """
@@ -169,6 +169,8 @@ class ImageRGB(Ndarray):
                 index += 4
         return self._imagedata.getImageData()
 
+    # __pragma__ ('noopov')
+
 
 class ImageMatrixAlpha(ImageMatrix):
     """
@@ -180,7 +182,8 @@ class ImageMatrixAlpha(ImageMatrix):
         return ImageMatrix.__getitem__(self, (index[1],index[0],3))
 
     def __setitem__(self, index, value):
-        return ImageMatrix.__setitem__(self, (index[1],index[0],3), value)
+        ImageMatrix.__setitem__(self, (index[1],index[0],3), value)
+        return None
 
 
 class ImageAlpha(Ndarray):
@@ -195,18 +198,20 @@ class ImageAlpha(Ndarray):
         array.setshape(self._imagedata.height,self._imagedata.width,4)
         try:
             data = Uint8ClampedArray(self._imagedata.height*self._imagedata.width)
-        except NotImplementedError:     #ie10 supports typedarray, not uint8clampedarray
+        except NotImplementedError:
             data = Uint8Array(self._imagedata.height*self._imagedata.width)
         index = 0
         for x in range(self._imagedata.width):
             for y in range(self._imagedata.height):
-                data[index] = array[y,x,3]
+                data[index] = array[y,x,3]      # __:opov
                 index += 1
         try:
             Ndarray.__init__(self, data, 'uint8c')
         except NotImplementedError:
             Ndarray.__init__(self, data, 'uint8')
         self.setshape(self._imagedata.width,self._imagedata.height)
+
+    # __pragma__ ('opov')
 
     def getImageData(self):
         """
@@ -219,6 +224,8 @@ class ImageAlpha(Ndarray):
                 index += 4
         return self._imagedata.getImageData()
 
+    # __pragma__ ('noopov')
+
 
 class ImageMatrixInteger(ImageMatrix):
     """
@@ -228,10 +235,11 @@ class ImageMatrixInteger(ImageMatrix):
 
     def __getitem__(self, index):
         value = ImageMatrix.__getitem__(self, (index[1],index[0]))
-        return value[0]<<16 | value[1]<<8 | value[2] | value[3]<<24
+        return value[0]<<16 | value[1]<<8 | value[2] | value[3]<<24     # __:opov
 
     def __setitem__(self, index, value):
-        return ImageMatrix.__setitem__(self, (index[1],index[0]), (value>>16 & 0xff, value>>8 & 0xff, value & 0xff, value>>24 & 0xff))
+        ImageMatrix.__setitem__(self, (index[1],index[0]), (value>>16 & 0xff, value>>8 & 0xff, value & 0xff, value>>24 & 0xff))     # __:opov
+        return None
 
 
 class ImageInteger(Ndarray):
@@ -248,10 +256,12 @@ class ImageInteger(Ndarray):
         index = 0
         for x in range(self._imagedata.width):
             for y in range(self._imagedata.height):
-                data[index] = array[y,x,0]<<16 | array[y,x,1]<<8 | array[y,x,2] | array[y,x,3]<<24
+                data[index] = array[y,x,0]<<16 | array[y,x,1]<<8 | array[y,x,2] | array[y,x,3]<<24     # __:opov
                 index += 1
         Ndarray.__init__(self, data, 'uint32')
         self.setshape(self._imagedata.width,self._imagedata.height)
+
+    # __pragma__ ('opov')
 
     def getImageData(self):
         """
@@ -260,10 +270,13 @@ class ImageInteger(Ndarray):
         index = 0
         for x in range(self._imagedata.height):
             for y in range(self._imagedata.width):
-                self._imagedata.data[index], self._imagedata.data[index+1], self._imagedata.data[index+2], self._imagedata.data[index+3] = self[y,x]>>16 & 0xff, self[y,x]>>8 & 0xff, self[y,x] & 0xff, self[y,x]>>24 & 0xff
+                dat = self[y,x]
+                self._imagedata.data[index] = dat>>16 & 0xff
+                self._imagedata.data[index+1] = dat>>8 & 0xff
+                self._imagedata.data[index+2] = dat & 0xff
+                self._imagedata.data[index+3] =  dat>>24 & 0xff
                 index += 4
         return self._imagedata.getImageData()
 
-
-# __pragma__ ('noopov')
+    # __pragma__ ('noopov')
 
