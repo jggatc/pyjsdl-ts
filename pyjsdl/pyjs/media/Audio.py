@@ -1,34 +1,33 @@
 class Audio:
 
     def __init__(self, sound_file):
-        self.obj = document.createElement("AUDIO")
-        self.obj.src = sound_file
-        self.obj.play()
+        self.element = document.createElement("AUDIO")
+        self.element.src = sound_file
 
     def play(self):
-        self.obj.play()
+        self.element.play()
 
     def pause(self):
-        self.obj.pause()
+        self.element.pause()
 
     def getCurrentTime(self):
-        return self.obj.currentTime
+        return self.element.currentTime
 
     def setCurrentTime(self, time):
-        self.obj.currentTime = time
+        self.element.currentTime = time
 
     def isPaused(self):
-        return self.obj.paused
+        return self.element.paused
 
     def getSrc(self):
-        return self.obj.src
+        return self.element.src
 
     def getVolume(self):
-        return self.obj.volume
+        return self.element.volume
 
     def setVolume(self, volume):
-        self.obj.volume = volume
+        self.element.volume = volume
 
     def getDuration(self):
-        return self.obj.duration
+        return self.element.duration
 
