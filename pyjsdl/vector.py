@@ -309,7 +309,8 @@ class Vector2(object):
         v = Vector2((sx * a) + (vx * b),
                     (sy * a) + (vy * b))
         smag = ((1.0-t)*smag) + (t*vmag)
-        v *= smag   # __:opov
+        v.x *= smag
+        v.y *= smag
         return v
 
     def elementwise(self):
