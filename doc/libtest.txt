@@ -1,0 +1,6 @@
+Libtest
+
+The libtest script tests the functionality of the Pyjsdl library, capable of running with Transcrypt/Pyjsdl or Python/Pygame. To test Pyjsdl, the system should have Transcrypt installed and the pyjsdl folder on script path. The libtest.py script in package root executes the tests in the test folder. Transcrypt compiled code in __target__ folder is run in web browser from libtest.html in root folder with local server running. Tests are compiled with Transcript with -da option to activate assertions with command:
+
+'transcrypt -n -da libtest.py'
+
