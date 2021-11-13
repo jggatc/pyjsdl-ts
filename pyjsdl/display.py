@@ -48,8 +48,8 @@ class Canvas(Surface):
         self.preventContextMenu()
         self.modKey = env.event.modKey
         self.specialKey = env.event.specialKey
-#        self.event._initiate_touch_listener(self)
-#        self._touch_callback = self.event.touchlistener.callback
+        self.event._initiate_touch_listener(self)
+        self._touch_callback = self.event.touchlistener.callback
         self._rect_list = []
         self._rect_len = 0
         self._rect_num = 0
