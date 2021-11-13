@@ -153,6 +153,7 @@ class FocusElement(Element):
 
     def addKeyboardListener(self, obj):
         element = obj.getElement()
+        element.setAttribute('tabindex','0')
         element.addEventListener('keypress', self.onKeyPress)
         element.addEventListener('keydown', self.onKeyDown)
         element.addEventListener('keyup', self.onKeyUp)
