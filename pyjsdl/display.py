@@ -72,7 +72,6 @@ class Canvas(Surface):
         r = self._canvas.getBoundingClientRect()
         event.pos = ( event.clientX - round(r.left),
                       event.clientY - round(r.top) )
-        print('move', event.pos)
         self.event.mouseMove['x'], self.event.mouseMove['y'] = event.pos
         self.event._updateQueue(event)
 
@@ -80,7 +79,6 @@ class Canvas(Surface):
         r = self._canvas.getBoundingClientRect()
         event.pos = ( event.clientX - round(r.left),
                       event.clientY - round(r.top) )
-        print('press', event.pos)
         self.event.mousePress[event.button] = True
         self.event._updateQueue(event)
 
@@ -112,7 +110,6 @@ class Canvas(Surface):
 
     def onKeyDown(self, event):
         keycode = event.keyCode
-        print(keycode)
         if keycode in self.modKey:
             self.event.keyPress[keycode] = True
             self.event._updateQueue(event)
