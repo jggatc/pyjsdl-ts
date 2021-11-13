@@ -23,8 +23,8 @@ def init():
     if _initialized:
         return
     try:
+        HTML5Canvas._identity = -1
         _surf = HTML5Canvas(1,1)
-        HTML5Canvas._identity -= 1
         _surf.measureText('x')
     except:
         _surf = None

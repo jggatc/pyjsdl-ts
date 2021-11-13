@@ -7,7 +7,7 @@ from pyjsdl.rect import Rect
 from pyjsdl.time import Time
 from pyjsdl.color import Color
 from pyjsdl import env
-from pyjsdl.pyjsobj import DOM, Window, RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
+from pyjsdl.pyjsobj import RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
 
 __docformat__ = 'restructuredtext'
 
@@ -72,6 +72,7 @@ class Canvas(Surface):
         r = self._canvas.getBoundingClientRect()
         event.pos = ( event.clientX - round(r.left),
                       event.clientY - round(r.top) )
+        print('move', event.pos)
         self.event.mouseMove['x'], self.event.mouseMove['y'] = event.pos
         self.event._updateQueue(event)
 
@@ -79,6 +80,7 @@ class Canvas(Surface):
         r = self._canvas.getBoundingClientRect()
         event.pos = ( event.clientX - round(r.left),
                       event.clientY - round(r.top) )
+        print('press', event.pos)
         self.event.mousePress[event.button] = True
         self.event._updateQueue(event)
 
@@ -110,6 +112,7 @@ class Canvas(Surface):
 
     def onKeyDown(self, event):
         keycode = event.keyCode
+        print(keycode)
         if keycode in self.modKey:
             self.event.keyPress[keycode] = True
             self.event._updateQueue(event)
@@ -321,7 +324,9 @@ class Display(object):
         env.set_env('canvas', self.canvas)
         self.frame = document.body
         env.set_env('frame', self.frame)
-#        self.panel = panel
+        panel = RootPanel()
+        panel.add(self.canvas)
+        self.panel = panel
         self.vpanel = None
         self.textbox = None
         self.textarea = None
@@ -397,6 +402,15 @@ class Display(object):
         Return Canvas.
         """
         return self.canvas
+
+    def set_panel(self, id):
+        """
+        Set panel.
+        Argument id is the dom element id. App default id is '__panel__'.
+        Call at app start to change default.
+        """
+        RootPanel._set_root_panel(id)
+        return None
 
     def get_panel(self):
         """
@@ -535,30 +549,34 @@ class Textbox(TextBox):
     def __init__(self, size=None, panel=None):
         TextBox.__init__(self)
         if not size:
-            self.width, self.height = env.canvas.surface.width-5, 20
+            self.width, self.height = '100%', '20px'
+            self.setSize(self.width, self.height)
         else:
             self.width, self.height = int(size[0]), int(size[1])
-        self.setSize(str(self.width)+'px', str(self.height)+'px')
+            self.setSize(str(self.width)+'px', str(self.height)+'px')
         self.setVisible(False)
         if panel:
             panel.add(self)
         else:
-            try:
+            if env.canvas.surface._display.vpanel is not None:
                 env.canvas.surface._display.vpanel.add(self)
-            except (TypeError, AttributeError):
-                env.canvas.surface._display.vpanel = VerticalPanel()
-                RootPanel().add(env.canvas.surface._display.vpanel)
-                env.canvas.surface._display.vpanel.add(self)
+            else:
+                panel = VerticalPanel()
+                env.canvas.surface._display.vpanel = panel
+                panel._element.style.width = str(env.canvas.surface.width-2) + 'px'
+                RootPanel().add(panel)
+                panel.add(self)
 
     def resize(self, width=None, height=None):
         if not (width or height):
-            self.width, self.height = env.canvas.surface.width-5, 20
+            self.width, self.height = '100%', '20px'
+            self.setSize(self.width, self.height)
         else:
             if width:
                 self.width = int(width)
             if height:
                 self.height = int(height)
-        self.setSize(str(self.width)+'px', str(self.height)+'px')
+            self.setSize(str(self.width)+'px', str(self.height)+'px')
 
     def toggle(self, visible=None):
         if visible:
@@ -577,33 +595,36 @@ class Textarea(TextArea):
     def __init__(self, size=None, panel=None):
         TextArea.__init__(self)
         if not size:
-            self.width, self.height = env.canvas.surface.width-5, int(env.canvas.surface.height/5)-5
+            self.width, self.height = '100%', str(int(env.canvas.surface.height/2))+'px'
+            self.setSize(self.width, self.height)
         else:
             self.width, self.height = int(size[0]), int(size[1])
-        self.setSize(str(self.width)+'px', str(self.height)+'px')
-        self.setStyleAttribute({'resize':'vertical'})
+            self.setSize(str(self.width)+'px', str(self.height)+'px')
         self.setVisible(False)
         if panel:
             panel.add(self)
         else:
-            try:
+            if env.canvas.surface._display.vpanel is not None:
                 env.canvas.surface._display.vpanel.add(self)
-            except (TypeError, AttributeError):
-                env.canvas.surface._display.vpanel = VerticalPanel()
-                RootPanel().add(env.canvas.surface._display.vpanel)
-                env.canvas.surface._display.vpanel.add(self)
+            else:
+                panel = VerticalPanel()
+                env.canvas.surface._display.vpanel = panel
+                panel._element.style.width = str(env.canvas.surface.width-2) + 'px'
+                RootPanel().add(panel)
+                panel.add(self)
 
     # __pragma__ ('kwargs')
 
     def resize(self, width=None, height=None):
         if not (width or height):
-            self.width, self.height = env.canvas.surface.width-5, int(env.canvas.surface.height/5)-5
+            self.width, self.height = '100%', str(int(env.canvas.surface.height/2))+'px'
+            self.setSize(self.width, self.height)
         else:
             if width:
                 self.width = int(width)
             if height:
                 self.height = int(height)
-        self.setSize(str(self.width)+'px', str(self.height)+'px')
+            self.setSize(str(self.width)+'px', str(self.height)+'px')
 
     # __pragma__ ('nokwargs')
 

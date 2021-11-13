@@ -1,2 +1,0 @@
-def getDocumentRoot():
-    return None

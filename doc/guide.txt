@@ -13,13 +13,11 @@ To compile script.py, use the command 'transcrypt script.py' that will compile t
 
 <!doctype html>
 <html>
-    <body> 
-        <h2>Pyjsdl App</h2>
-            <div id="canvas_frame" style="position:absolute">
-            <canvas id="canvas" width="400" height="300"></canvas>
-            </div>
-        <script type="module" src="__target__/pyjsdl_app.js"></script>
-    </body>
+<body>
+    <h2>Pyjsdl App</h2>
+    <div id="__panel__"></div>
+    <script type="module" src="__target__/pyjsdl_app.js"></script>
+</body>
 </html>
 
 The script.html file can be launched direct, or loaded in another Web page using:
