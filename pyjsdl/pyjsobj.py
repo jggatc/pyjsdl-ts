@@ -227,29 +227,21 @@ class HTML5Canvas(FocusElement):
 
     def __init__(self, width, height):
         FocusElement.__init__(self)
-        if HTML5Canvas._identity:
-            self._id = HTML5Canvas._identity
-            HTML5Canvas._identity += 1
-            self._canvas = document.createElement('canvas')
-            self._canvas.id = str(self._id)
-        else:
-            self._id = HTML5Canvas._identity
-            HTML5Canvas._identity += 1
-            panel = document.getElementById('__panel__')
-            self._canvas = document.createElement('canvas')
-            self._canvas.id = str(self._id)
-            panel.appendChild(self._canvas)
-        self._canvas.width = width
-        self._canvas.height = height
+        self._id = HTML5Canvas._identity
+        HTML5Canvas._identity += 1
+        self._canvas = document.createElement('canvas')
+        self._element = self._canvas
+        self._element.id = str(self._id)
+        self._element.width = width
+        self._element.height = height
         self.width = width
         self.height = height
-        self._canvas.style.margin = '0px'
-        self._canvas.style.padding = '0px'
-        self._canvas.style['vertical-align'] = 'bottom'
-        self._canvas.style.id = str(self._id)
-        self.canvas = self._canvas
-        self._element = self._canvas
-        self._ctx = self._canvas.getContext('2d')
+        self._element.style.margin = '0px'
+        self._element.style.padding = '0px'
+        self._element.style['vertical-align'] = 'bottom'
+        self._element.style.id = str(self._id)
+        self.canvas = self._element
+        self._ctx = self._element.getContext('2d')
         self.impl = CanvasImpl(self._ctx)
 
     def resize(self, width, height):
@@ -355,13 +347,13 @@ class HTML5Canvas(FocusElement):
             return self._element.getContext(ctx_type, ctx_attr)
 
     def toDataURL(self, img_type='image/png', enc_options=0.92):
-        return self._canvas.toDataURL(img_type, enc_options)
+        return self._element.toDataURL(img_type, enc_options)
 
     def toBlob(self, callback, img_type='image/png', quality=0.92):
         return self._element.toBlob(callback, img_type, quality)
 
     def getElement(self):
-        return self._canvas
+        return self._element
 
 
 class CanvasImpl:
