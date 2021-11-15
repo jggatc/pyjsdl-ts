@@ -241,7 +241,7 @@ class Event(object):
         """
         Return event name of a event type.
         """
-        if eventType in self.eventName.keys():
+        if str(eventType) in self.eventName.keys():
             return self.eventName[eventType]
         else:
             return None
