@@ -121,7 +121,7 @@ class Event(object):
             return self.queueNil
         self._lock()
         if not eventType:
-            self.queue = [event for event in self.eventQueue[0:self.eventNum]]
+            self.queue = self.eventQueue[0:self.eventNum]
             self.eventNum = 0
         else:
             self.queue = []
