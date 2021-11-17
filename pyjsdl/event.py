@@ -375,22 +375,19 @@ class JEvent(object):
         self.attr = {}
         if event_type in ('mousedown', 'mouseup'):
             self.attr['button'] = event.button + 1
-            self.attr['pos'] = (event._x+env.frame.scrollLeft,
-                                event._y+env.frame.scrollTop)
+            self.attr['pos'] = (event._x, event._y)
         elif event_type == 'mousemove':
             self.attr['buttons'] = (bool(event.buttons & 1),
                                     bool(event.buttons & 4),
                                     bool(event.buttons & 2))
-            self.attr['pos'] = (event._x+env.frame.scrollLeft,
-                                event._y+env.frame.scrollTop)
+            self.attr['pos'] = (event._x, event._y)
             self.attr['rel'] = (event._relx, event._rely)
         elif event_type in ('wheel', 'mousewheel', 'DOMMouseScroll'):
             if event.deltaY < 0:
                 self.attr['button'] = 4
             else:
                 self.attr['button'] = 5
-            self.attr['pos'] = (event._x+env.frame.scrollLeft,
-                                event._y+env.frame.scrollTop)
+            self.attr['pos'] = (event._x, event._y)
         elif event_type in ('keydown', 'keyup'):
             self.attr['key'] = event.keyCode
         elif event_type == 'keypress':
