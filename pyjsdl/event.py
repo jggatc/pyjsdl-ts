@@ -324,15 +324,12 @@ class UserEvent(object):
         Argument includes eventType (USEREVENT+num).
         Optional attribute argument as dictionary ({str:val}) or keyword arg(s).
         """
-        if args:
+        if len(args) > 0:
             attr = args[0]
         else:
             attr = kwargs
         self.type = eventType
         self.attr = attr
-        if env.pyjs_mode.optimized: #__getattr__ not implemented in pyjs -O
-            for attr in self.attr:
-                object.__setattr__(self, attr, self.attr[attr])
         env.event._register_event(eventType)
 
     # __pragma__ ('nokwargs')
