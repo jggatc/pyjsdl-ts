@@ -341,7 +341,7 @@ class UserEvent(object):
         return self.toString()
 
     def __getattr__(self, attr):
-        if attr in self.attr:
+        if attr in self.attr.keys():
             return self.attr[attr]
         else:
             raise AttributeError("'Event' object has no attribute '{}'".format(attr))
