@@ -5,7 +5,6 @@
 from pyjsdl.surface import Surface
 from pyjsdl.rect import Rect
 from pyjsdl.time import Time
-from pyjsdl.color import Color
 from pyjsdl import env
 from pyjsdl.pyjsobj import RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
 
