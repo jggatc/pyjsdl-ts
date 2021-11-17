@@ -576,12 +576,6 @@ def wnd():
     return window
 
 
-def eventGetMouseWheelVelocityY(evt):
-    #code from pyjs
-    __pragma__('js', {},
-        "return Math['round'](-evt['wheelDelta'] / 40) || 0;")
-
-
 def requestAnimationFrameInit():
     requestAnimationFramePolyfill()
     return wnd()

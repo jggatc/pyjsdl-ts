@@ -69,65 +69,82 @@ class Canvas(Surface):
         _wnd = requestAnimationFrameInit()
 
     def onMouseMove(self, event):
-        r = self._canvas.getBoundingClientRect()
-        event.pos = ( event.clientX - round(r.left),
-                      event.clientY - round(r.top) )
-        self.event.mouseMove['x'], self.event.mouseMove['y'] = event.pos
-        self.event._updateQueue(event)
+        if event.js_type in self.event.events:
+            r = self._canvas.getBoundingClientRect()
+            event._x = event.clientX - round(r.left)
+            event._y = event.clientY - round(r.top)
+            event._relx = event._x - self.event.mouseMove['x']
+            event._rely = event._y - self.event.mouseMove['y']
+            self.event.mouseMove['x'] = event._x
+            self.event.mouseMove['y'] = event._y
+            self.event._updateQueue(event)
+        else:
+            r = self._canvas.getBoundingClientRect()
+            self.event.mouseMove['x'] = event.clientX - round(r.left)
+            self.event.mouseMove['y'] = event.clientY - round(r.top)
 
     def onMouseDown(self, event):
-        r = self._canvas.getBoundingClientRect()
-        event.pos = ( event.clientX - round(r.left),
-                      event.clientY - round(r.top) )
+        if event.js_type in self.event.events:
+            r = self._canvas.getBoundingClientRect()
+            event._x = event.clientX - round(r.left)
+            event._y = event.clientY - round(r.top)
+            self.event._updateQueue(event)
         self.event.mousePress[event.button] = True
-        self.event._updateQueue(event)
 
     def onMouseUp(self, event):
-        r = self._canvas.getBoundingClientRect()
-        event.pos = ( event.clientX - round(r.left),
-                      event.clientY - round(r.top) )
+        if event.js_type in self.event.events:
+            r = self._canvas.getBoundingClientRect()
+            event._x = event.clientX - round(r.left)
+            event._y = event.clientY - round(r.top)
+            self.event._updateQueue(event)
         self.event.mousePress[event.button] = False
-        self.event._updateQueue(event)
 
     def onMouseLeave(self, event):
-        self.event.mousePress[0], self.event.mousePress[1], self.event.mousePress[2] = False, False, False
-        self.event.mouseMove['x'], self.event.mouseMove['y'] = -1, -1
-        self.event.mouseMoveRel['x'], self.event.mouseMoveRel['y'] = None, None
+        self.event.mousePress[0] = False
+        self.event.mousePress[1] = False
+        self.event.mousePress[2] = False
+        self.event.mouseMove['x'] = -1
+        self.event.mouseMove['y'] = -1
+        self.event.mouseMoveRel['x'] = None
+        self.event.mouseMoveRel['y'] = None
         for keycode in self.modKey:
             if self.event.keyPress[keycode]:
                 self.event.keyPress[keycode] = False
 
     def onMouseWheel(self, event):
+        if event.js_type in self.event.events:
+            r = self._canvas.getBoundingClientRect()
+            event._x = event.clientX - round(r.left)
+            event._y = event.clientY - round(r.top)
+            if event.deltaY < 0:
+                event._btn = 4
+            else:
+                event._btn = 5
+            self.event._updateQueue(event)
         event.preventDefault()
-        r = self._canvas.getBoundingClientRect()
-        event.pos = ( event.clientX - round(r.left),
-                      event.clientY - round(r.top) )
-        if event.deltaY < 0:
-            event.btn = 4
-        else:
-            event.btn = 5
-        self.event._updateQueue(event)
 
     def onKeyDown(self, event):
-        keycode = event.keyCode
-        if keycode in self.modKey:
-            self.event.keyPress[keycode] = True
-            self.event._updateQueue(event)
-            event.preventDefault()
-        elif keycode in self.specialKey:
-            self.event._updateQueue(event)
-            event.preventDefault()
+        if event.js_type in self.event.events:
+            if event.keyCode in self.modKey:
+                self.event._updateQueue(event)
+                self.event.keyPress[event.keyCode] = True
+            elif event.keyCode in self.specialKey:
+                self.event._updateQueue(event)
+        else:
+            if event.keyCode in self.modKey:
+                self.event.keyPress[event.keyCode] = True
 
     def onKeyPress(self, event):
-        if not (event.keyCode and event.keyCode in self.specialKey):
-            self.event._updateQueue(event)
+        if event.js_type in self.event.events:
+            if not (event.keyCode and event.keyCode in self.specialKey):
+                self.event._updateQueue(event)
         event.preventDefault()
 
     def onKeyUp(self, event):
-        keycode = event.keyCode
-        if keycode in self.modKey:
-            self.event.keyPress[keycode] = False
-        self.event._updateQueue(event)
+        if event.js_type in self.event.events:
+            self.event._updateQueue(event)
+        if event.keyCode in self.modKey:
+            self.event.keyPress[event.keyCode] = False
 
     def onTouchInitiate(self, event):
         self.event.touchlistener.activate()
