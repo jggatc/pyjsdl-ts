@@ -8,7 +8,6 @@ class Element:
             self._element = element
         else:
             self._element = None
-        self._sink_events = None
 
     @property
     def style(self, attr):
@@ -49,27 +48,6 @@ class Element:
         else:
             self._element.style['min-height'] = str(int(height)) + 'px'
 
-    def addMouseListener(self, obj, callback):
-        element = obj.getElement()
-        element.addEventListener('mousemove', callback)
-        element.addEventListener('mousedown', callback)
-        element.addEventListener('mouseup', callback)
-        element.addEventListener('mouseenter', callback)
-        element.addEventListener('mouseleave', callback)
-        element.addEventListener('mousewheel', callback)
-
-    def addKeyboardListener(self, obj, callback):
-        element = obj.getElement()
-        element.addEventListener('keypress', callback)
-        element.addEventListener('keydown', callback)
-        element.addEventListener('keyup', callback)
-
-    def addFocusListener(self, obj, callback):
-        element = obj.getElement()
-        element.setAttribute('tabindex','0')
-        element.addEventListener('focus', callback)
-        element.addEventListener('blur', callback)
-
     def getAttributes(self):
         return self._element.attributes
 
@@ -102,6 +80,19 @@ class Element:
 
     def removeEventListener(self, type, listener, useCapture):
         self._element.removeEventListener(type, listener, useCapture)
+
+    def getMouseWheelEventType(self):
+        if self._element is not None:
+            element = self._element
+        else:
+            element = document.createElement('div')
+        if hasattr(element, 'onwheel'):
+            event_type = 'wheel'
+        elif hasattr(element, 'onmousewheel'):
+            event_type = 'mousewheel'
+        else:
+            event_type = 'DOMMouseScroll'
+        return event_type
 
     def getAttribute(self):
         return self._element.getAttribute()
@@ -139,8 +130,11 @@ class Element:
 
 class FocusElement(Element):
 
+    _event_type = None
+
     def __init__(self):
         Element.__init__(self)
+        self._sink_events = None
 
     def addMouseListener(self, obj):
         element = obj.getElement()
@@ -149,7 +143,12 @@ class FocusElement(Element):
         element.addEventListener('mouseup', self.onMouseUp)
         element.addEventListener('mouseenter', self.onMouseEnter)
         element.addEventListener('mouseleave', self.onMouseLeave)
-        element.addEventListener('mousewheel', self.onMouseWheel)
+        if hasattr(element, 'onwheel'):
+            element.addEventListener('wheel', self.onMouseWheel)
+        elif hasattr(element, 'onmousewheel'):
+            element.addEventListener('mousewheel', self.onMouseWheel)
+        else:
+            element.addEventListener('DOMMouseScroll', self.onMouseWheel)
 
     def addKeyboardListener(self, obj):
         element = obj.getElement()
