@@ -44,7 +44,12 @@ class Mouse(object):
         Return x,y of mouse pointer.
         If the pointer is not in canvas, returns -1,-1
         """
-        return (self.mouseMove['x'],  self.mouseMove['y'])
+        if self.mouseMove['x'] != -1:
+            r = env.canvas.getBoundingClientRect()
+            return (self.mouseMove['x'] - round(r.left),
+                    self.mouseMove['y'] - round(r.top))
+        else:
+            return self.mouseMove['x'], self.mouseMove['y']
 
     def get_rel(self):
         """
