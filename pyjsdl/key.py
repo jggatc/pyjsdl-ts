@@ -33,10 +33,10 @@ class Key(object):
         """
         Return name of key of a keycode.
         """
-        if not self._keys:
+        if len(self._keys.keys()) == 0:
             for keyname in dir(Const):
                 if keyname.startswith('K_'):
-                    self._keys[getattr(Const, keyname)] = keyname.split('_')[-1].lower()
+                    self._keys[getattr(Const, keyname)] = keyname.split('_')[1].lower()
             self._keys[0] = 'unknown key'
         if keycode not in self._keys:
             keycode = 0
