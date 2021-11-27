@@ -124,7 +124,8 @@ class Canvas(Surface):
     def onKeyUp(self, event):
         if event.keyCode in self.modKey:
             self.event.keyPress[event.keyCode] = False
-        self.keyHeld[event.keyCode]['pressed'] = False
+        if event.keyCode in self.keyHeld:
+            self.keyHeld[event.keyCode]['pressed'] = False
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
 
