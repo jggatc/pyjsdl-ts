@@ -6,7 +6,7 @@ from pyjsdl.surface import Surface
 from pyjsdl.rect import Rect
 from pyjsdl.time import Time
 from pyjsdl import env
-from pyjsdl.pyjsobj import RootPanel, FocusPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
+from pyjsdl.pyjsobj import RootPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
 
 __docformat__ = 'restructuredtext'
 
@@ -47,6 +47,7 @@ class Canvas(Surface):
         self.preventContextMenu()
         self.evt = self.event.eventObj
         self.modKey = self.event.modKey
+        self.specialKey = self.event.specialKey
         self.keyRepeat = self.event.keyRepeat
         self.keyHeld = self.event.keyHeld
         self.mouse_entered = True
@@ -114,20 +115,33 @@ class Canvas(Surface):
         event.preventDefault()
 
     def onKeyDown(self, event):
-        if event.keyCode in self.modKey:
-            self.event.keyPress[event.keyCode] = True
+        keycode = event.which or event.keyCode or 0
+        if keycode in self.modKey:
+            self.event.keyPress[keycode] = True
         if event.js_type in self.event.events:
             if not self._isPaused(event.keyCode):
-                self.event._updateQueue(self.evt[event.js_type](event))
-        event.preventDefault()
+                self.event.keyCode = keycode
+                if keycode in self.specialKey:
+                    self.event._updateQueue(self.evt[event.js_type](event))
+                    event.preventDefault()
+            else:
+                event.preventDefault()
 
     def onKeyUp(self, event):
-        if event.keyCode in self.modKey:
-            self.event.keyPress[event.keyCode] = False
-        if event.keyCode in self.keyHeld:
-            self.keyHeld[event.keyCode]['pressed'] = False
+        keycode = event.which or event.keyCode or 0
+        if keycode in self.modKey:
+            self.event.keyPress[keycode] = False
+        if keycode in self.keyHeld:
+            self.keyHeld[keycode]['pressed'] = False
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
+
+    def onKeyPress(self, event):
+        if event.js_type in self.event.events:
+            keycode = event.which or event.keyCode or 0
+            self.event.keyPressCode[self.event.keyCode] = keycode
+            self.event._updateQueue(self.evt[event.js_type](event))
+        event.preventDefault()
 
     def _isPaused(self, keycode):
         if keycode not in self.keyHeld:
