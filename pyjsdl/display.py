@@ -1,7 +1,6 @@
 #Pyjsdl - Copyright (C) 2013 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-#import base64
 from pyjsdl.surface import Surface
 from pyjsdl.rect import Rect
 from pyjsdl.time import Time
@@ -258,9 +257,9 @@ class Canvas(Surface):
                     if isinstance(image[1], str):
                         data = image[1]
                     else:
-                        data = base64.b64encode(image[1].getvalue())
+                        raise TypeError('provide image in base64-encoded data')
                     if not data.startswith('data:'):
-                        ext = name.strip().split('.')[-1]
+                        ext = name.strip().split('.').reverse()[0]
                         data = 'data:{};base64,{}'.format(ext, data)
                         #data:[<mediatype>][;base64],<data>
                     image_list.append(data)
@@ -408,7 +407,7 @@ class Display(object):
         Initialize Canvas for script execution.
         Argument include callback function to run and optional images list to preload.
         Callback function can also be an object with a run method to call.
-        The images can be image URL, or file-like object or base64 data in format (name.ext,data).
+        The images can be image URL, or base64 data in format (name.ext,data).
         """
         self.canvas.set_callback(callback)
         image_list = []
@@ -433,7 +432,7 @@ class Display(object):
     def setup_images(self, images):
         """
         Add images to image preload list.
-        The argument is an image or list of images representing an image URL, or file-like object or base64 data in format (name.ext,data).
+        The argument is an image or list of images representing an image URL, or base64 data in format (name.ext,data).
         Image preloading occurs at display.setup call.
         """
         if isinstance(images, str):
