@@ -1,6 +1,7 @@
 #Pyjsdl - Copyright (C) 2013 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+
 class Element:
 
     def __init__(self, element=None):
@@ -153,9 +154,29 @@ class FocusElement(Element):
     def addKeyboardListener(self, obj):
         element = obj.getElement()
         element.setAttribute('tabindex','0')
-        element.addEventListener('keypress', self.onKeyPress)
         element.addEventListener('keydown', self.onKeyDown)
         element.addEventListener('keyup', self.onKeyUp)
+        element.addEventListener('keypress', self.onKeyPress)
+
+    def _addKeyboardListener(self, obj):
+        element = obj.getElement()
+        element.setAttribute('tabindex','0')
+        element.addEventListener('keydown', self._onKeyDown)
+        element.addEventListener('keyup', self._onKeyUp)
+        element.addEventListener('keypress', self._onKeyPress)
+
+    def addKeyEventListener(self, obj):
+        element = obj.getElement()
+        element.setAttribute('tabindex','0')
+        listener = lambda event: self.onKeyEvent(event)
+        _listener[self.__name__] = listener
+        element.addEventListener('keydown', listener)
+
+    def removeKeyEventListener(self, obj):
+        element = obj.getElement()
+        listener = _listener[self.__name__]
+        element.removeEventListener('keydown', listener)
+        del _listener[self.__name__]
 
     def addFocusListener(self, obj):
         element = obj.getElement()
@@ -184,13 +205,13 @@ class FocusElement(Element):
     def onMouseWheel(self, event):
         pass
 
-    def onKeyPress(self, event):
-        pass
-
     def onKeyDown(self, event):
         pass
 
     def onKeyUp(self, event):
+        pass
+
+    def onKeyPress(self, event):
         pass
 
     def onTouchInitiate(self, event):
@@ -219,6 +240,9 @@ class FocusElement(Element):
 
     def blur(self):
         self._element.blur()
+
+
+_listener = {}
 
 
 class HTML5Canvas(FocusElement):

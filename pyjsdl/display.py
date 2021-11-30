@@ -41,13 +41,15 @@ class Canvas(Surface):
         self.time = Time()
         self.event = env.event
         self.addMouseListener(self)
-        self.addKeyboardListener(self)
+        self.addKeyEventListener(self)
         self.sinkEvents(Event.ONMOUSEDOWN | Event.ONMOUSEUP| Event.ONMOUSEMOVE | Event.ONMOUSEOUT | Event.ONMOUSEWHEEL | Event.ONKEYDOWN | Event.ONKEYPRESS | Event.ONKEYUP)
         self.onContextMenu = None
         self.preventContextMenu()
         self.evt = self.event.eventObj
         self.modKey = self.event.modKey
         self.specialKey = self.event.specialKey
+        self.modKeyCode = self.event.modKeyCode
+        self.specialKeyCode = self.event.specialKeyCode
         self.keyRepeat = self.event.keyRepeat
         self.keyHeld = self.event.keyHeld
         self.mouse_entered = True
@@ -105,7 +107,7 @@ class Canvas(Surface):
         self.event.mouseMove['y'] = -1
         self.event.mouseMoveRel['x'] = None
         self.event.mouseMoveRel['y'] = None
-        for keycode in self.modKey:
+        for keycode in self.modKeyCode:
             if self.event.keyPress[keycode]:
                 self.event.keyPress[keycode] = False
 
@@ -114,29 +116,55 @@ class Canvas(Surface):
             self.event._updateQueue(self.evt[event.js_type](event))
         event.preventDefault()
 
+    def onKeyEvent(self, event):
+        self.removeKeyEventListener(self)
+        if event.key and event.code:
+            self.addKeyboardListener(self)
+            self.onKeyDown(event)
+        else:
+            self.event._set_key_event()
+            self._addKeyboardListener(self)
+            self._onKeyDown(event)
+
     def onKeyDown(self, event):
+        if event.key in self.modKey:
+            self.event.keyPress[self.modKey[event.key]] = True
+        if event.js_type in self.event.events:
+            if not self._isPaused(event.key):
+                self.event._updateQueue(self.evt[event.js_type](event))
+        event.preventDefault()
+
+    def onKeyUp(self, event):
+        if event.key in self.modKey:
+            self.event.keyPress[self.modKey[event.key]] = False
+        if event.key in self.keyHeld:
+            self.keyHeld[event.key]['pressed'] = False
+        if event.js_type in self.event.events:
+            self.event._updateQueue(self.evt[event.js_type](event))
+
+    def _onKeyDown(self, event):
         keycode = event.which or event.keyCode or 0
-        if keycode in self.modKey:
+        if keycode in self.modKeyCode:
             self.event.keyPress[keycode] = True
         if event.js_type in self.event.events:
             if not self._isPaused(event.keyCode):
                 self.event.keyCode = keycode
-                if keycode in self.specialKey:
+                if keycode in self.specialKeyCode:
                     self.event._updateQueue(self.evt[event.js_type](event))
                     event.preventDefault()
             else:
                 event.preventDefault()
 
-    def onKeyUp(self, event):
+    def _onKeyUp(self, event):
         keycode = event.which or event.keyCode or 0
-        if keycode in self.modKey:
+        if keycode in self.modKeyCode:
             self.event.keyPress[keycode] = False
         if keycode in self.keyHeld:
             self.keyHeld[keycode]['pressed'] = False
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
 
-    def onKeyPress(self, event):
+    def _onKeyPress(self, event):
         if event.js_type in self.event.events:
             keycode = event.which or event.keyCode or 0
             self.event.keyPressCode[self.event.keyCode] = keycode

@@ -51,9 +51,11 @@ class Event(object):
         self.eventType = [Const.MOUSEMOTION, Const.MOUSEBUTTONDOWN, Const.MOUSEBUTTONUP, Const.KEYDOWN, Const.KEYUP, 'mousemove', 'mousedown', 'mouseup', 'wheel', 'mousewheel', 'DOMMouseScroll', 'keydown', 'keypress', 'keyup']
         self.events = set(self.eventType)
         self.eventTypes = {Const.MOUSEMOTION: set([Const.MOUSEMOTION, 'mousemove']), Const.MOUSEBUTTONDOWN: set([Const.MOUSEBUTTONDOWN, 'mousedown', 'wheel', 'mousewheel',  'DOMMouseScroll']), Const.MOUSEBUTTONUP: set([Const.MOUSEBUTTONUP, 'mouseup']), Const.KEYDOWN: set([Const.KEYDOWN, 'keydown', 'keypress']), Const.KEYUP: set([ Const.KEYUP, 'keyup'])}
-        self.eventObj = {'mousedown':MouseDownEvent, 'mouseup':MouseUpEvent, 'wheel':MouseWheelEvent, 'mousewheel':MouseWheelEvent, 'DOMMouseScroll':_MouseWheelEvent, 'mousemove':MouseMoveEvent, 'keydown':KeyDownEvent, 'keyup':KeyUpEvent, 'keypress':KeyPressEvent}
+        self.eventObj = {'mousedown':MouseDownEvent, 'mouseup':MouseUpEvent, 'wheel':MouseWheelEvent, 'mousewheel':MouseWheelEvent, 'DOMMouseScroll':_MouseWheelEvent, 'mousemove':MouseMoveEvent, 'keydown':KeyDownEvent, 'keyup':KeyUpEvent}
         self.modKey = key._modKey
         self.specialKey = key._specialKey
+        self.modKeyCode = key._modKeyCode
+        self.specialKeyCode = key._specialKeyCode
         self.touchlistener = None
         self.keyRepeat = [0, 0]
         self.keyHeld = {}
@@ -291,6 +293,11 @@ class Event(object):
         self._unlock()
         return None
 
+    def _set_key_event(self):
+        self.eventObj['keydown'] = _KeyDownEvent
+        self.eventObj['keyup'] = _KeyUpEvent
+        self.eventObj['keypress'] = _KeyPressEvent
+
     def _initiate_touch_listener(self, canvas):
         self.touchlistener = TouchListener(canvas)
         return None
@@ -470,7 +477,9 @@ class KeyEvent(JEvent):
 
     _types = {'keydown':Const.KEYDOWN, 'keyup':Const.KEYUP, 'keypress':Const.KEYDOWN}
     _eventName = {Const.KEYDOWN:'KeyDown', Const.KEYUP:'KeyUp'}
+    _code = key._code
     _specialKey = key._specialKey
+    _specialKeyCode = key._specialKeyCode
 
     __slots__ = []
 
@@ -482,8 +491,55 @@ class KeyDownEvent(KeyEvent):
     def __init__(self, event):
         self.event = event
         self.type = self._types[event.js_type]
+        if event.key in self._specialKey:
+            self.key = self._specialKey[event.key]
+            if self.key in (9, 13):
+                self.unicode = chr(self.key)
+            else:
+                self.unicode = ''
+        else:
+            if event.code in self._code:
+                self.key = self._code[event.code]
+            else:
+                self.key = event.code
+            self.unicode = event.key
+        self.mod = ( (event.altKey*Const.KMOD_ALT) |
+                     (event.ctrlKey*Const.KMOD_CTRL) |
+                     (event.shiftKey*Const.KMOD_SHIFT) )
+
+class KeyUpEvent(KeyEvent):
+
+    __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
+
+    def __init__(self, event):
+        self.event = event
+        self.type = self._types[event.js_type]
+        if event.key in self._specialKey:
+            self.key = self._specialKey[event.key]
+            if self.key in (9, 13):
+                self.unicode = chr(self.key)
+            else:
+                self.unicode = ''
+        else:
+            if event.code in self._code:
+                self.key = self._code[event.code]
+            else:
+                self.key = event.code
+            self.unicode = event.key
+        self.mod = ( (event.altKey*Const.KMOD_ALT) |
+                     (event.ctrlKey*Const.KMOD_CTRL) |
+                     (event.shiftKey*Const.KMOD_SHIFT) )
+
+
+class _KeyDownEvent(KeyEvent):
+
+    __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
+
+    def __init__(self, event):
+        self.event = event
+        self.type = self._types[event.js_type]
         keycode = event.which or event.keyCode or 0
-        self.key = self._specialKey[keycode]
+        self.key = self._specialKeyCode[keycode]
         if self.key in (9, 13):
             self.unicode = chr(self.key)
         else:
@@ -493,7 +549,7 @@ class KeyDownEvent(KeyEvent):
                      (event.shiftKey*Const.KMOD_SHIFT) )
 
 
-class KeyUpEvent(KeyEvent):
+class _KeyUpEvent(KeyEvent):
 
     __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
 
@@ -501,8 +557,8 @@ class KeyUpEvent(KeyEvent):
         self.event = event
         keycode = event.which or event.keyCode or 0
         self.type = self._types[event.js_type]
-        if keycode in self._specialKey:
-            self.key = self._specialKey[keycode]
+        if keycode in self._specialKeyCode:
+            self.key = self._specialKeyCode[keycode]
             if keycode in (9, 13):
                 self.unicode = chr(keycode)
             else:
@@ -527,7 +583,7 @@ class KeyUpEvent(KeyEvent):
                      (event.shiftKey*Const.KMOD_SHIFT) )
 
 
-class KeyPressEvent(KeyEvent):
+class _KeyPressEvent(KeyEvent):
 
     __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
 
