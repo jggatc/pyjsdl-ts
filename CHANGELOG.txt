@@ -22,6 +22,7 @@
 -refactor event handler for performance.
 -add key set_repeat method.
 -revise key event handler.
+-update key event handler.
 
 0.24    2021-04-28
 -revise rect move/inflate args processing.
