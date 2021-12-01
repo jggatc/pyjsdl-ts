@@ -1,4 +1,5 @@
-0.24-dev
+0.25    2021-11-30
+-create pyjsdl-ts port
 -revise module for transcrypt.
 -revise sprite orderedupdates.
 -revise font render.

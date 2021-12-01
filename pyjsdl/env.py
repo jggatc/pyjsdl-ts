@@ -1,13 +1,5 @@
-#Pyjsdl - Copyright (C) 2013 James Garnon <https://gatc.ca/>
+#Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
-
-#import os, sys     ###
-
-
-#if os.name != 'pyjs':      ###
-#    print('Use Pyjs to compile script to a JS app')
-#    sys.exit()
-
 
 canvas = None
 

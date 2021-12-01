@@ -1,4 +1,4 @@
-#Pyjsdl - Copyright (C) 2013 James Garnon <https://gatc.ca/>
+#Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
 #PyjsArray - Python-to-JavaScript TypedArray Module
@@ -24,6 +24,8 @@
 
 #PyjsArray version 0.54
 #Project Site: https://gatc.ca/
+
+#ported to use with Transcrypt
 
 from math import ceil as _ceil, floor as _floor
 # __pragma__ ('skip')

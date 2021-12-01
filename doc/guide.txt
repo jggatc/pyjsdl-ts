@@ -26,5 +26,5 @@ The script.html file can be launched direct, or loaded in another Web page using
 
 Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. To run on a local HTTP server, use command 'python3 -m http.server' and browse to localhost:8000. During development, use the web browser devtools console that displays print and error output, and to maintain updated development changes set devtools to open with cache disabled. The app can also run on the desktop using the app.py script, check instructions within the script.
 
-Further information is available on the Pyjsdl project page (https://gatc.ca/projects/pyjsdl/) and in the API documentation (https://gatc.ca/projects/pyjsdl/doc/).
+Further information is available on the Pyjsdl project page (https://gatc.ca/projects/pyjsdl-ts/) and in the API documentation (https://gatc.ca/projects/pyjsdl/doc/).
 
