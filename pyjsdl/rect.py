@@ -54,12 +54,6 @@ class Rect(object):
         center, centerx, centery
         size, w, h
 
-        Attribute access is functional in strict mode (-S),
-        while in optimized mode (-O) direct access can be used
-        with x/y/width/height whereas other attributes can be
-        accessed with getattr/setattr functions or build with
-        the --enable-descriptor-proto option.
-
         Module initialization places pyjsdl.Rect in module's namespace.
         """
         if len(args) == 1:
