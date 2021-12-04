@@ -99,7 +99,7 @@ class Mouse(object):
                 fallback = 'default'
             else:
                 fallback = cursor[2]
-            self._cursor = 'url("%s") %d %d, %s' % (url, hotspot[0], hotspot[1], fallback)
+            self._cursor = 'url({}) {} {}, {}'.format(url, hotspot[0], hotspot[1], fallback)
         elif args in (4,5):
             size = cursor[0]
             hotspot = cursor[1]
@@ -111,7 +111,7 @@ class Mouse(object):
                 fallback = cursor[4]
             surface = cursors.create_cursor(size, data, mask)
             url = surface.toDataURL()
-            self._cursor = 'url("%s") %d %d, %s' % (url, hotspot[0], hotspot[1], fallback)
+            self._cursor = 'url({}) {} {}, {}'.format(url, hotspot[0], hotspot[1], fallback)
         else:
             self._cursor = 'default'
         if self._cursorVisible:

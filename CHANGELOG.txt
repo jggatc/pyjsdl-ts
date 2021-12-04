@@ -1,5 +1,9 @@
+0.25-dev
+-revise textarea object.
+-revise mouse set_cursor method.
+
 0.25    2021-11-30
--create pyjsdl-ts port
+-create pyjsdl-ts port.
 -revise module for transcrypt.
 -revise sprite orderedupdates.
 -revise font render.
