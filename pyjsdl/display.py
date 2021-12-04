@@ -610,7 +610,7 @@ class Textbox(TextBox):
 
     def __init__(self, size=None, panel=None):
         TextBox.__init__(self)
-        if not size:
+        if size is None:
             self.width, self.height = '100%', '20px'
             self.setSize(self.width, self.height)
         else:
@@ -656,7 +656,7 @@ class Textarea(TextArea):
 
     def __init__(self, size=None, panel=None):
         TextArea.__init__(self)
-        if not size:
+        if size is None:
             self.width, self.height = '100%', str(int(env.canvas.surface.height/2))+'px'
             self.setSize(self.width, self.height)
         else:
