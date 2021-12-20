@@ -272,12 +272,14 @@ class HTML5Canvas(FocusElement):
         self.height = height
 
     def drawImage(self, image, *args):
-        if len(args) == 2:
+        ln = len(args)
+        if ln == 2:
             self._ctx.drawImage(image,args[0],args[1])
-        if len(args) == 4:
+        elif ln == 4:
             self._ctx.drawImage(image,args[0],args[1],args[2],args[3])
-        elif len(args) == 8:
-            self._ctx.drawImage(image,args[0],args[1],args[2],args[3], args[4],args[5],args[6],args[7])
+        elif ln == 8:
+            self._ctx.drawImage(image,args[0],args[1],args[2],args[3],
+                                      args[4],args[5],args[6],args[7])
 
     def fill(self):
         self._ctx.fill()
