@@ -1,6 +1,7 @@
 0.25-dev
 -revise textarea object.
 -revise mouse set_cursor method.
+-update surface blit with optional rect return.
 
 0.25    2021-11-30
 -create pyjsdl-ts port.

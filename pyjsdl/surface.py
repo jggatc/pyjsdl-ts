@@ -14,6 +14,9 @@ if sys.version_info < (3,):
 __docformat__ = 'restructuredtext'
 
 
+_return_rect = True
+
+
 class Surface(HTML5Canvas):
     """
     **pyjsdl.Surface**
@@ -154,12 +157,23 @@ class Surface(HTML5Canvas):
         Draw given surface on this surface at position.
         Optional area delimitates the region of given surface to draw.
         """
+        if not _return_rect:
+            if not area:
+                self._ctx.drawImage(surface.canvas, position[0], position[1])
+            else:
+                self._ctx.drawImage(surface.canvas,
+                                    area[0], area[1], area[2], area[3],
+                                    position[0], position[1], area[2], area[3])
+            return None
         if not area:
-            rect = rectPool.get(position[0],position[1],surface.width,surface.height)
-            self.impl.canvasContext.drawImage(surface.canvas, rect.x, rect.y)
+            rect = rectPool.get(position[0], position[1],
+                                surface.width, surface.height)
+            self._ctx.drawImage(surface.canvas, rect.x, rect.y)
         else:
-            rect = rectPool.get(position[0],position[1],area[2], area[3])
-            self.impl.canvasContext.drawImage(surface.canvas, area[0], area[1], area[2], area[3], rect.x, rect.y, area[2], area[3])
+            rect = rectPool.get(position[0], position[1], area[2], area[3])
+            self._ctx.drawImage(surface.canvas,
+                                area[0], area[1], area[2], area[3],
+                                rect.x, rect.y, area[2], area[3])
         if self._display:
             surface_rect = self._display._surface_rect
         else:
@@ -373,4 +387,13 @@ class Surf(object):
 
 class IndexSizeError(Exception):
     pass
+
+
+def bounding_rect_return(setting):
+    """
+    Set whether surface blit function returns bounding Rect.
+    Setting (bool) defaults to True on module initialization.
+    """
+    global _return_rect
+    _return_rect = setting
 
