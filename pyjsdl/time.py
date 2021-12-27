@@ -146,7 +146,7 @@ class Time(object):
         Optional argument once set no timer repeat, defaults to False.
         Disable timer with time of 0. 
         """
-        if hasattr(event, 'type'):
+        if event.type:
             eventType = event.type
             if str(eventType) not in self._timers.keys():
                 self._timers[eventType] = _EventTimer(event)
