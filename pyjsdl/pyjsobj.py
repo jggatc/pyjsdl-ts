@@ -692,3 +692,22 @@ def performanceNowPolyfill():
 
 fabs = Math.abs
 
+
+if not String.prototype.count:
+    __pragma__ ('js', {},
+    """
+String.prototype.count = function (sub, start, end) {
+    if (start === undefined && start === null) {
+        return (this.match (new RegExp (sub, 'g')) || []).length;
+    }
+    if (start === undefined || start === null) {
+        start = 0;
+    }
+    if (end === undefined || end === null) {
+        end = this.length;
+    }
+    return (this.slice (start, end)
+                .match (new RegExp (sub, 'g')) || []).length;
+};
+    """)
+
