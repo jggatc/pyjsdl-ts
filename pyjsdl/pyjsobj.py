@@ -711,3 +711,12 @@ String.prototype.count = function (sub, start, end) {
 };
     """)
 
+
+if not String.prototype.splitlines:
+    __pragma__ ('js', {},
+    """
+String.prototype.splitlines = function () {
+    return this.split (/\\r\\n|\\r|\\n/g);
+};
+    """)
+
