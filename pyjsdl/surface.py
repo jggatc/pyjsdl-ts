@@ -355,6 +355,9 @@ class Surface(HTML5Canvas):
         else:
             return self.canvas.toDataURL(datatype)
 
+    def toString(self):
+        return self.__str__()
+
     def _nonimplemented_methods(self):
         self.convert = lambda *arg: self
         self.convert_alpha = lambda *arg: self
