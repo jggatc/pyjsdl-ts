@@ -290,8 +290,9 @@ class HTML5Canvas(FocusElement):
     def fillRect(self, x, y, width, height):
         self._ctx.fillRect(x, y, width, height)
 
-    def clear(self):
-        self._ctx.clear()
+    def py_clear(self):
+        #clear()
+        self._ctx.clearRect(0, 0, self.width, self.height)
 
     def setLineWidth(self, width):
         self._ctx.lineWidth = width
