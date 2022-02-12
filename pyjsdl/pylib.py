@@ -36,7 +36,7 @@ def join(a, *p):
 
 
 #os.path.normpath - py3.5.2
-def normpath(path):     ###
+def normpath(path):
     """Normalize path, eliminating double slashes, etc."""
     if isinstance(path, bytes):
         sep = b'/'

@@ -37,7 +37,9 @@ class Mouse(object):
         """
         Return state of mouse buttons as a tuple of bool for button1,2,3.
         """
-        return (self.mousePress[0], self.mousePress[1], self.mousePress[2])
+        return (self.mousePress[0],
+                self.mousePress[1],
+                self.mousePress[2])
 
     def get_pos(self):
         """
@@ -49,19 +51,22 @@ class Mouse(object):
             return (self.mouseMove['x'] - round(r.left),
                     self.mouseMove['y'] - round(r.top))
         else:
-            return self.mouseMove['x'], self.mouseMove['y']
+            return (self.mouseMove['x'], self.mouseMove['y'])
 
     def get_rel(self):
         """
         Return relative x,y change of mouse position since last call.
         """
         try:
-            rel = (self.mouseMove['x']-self.mouseMoveRel['x'], self.mouseMove['y']-self.mouseMoveRel['y'])
-            self.mouseMoveRel['x'], self.mouseMoveRel['y'] = self.mouseMove['x'], self.mouseMove['y']
+            rel = (self.mouseMove['x'] - self.mouseMoveRel['x'],
+                   self.mouseMove['y'] - self.mouseMoveRel['y'])
+            self.mouseMoveRel['x'] = self.mouseMove['x']
+            self.mouseMoveRel['y'] = self.mouseMove['y']
         except TypeError:
             rel = (0, 0)
             if self.mouseMove['x'] != -1:
-                self.mouseMoveRel['x'], self.mouseMoveRel['y'] = self.mouseMove['x'], self.mouseMove['y']
+                self.mouseMoveRel['x'] = self.mouseMove['x']
+                self.mouseMoveRel['y'] = self.mouseMove['y']
         return rel
 
     def set_visible(self, visible):
@@ -70,10 +75,12 @@ class Mouse(object):
         """
         visible_pre = self._cursorVisible
         if visible:
-            DOM.setStyleAttribute(env.canvas.getElement(), 'cursor', self._cursor)
+            DOM.setStyleAttribute(env.canvas.getElement(),
+                                  'cursor', self._cursor)
             self._cursorVisible = True
         else:
-            DOM.setStyleAttribute(env.canvas.getElement(), 'cursor', 'none')
+            DOM.setStyleAttribute(env.canvas.getElement(),
+                                  'cursor', 'none')
             self._cursorVisible = False
         return visible_pre
 
@@ -99,7 +106,10 @@ class Mouse(object):
                 fallback = 'default'
             else:
                 fallback = cursor[2]
-            self._cursor = 'url({}) {} {}, {}'.format(url, hotspot[0], hotspot[1], fallback)
+            self._cursor = 'url({}) {} {}, {}'.format(url,
+                                                      hotspot[0],
+                                                      hotspot[1],
+                                                      fallback)
         elif args in (4,5):
             size = cursor[0]
             hotspot = cursor[1]
@@ -111,11 +121,15 @@ class Mouse(object):
                 fallback = cursor[4]
             surface = cursors.create_cursor(size, data, mask)
             url = surface.toDataURL()
-            self._cursor = 'url({}) {} {}, {}'.format(url, hotspot[0], hotspot[1], fallback)
+            self._cursor = 'url({}) {} {}, {}'.format(url,
+                                                      hotspot[0],
+                                                      hotspot[1],
+                                                      fallback)
         else:
             self._cursor = 'default'
         if self._cursorVisible:
-            DOM.setStyleAttribute(env.canvas.getElement(), 'cursor', self._cursor)
+            DOM.setStyleAttribute(env.canvas.getElement(),
+                                  'cursor', self._cursor)
 
     def get_cursor(self):
         """

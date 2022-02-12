@@ -274,12 +274,12 @@ class HTML5Canvas(FocusElement):
     def drawImage(self, image, *args):
         ln = len(args)
         if ln == 2:
-            self._ctx.drawImage(image,args[0],args[1])
+            self._ctx.drawImage(image, args[0], args[1])
         elif ln == 4:
-            self._ctx.drawImage(image,args[0],args[1],args[2],args[3])
+            self._ctx.drawImage(image, args[0], args[1], args[2], args[3])
         elif ln == 8:
-            self._ctx.drawImage(image,args[0],args[1],args[2],args[3],
-                                      args[4],args[5],args[6],args[7])
+            self._ctx.drawImage(image, args[0], args[1], args[2], args[3],
+                                       args[4], args[5], args[6], args[7])
 
     def fill(self):
         self._ctx.fill()
@@ -364,7 +364,8 @@ class HTML5Canvas(FocusElement):
         if len(args) == 3:
             self._ctx.putImageData(args[0], args[1], args[2])
         else:
-            self._ctx.putImageData(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+            self._ctx.putImageData(args[0], args[1], args[2],
+                                   args[3], args[4], args[5], args[6])
 
     def getContext(self, ctx_type='2d', ctx_attr=None):
         if ctx_attr is None:

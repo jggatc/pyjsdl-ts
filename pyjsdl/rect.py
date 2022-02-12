@@ -62,13 +62,22 @@ class Rect(object):
             arg = args
         ln = len(arg)
         if ln == 4:
-            x, y, width, height = arg[0], arg[1], arg[2], arg[3]
+            x = arg[0]
+            y = arg[1]
+            width = arg[2]
+            height = arg[3]
         elif ln == 2:
-            x, y, width, height = arg[0][0], arg[0][1], arg[1][0], arg[1][1]
+            x = arg[0][0]
+            y = arg[0][1]
+            width = arg[1][0]
+            height = arg[1][1]
         else:
             if hasattr(arg, 'rect'):
                 arg = arg.rect
-            x, y, width, height = arg.x, arg.y, arg.width, arg.height
+            x = arg.x
+            y = arg.y
+            width = arg.width
+            height = arg.height
         self._x = int(x)
         self._y = int(y)
         self._width = int(width)
@@ -77,10 +86,17 @@ class Rect(object):
     # __pragma__ ('noopov')
 
     def __str__(self):
-        return '<rect({}, {}, {}, {})>'.format(self.x, self.y, self.width, self.height)
+        return '<rect({}, {}, {}, {})>'.format(self.x,
+                                               self.y,
+                                               self.width,
+                                               self.height)
 
     def __repr__(self):
-        return '{}({}, {}, {}, {})'.format(self.__class__.__name__, self.x, self.y, self.width, self.height)
+        class_name = self.__class__.__name__
+        return '{}({}, {}, {}, {})'.format(class_name, self.x,
+                                                       self.y,
+                                                       self.width,
+                                                       self.height)
 
     def __getitem__(self, key):
         return getattr(self, ('x','y','width','height')[key])
@@ -101,10 +117,16 @@ class Rect(object):
         return self.width and self.height
 
     def __eq__(self, other):
-        return self.x==other.x and self.y==other.y and self.width==other.width and self.height==other.height
+        return (self.x == other.x and
+                self.y == other.y and
+                self.width == other.width
+                and self.height == other.height)
 
     def __ne__(self, other):
-        return self.x!=other.x or self.y!=other.y or self.width!=other.width or self.height!=other.height
+        return (self.x != other.x or
+                self.y != other.y or
+                self.width != other.width or
+                self.height != other.height)
 
     def setLocation(self, x, y):
         self._x = int(x)
@@ -192,13 +214,19 @@ class Rect(object):
         """
         Check if rect is in this rect.
         """
-        return (self.x <= rect.x and (self.x+self.width) >= (rect.x+rect.width) and self.y <= rect.y and (self.y+self.height) >= (rect.y+rect.height))
+        return (self.x <= rect.x and
+                (self.x + self.width) >= (rect.x + rect.width) and
+                self.y <= rect.y and
+                (self.y + self.height) >= (rect.y + rect.height))
 
     def intersects(self, rect):
         """
         Check if rect intersects this rect.
         """
-        return (self.x < (rect.x+rect.width) and rect.x < (self.x+self.width) and self.y < (rect.y+rect.height) and rect.y < (self.y+self.height))
+        return (self.x < (rect.x + rect.width) and
+                rect.x < (self.x + self.width) and
+                self.y < (rect.y + rect.height) and
+                rect.y < (self.y + self.height))
 
     def union(self, rect):
         """
@@ -206,11 +234,11 @@ class Rect(object):
         """
         x = self.x if self.x < rect.x else rect.x
         y = self.y if self.y < rect.y else rect.y
-        s = self.x+self.width
-        r = rect.x+rect.width
+        s = self.x + self.width
+        r = rect.x + rect.width
         w = (s if s > r else r) - x
-        s = self.y+self.height
-        r = rect.y+rect.height
+        s = self.y + self.height
+        r = rect.y + rect.height
         h = (s if s > r else r) - y
         return Rect(x, y, w, h)
 
@@ -220,11 +248,11 @@ class Rect(object):
         """
         x = self.x if self.x < rect.x else rect.x
         y = self.y if self.y < rect.y else rect.y
-        s = self.x+self.width
-        r = rect.x+rect.width
+        s = self.x + self.width
+        r = rect.x + rect.width
         w = (s if s > r else r) - x
-        s = self.y+self.height
-        r = rect.y+rect.height
+        s = self.y + self.height
+        r = rect.y + rect.height
         h = (s if s > r else r) - y
         self.x = x
         self.y = y
@@ -238,20 +266,20 @@ class Rect(object):
         """
         x1 = self.x
         y1 = self.y
-        x2 = self.x+self.width
-        y2 = self.y+self.height
+        x2 = self.x + self.width
+        y2 = self.y + self.height
         for r in rect_list:
             if r.x < x1:
                 x1 = r.x
             if r.y < y1:
                 y1 = r.y
-            rx2 = r.x+r.width
+            rx2 = r.x + r.width
             if rx2 > x2:
                 x2 = rx2
-            ry2 = r.y+r.height
+            ry2 = r.y + r.height
             if ry2 > y2:
                 y2 = ry2
-        return Rect(x1,y1,x2-x1,y2-y1)
+        return Rect(x1, y1, x2-x1, y2-y1)
 
     def unionall_ip(self, rect_list):
         """
@@ -259,23 +287,23 @@ class Rect(object):
         """
         x1 = self.x
         y1 = self.y
-        x2 = self.x+self.width
-        y2 = self.y+self.height
+        x2 = self.x + self.width
+        y2 = self.y + self.height
         for r in rect_list:
             if r.x < x1:
                 x1 = r.x
             if r.y < y1:
                 y1 = r.y
-            rx2 = r.x+r.width
+            rx2 = r.x + r.width
             if rx2 > x2:
                 x2 = rx2
-            ry2 = r.y+r.height
+            ry2 = r.y + r.height
             if ry2 > y2:
                 y2 = ry2
         self.x = x1
         self.y = y1
-        self.width = x2-x1
-        self.height = y2-y1
+        self.width = x2 - x1
+        self.height = y2 - y1
         return None
 
     def clamp(self, rect):
@@ -285,21 +313,21 @@ class Rect(object):
         if self.width < rect.width:
             if self.x < rect.x:
                 x = rect.x
-            elif self.x+self.width > rect.x+rect.width:
-                x = rect.x+rect.width-self.width
+            elif self.x + self.width > rect.x + rect.width:
+                x = rect.x + rect.width - self.width
             else:
                 x = self.x
         else:
-            x = rect.x-int((self.width-rect.width)/2)
+            x = rect.x - int((self.width - rect.width)/2)
         if self.height < rect.height:
             if self.y < rect.y:
                 y = rect.y
-            elif self.y+self.height > rect.y+rect.height:
-                y = rect.y+rect.height-self.height
+            elif self.y + self.height > rect.y + rect.height:
+                y = rect.y + rect.height - self.height
             else:
                 y = self.y
         else:
-            y = rect.y-int((self.height-rect.height)/2)
+            y = rect.y - int((self.height - rect.height)/2)
         return Rect(x, y, self.width, self.height)
 
     def clamp_ip(self, rect):
@@ -309,21 +337,21 @@ class Rect(object):
         if self.width < rect.width:
             if self.x < rect.x:
                 x = rect.x
-            elif self.x+self.width > rect.x+rect.width:
-                x = rect.x+rect.width-self.width
+            elif self.x + self.width > rect.x + rect.width:
+                x = rect.x + rect.width - self.width
             else:
                 x = self.x
         else:
-            x = rect.x-int((self.width-rect.width)/2)
+            x = rect.x - int((self.width - rect.width)/2)
         if self.height < rect.height:
             if self.y < rect.y:
                 y = rect.y
-            elif self.y+self.height > rect.y+rect.height:
-                y = rect.y+rect.height-self.height
+            elif self.y + self.height > rect.y + rect.height:
+                y = rect.y + rect.height - self.height
             else:
                 y = self.y
         else:
-            y = rect.y-int((self.height-rect.height)/2)
+            y = rect.y - int((self.height - rect.height)/2)
         self.setLocation(x, y)
         return None
 
@@ -343,13 +371,22 @@ class Rect(object):
             arg = args
         ln = len(arg)
         if ln == 4:
-            x, y, width, height = arg[0], arg[1], arg[2], arg[3]
+            x = arg[0]
+            y = arg[1]
+            width = arg[2]
+            height = arg[3]
         elif ln == 2:
-            x, y, width, height = arg[0][0], arg[0][1], arg[1][0], arg[1][1]
+            x = arg[0][0]
+            y = arg[0][1]
+            width = arg[1][0]
+            height = arg[1][1]
         else:
             if hasattr(arg, 'rect'):
                 arg = arg.rect
-            x, y, width, height = arg.x, arg.y, arg.width, arg.height
+            x = arg.x
+            y = arg.y
+            width = arg.width
+            height = arg.height
         self._x = int(x)
         self._y = int(y)
         self._width = int(width)
@@ -360,9 +397,11 @@ class Rect(object):
         Return True if point is in this rect.
         """
         if len(point) == 2:
-            return (self.x <= point[0] < (self.x+self.width) and self.y <= point[1] < (self.y+self.height))
+            return (self.x <= point[0] < (self.x + self.width) and
+                    self.y <= point[1] < (self.y + self.height))
         else:
-            return (self.x <= point[0][0] < (self.x+self.width) and self.y <= point[0][1] < (self.y+self.height))
+            return (self.x <= point[0][0] < (self.x + self.width) and
+                    self.y <= point[0][1] < (self.y + self.height))
 
     def colliderect(self, rect):
         """

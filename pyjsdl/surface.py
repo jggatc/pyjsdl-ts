@@ -110,7 +110,7 @@ class Surface(HTML5Canvas):
         """
         Return Surface that is a copy of this surface.
         """
-        surface = Surface((self.width,self.height))
+        surface = Surface((self.width, self.height))
         surface.drawImage(self.canvas, 0, 0)
         return surface
 
@@ -124,9 +124,12 @@ class Surface(HTML5Canvas):
             if not self._super_surface:
                 return
             if rect == 't':
-                self.drawImage(self._super_surface.canvas, self._offset[0], self._offset[1], self.width, self.height, 0, 0, self.width, self.height)
+                self.drawImage(self._super_surface.canvas,
+                    self._offset[0], self._offset[1], self.width, self.height,
+                    0, 0, self.width, self.height)
             else:
-                self._super_surface.drawImage(self.canvas, self._offset[0], self._offset[1])
+                self._super_surface.drawImage(self.canvas,
+                    self._offset[0], self._offset[1])
             return
         if hasattr(rect, 'width'):
             _rect = rect
@@ -147,7 +150,8 @@ class Surface(HTML5Canvas):
         Arguments include x, y, width, and height of the subimage.
         """
         surface = Surface((width,height))
-        surface.drawImage(self.canvas, x, y, width, height, 0, 0, width, height)
+        surface.drawImage(self.canvas,
+                          x, y, width, height, 0, 0, width, height)
         return surface
 
     # __pragma__ ('opov')
@@ -159,18 +163,20 @@ class Surface(HTML5Canvas):
         """
         if not _return_rect:
             if not area:
-                self._ctx.drawImage(surface.canvas, position[0], position[1])
+                self._ctx.drawImage(surface.canvas,
+                            position[0], position[1])
             else:
                 self._ctx.drawImage(surface.canvas,
-                                    area[0], area[1], area[2], area[3],
-                                    position[0], position[1], area[2], area[3])
+                            area[0], area[1], area[2], area[3],
+                            position[0], position[1], area[2], area[3])
             return None
         if not area:
             rect = rectPool.get(position[0], position[1],
                                 surface.width, surface.height)
             self._ctx.drawImage(surface.canvas, rect.x, rect.y)
         else:
-            rect = rectPool.get(position[0], position[1], area[2], area[3])
+            rect = rectPool.get(position[0], position[1],
+                                area[2], area[3])
             self._ctx.drawImage(surface.canvas,
                                 area[0], area[1], area[2], area[3],
                                 rect.x, rect.y, area[2], area[3])
@@ -192,7 +198,9 @@ class Surface(HTML5Canvas):
     def _blit_clear(self, surface, rect_list):
         ctx = self.impl.canvasContext
         for r in rect_list:
-            ctx.drawImage(surface.canvas, r.x,r.y,r.width,r.height, r.x,r.y,r.width,r.height)
+            ctx.drawImage(surface.canvas,
+                          r.x, r.y, r.width, r.height,
+                          r.x, r.y, r.width, r.height)
 
     def set_colorkey(self, color, flags=None):
         """
@@ -229,7 +237,7 @@ class Surface(HTML5Canvas):
         """
         Replace color with with new_color or with alpha.
         """
-        pixels = self.getImageData(0,0,self.width,self.height)
+        pixels = self.getImageData(0, 0, self.width, self.height)
         if hasattr(color, 'a'):
             color1 = color
         else:
@@ -246,24 +254,24 @@ class Surface(HTML5Canvas):
             r1,g1,b1,a1  = color1.r, color1.g, color1.b, color1.a
             a2  = 0
             for i in range(0, len(pixels.data), 4):
-                if (    self._getPixel(pixels,i) == r1 and 
-                        self._getPixel(pixels,i+1) == g1 and 
-                        self._getPixel(pixels,i+2) == b1 and 
+                if (    self._getPixel(pixels,i) == r1 and
+                        self._getPixel(pixels,i+1) == g1 and
+                        self._getPixel(pixels,i+2) == b1 and
                         self._getPixel(pixels,i+3) == a1   ):
                     self._setPixel(pixels, i+3, a2)
         else:
             r1,g1,b1,a1 = color1.r, color1.g, color1.b, color1.a
             r2,g2,b2,a2 = color2.r, color2.g, color2.b, color2.a
             for i in range(0, len(pixels.data), 4):
-                if (    self._getPixel(pixels,i) == r1 and 
-                        self._getPixel(pixels,i+1) == g1 and 
-                        self._getPixel(pixels,i+2) == b1 and 
+                if (    self._getPixel(pixels,i) == r1 and
+                        self._getPixel(pixels,i+1) == g1 and
+                        self._getPixel(pixels,i+2) == b1 and
                         self._getPixel(pixels,i+3) == a1   ):
                     self._setPixel(pixels, i, r2)
                     self._setPixel(pixels, i+1, g2)
                     self._setPixel(pixels, i+2, b2)
                     self._setPixel(pixels, i+3, a2)
-        self.putImageData(pixels,0,0,0,0,self.width,self.height)
+        self.putImageData(pixels, 0, 0, 0, 0, self.width, self.height)
         return None
 
     def get_at(self, pos):
@@ -374,7 +382,8 @@ class Surf(object):
 
     def __init__(self, image):
         self.canvas = image
-        self.width, self.height = self.canvas.width, self.canvas.height
+        self.width = self.canvas.width
+        self.height = self.canvas.height
         self._nonimplemented_methods()
 
     def get_size(self):
