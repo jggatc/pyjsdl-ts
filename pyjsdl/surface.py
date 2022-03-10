@@ -161,25 +161,23 @@ class Surface(HTML5Canvas):
         Draw given surface on this surface at position.
         Optional area delimitates the region of given surface to draw.
         """
-        if not _return_rect:
-            if not area:
-                self._ctx.drawImage(surface.canvas,
-                            position[0], position[1])
-            else:
-                self._ctx.drawImage(surface.canvas,
-                            area[0], area[1], area[2], area[3],
-                            position[0], position[1], area[2], area[3])
-            return None
         if not area:
-            rect = rectPool.get(position[0], position[1],
-                                surface.width, surface.height)
-            self._ctx.drawImage(surface.canvas, rect.x, rect.y)
-        else:
-            rect = rectPool.get(position[0], position[1],
-                                area[2], area[3])
             self._ctx.drawImage(surface.canvas,
-                                area[0], area[1], area[2], area[3],
-                                rect.x, rect.y, area[2], area[3])
+                        position[0], position[1])
+            if _return_rect:
+                rect = rectPool.get(position[0], position[1],
+                                    surface.width, surface.height)
+            else:
+                return None
+        else:
+            self._ctx.drawImage(surface.canvas,
+                        area[0], area[1], area[2], area[3],
+                        position[0], position[1], area[2], area[3])
+            if _return_rect:
+                rect = rectPool.get(position[0], position[1],
+                                    area[2], area[3])
+            else:
+                return None
         if self._display:
             surface_rect = self._display._surface_rect
         else:
