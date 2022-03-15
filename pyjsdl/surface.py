@@ -164,32 +164,41 @@ class Surface(HTML5Canvas):
                           x, y, width, height, 0, 0, width, height)
         return surface
 
-    # __pragma__ ('opov')
-
     def blit(self, surface, position, area=None):
         """
         Draw given surface on this surface at position.
         Optional area delimitates the region of given surface to draw.
         """
+        if not position._width:
+            x = position[0]
+            y = position[1]
+        else:
+            x = position.x
+            y = position.y
         ctx = self.impl.canvasContext
         ctx.globalAlpha = surface._alpha
         if not area:
-            ctx.drawImage(surface.canvas,
-                          position[0], position[1])
+            ctx.drawImage(surface.canvas, x, y)
             ctx.globalAlpha = 1.0
             if _return_rect:
-                rect = rectPool.get(position[0], position[1],
-                                    surface.width, surface.height)
+                rect = rectPool.get(x, y, surface.width, surface.height)
             else:
                 return None
         else:
-            ctx.drawImage(surface.canvas,
-                          area[0], area[1], area[2], area[3],
-                          position[0], position[1], area[2], area[3])
+            if not area._width:
+                ax = area[0]
+                ay = area[1]
+                aw = area[2]
+                ah = area[3]
+            else:
+                ax = area.x
+                ay = area.y
+                aw = area.width
+                ah = area.height
+            ctx.drawImage(surface.canvas, ax, ay, aw, ah, x, y, aw, ah)
             ctx.globalAlpha = 1.0
             if _return_rect:
-                rect = rectPool.get(position[0], position[1],
-                                    area[2], area[3])
+                rect = rectPool.get(x, y, aw, ah)
             else:
                 return None
         if self._display:
@@ -199,10 +208,6 @@ class Surface(HTML5Canvas):
         changed_rect = surface_rect.clip(rect)
         rectPool.append(rect)
         return changed_rect
-
-    # __pragma__ ('noopov')
-
-    # __pragma__ ('opov')
 
     def blits(self, blit_sequence, doreturn=True):
         """
@@ -222,32 +227,41 @@ class Surface(HTML5Canvas):
         for blit in blit_sequence:
             surface = blit[0]
             position = blit[1]
+            if not position._width:
+                x = position[0]
+                y = position[1]
+            else:
+                x = position.x
+                y = position.y
             if len(blit) > 2:
                 area = blit[2]
+                if not area._width:
+                    ax = area[0]
+                    ay = area[1]
+                    aw = area[2]
+                    ah = area[3]
+                else:
+                    ax = area.x
+                    ay = area.y
+                    aw = area.width
+                    ah = area.height
             else:
                 area = None
             ctx.globalAlpha = surface._alpha
             if not area:
-                ctx.drawImage(surface.canvas,
-                              position[0], position[1])
+                ctx.drawImage(surface.canvas, x, y)
                 if doreturn:
-                    rect = rectPool.get(position[0], position[1],
-                                        surface.width, surface.height)
+                    rect = rectPool.get(x, y, surface.width, surface.height)
                     rects.append(surface_rect.clip(rect))
                     rectPool.append(rect)
             else:
-                ctx.drawImage(surface.canvas,
-                              area[0], area[1], area[2], area[3],
-                              position[0], position[1], area[2], area[3])
+                ctx.drawImage(surface.canvas, ax, ay, aw, ah, x, y, aw, ah)
                 if doreturn:
-                    rect = rectPool.get(position[0], position[1],
-                                        area[2], area[3])
+                    rect = rectPool.get(x, y, aw, ah)
                     rects.append(surface_rect.clip(rect))
                     rectPool.append(rect)
         ctx.globalAlpha = 1.0
         return rects
-
-    # __pragma__ ('noopov')
 
     def _blits(self, surfaces):
         ctx = self.impl.canvasContext
