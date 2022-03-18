@@ -328,13 +328,6 @@ class Surface(HTML5Canvas):
         else:
             return None
 
-    def _getPixel(self, imagedata, index):
-        return imagedata.data[index]
-
-    def _setPixel(self, imagedata, index, dat):
-        imagedata.data[index] = dat
-        return
-
     def replace_color(self, color, new_color=None):
         """
         Replace color with with new_color or with alpha.
@@ -355,24 +348,22 @@ class Surface(HTML5Canvas):
         if alpha_zero:
             r1,g1,b1,a1  = color1.r, color1.g, color1.b, color1.a
             a2  = 0
-            for i in range(0, len(pixels.data), 4):
-                if (    self._getPixel(pixels,i) == r1 and
-                        self._getPixel(pixels,i+1) == g1 and
-                        self._getPixel(pixels,i+2) == b1 and
-                        self._getPixel(pixels,i+3) == a1   ):
-                    self._setPixel(pixels, i+3, a2)
+            data = pixels.data
+            for i in range(0, len(data), 4):
+                if (data[i] == r1 and data[i+1] == g1 and
+                            data[i+2] == b1 and data[i+3] == a1):
+                    data[i+3] = a2
         else:
             r1,g1,b1,a1 = color1.r, color1.g, color1.b, color1.a
             r2,g2,b2,a2 = color2.r, color2.g, color2.b, color2.a
-            for i in range(0, len(pixels.data), 4):
-                if (    self._getPixel(pixels,i) == r1 and
-                        self._getPixel(pixels,i+1) == g1 and
-                        self._getPixel(pixels,i+2) == b1 and
-                        self._getPixel(pixels,i+3) == a1   ):
-                    self._setPixel(pixels, i, r2)
-                    self._setPixel(pixels, i+1, g2)
-                    self._setPixel(pixels, i+2, b2)
-                    self._setPixel(pixels, i+3, a2)
+            data = pixels.data
+            for i in range(0, len(data), 4):
+                if (data[i] == r1 and data[i+1] == g1 and
+                            data[i+2] == b1 and data[i+3] == a1):
+                    data[i] = r2
+                    data[i+1] = g2
+                    data[i+2] = b2
+                    data[i+3] = a2
         self.putImageData(pixels, 0, 0, 0, 0, self.width, self.height)
         return None
 
