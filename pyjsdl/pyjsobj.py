@@ -268,6 +268,8 @@ class HTML5Canvas(FocusElement):
         self.impl = CanvasImpl(self._ctx)
 
     def resize(self, width, height):
+        self._element.width = width
+        self._element.height = height
         self.width = width
         self.height = height
 
