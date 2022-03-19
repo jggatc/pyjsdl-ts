@@ -31,8 +31,6 @@ class Rect(object):
 
     __slots__ = ['_x', '_y', '_width', '_height']
 
-    # __pragma__ ('opov')
-
     def __init__(self, *args):
         """
         Return Rect object.
@@ -56,12 +54,16 @@ class Rect(object):
 
         Module initialization places pyjsdl.Rect in module's namespace.
         """
-        if len(args) == 1:
-            arg = args[0]
+        ln = len(args)
+        if ln == 1:
+            if args.index:
+                arg = args[0]
+                ln = len(arg)
+            else:
+                arg = args
         else:
             arg = args
-        ln = len(arg)
-        if ln == 4:
+        if ln == 4 and arg.index:
             x = arg[0]
             y = arg[1]
             width = arg[2]
@@ -72,18 +74,16 @@ class Rect(object):
             width = arg[1][0]
             height = arg[1][1]
         else:
-            if hasattr(arg, 'rect'):
+            if arg.rect:
                 arg = arg.rect
             x = arg.x
             y = arg.y
             width = arg.width
             height = arg.height
-        self._x = int(x)
-        self._y = int(y)
-        self._width = int(width)
-        self._height = int(height)
-
-    # __pragma__ ('noopov')
+        self._x = ~(~(x))
+        self._y = ~(~(y))
+        self._width = ~(~(width))
+        self._height = ~(~(height))
 
     def __str__(self):
         return '<rect({}, {}, {}, {})>'.format(self.x,
@@ -365,12 +365,16 @@ class Rect(object):
         * Rect
         * Obj with rect attribute
         """
-        if len(args) == 1:
-            arg = args[0]
+        ln = len(args)
+        if ln == 1:
+            if args.index:
+                arg = args[0]
+                ln = len(arg)
+            else:
+                arg = args
         else:
             arg = args
-        ln = len(arg)
-        if ln == 4:
+        if ln == 4 and arg.append:
             x = arg[0]
             y = arg[1]
             width = arg[2]
@@ -381,16 +385,16 @@ class Rect(object):
             width = arg[1][0]
             height = arg[1][1]
         else:
-            if hasattr(arg, 'rect'):
+            if arg.rect:
                 arg = arg.rect
             x = arg.x
             y = arg.y
             width = arg.width
             height = arg.height
-        self._x = int(x)
-        self._y = int(y)
-        self._width = int(width)
-        self._height = int(height)
+        self._x = ~(~(x))
+        self._y = ~(~(y))
+        self._width = ~(~(width))
+        self._height = ~(~(height))
 
     def collidepoint(self, *point):
         """
