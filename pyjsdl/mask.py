@@ -23,13 +23,14 @@ def from_surface(surface, threshold=127):
     mask = Mask((surface.width, surface.height))
     if not mask.bit:
         return None
-    pixels = surface.getImageData(0, 0, surface.width, surface.height)
+    imagedata = surface.getImageData(0, 0, surface.width, surface.height)
+    data = imagedata.data
     width, height = surface.width*4, surface.height
     for y in range(0, height):
         xpix = 0
         i = (y*width)+3
         for x in range(0, width, 4):
-            if surface._getPixel(pixels, i+x) > threshold:
+            if data[i+x] > threshold:
                 mask.set_at((xpix,y))
             xpix += 1
     return mask
@@ -45,7 +46,8 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
     mask = Mask((surface.width, surface.height))
     if not mask.bit:
         return None
-    pixels = surface.getImageData(0, 0, surface.width, surface.height)
+    imagedata = surface.getImageData(0, 0, surface.width, surface.height)
+    data = imagedata.data
     if threshold == (0,0,0,255):
         color = Color(color)
         width, height = surface.width*4, surface.height
@@ -54,10 +56,10 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
             i = y*width
             for x in range(0, width, 4):
                 ix = i+x
-                if (surface._getPixel(pixels, ix) == color.r and
-                    surface._getPixel(pixels, ix+1) == color.g and
-                    surface._getPixel(pixels, ix+2) == color.b and
-                    surface._getPixel(pixels, ix+3) >= threshold[3]):
+                if (data[ix] == color.r and
+                    data[ix+1] == color.g and
+                    data[ix+2] == color.b and
+                    data[ix+3] >= threshold[3]):
                     mask.set_at((xpix,y))
                 xpix += 1
     else:
@@ -76,10 +78,10 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
             i = y*width
             for x in range(0, width, 4):
                 ix = i+x
-                if ((col['r1'] < surface._getPixel(pixels, ix) < col['r2']) and
-                    (col['g1'] < surface._getPixel(pixels, ix+1) < col['g2']) and
-                    (col['b1'] < surface._getPixel(pixels, ix+2) < col['b2']) and
-                    (surface._getPixel(pixels, ix+3) > col['a'])):
+                if ((col['r1'] < data[ix] < col['r2']) and
+                    (col['g1'] < data[ix+1] < col['g2']) and
+                    (col['b1'] < data[ix+2] < col['b2']) and
+                    (data[ix+3] > col['a'])):
                     mask.set_at((xpix,y))
                 xpix += 1
     return mask
