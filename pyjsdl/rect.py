@@ -1,6 +1,8 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+from pyjsdl.pylib import int
+
 __docformat__ = 'restructuredtext'
 
 
@@ -469,75 +471,75 @@ class Rect(object):
 
     @property
     def center(self):
-        return (self.x+(self.width//2), self.y+(self.height//2))
+        return (self._x+(self._width//2), self._y+(self._height//2))
 
     @property
     def centerx(self):
-        return self.x+(self.width//2)
+        return self._x+(self._width//2)
 
     @property
     def centery(self):
-        return self.y+(self.height//2)
+        return self._y+(self._height//2)
 
     @property
     def top(self):
-        return self.y
+        return self._y
 
     @property
     def left(self):
-        return self.x
+        return self._x
 
     @property
     def bottom(self):
-        return self.y+self.height
+        return self._y+self._height
 
     @property
     def right(self):
-        return self.x+self.width
+        return self._x+self._width
 
     @property
     def topleft(self):
-        return (self.x, self.y)
+        return (self._x, self._y)
 
     @property
     def bottomleft(self):
-        return (self.x, self.y+self.height)
+        return (self._x, self._y+self._height)
 
     @property
     def topright(self):
-        return (self.x+self.width, self.y)
+        return (self._x+self._width, self._y)
 
     @property
     def bottomright(self):
-        return (self.x+self.width, self.y+self.height)
+        return (self._x+self._width, self._y+self._height)
 
     @property
     def midtop(self):
-        return (self.x+(self.width//2), self.y)
+        return (self._x+(self._width//2), self._y)
 
     @property
     def midleft(self):
-        return (self.x, self.y+(self.height//2))
+        return (self._x, self._y+(self._height//2))
 
     @property
     def midbottom(self):
-        return (self.x+(self.width//2), self.y+self.height)
+        return (self._x+(self._width//2), self._y+self._height)
 
     @property
     def midright(self):
-        return (self.x+self.width, self.y+(self.height//2))
+        return (self._x+self._width, self._y+(self._height//2))
 
     @property
     def size(self):
-        return (self.width, self.height)
+        return (self._width, self._height)
 
     @property
     def w(self):
-        return self.width
+        return self._width
 
     @property
     def h(self):
-        return self.height
+        return self._height
 
     @x.setter
     def x(self, val):
@@ -557,75 +559,85 @@ class Rect(object):
 
     @center.setter
     def center(self, val):
-        self.setLocation(val[0]-(self.width//2), val[1]-(self.height//2))
+        self._x = int(val[0]-(self._width//2))
+        self._y = int(val[1]-(self._height//2))
 
     @centerx.setter
     def centerx(self, val):
-        self.setLocation(val-(self.width//2), self.y)
+        self._x = int(val-(self._width//2))
 
     @centery.setter
     def centery(self, val):
-        self.setLocation(self.x, val-(self.height//2))
+        self._y = int(val-(self._height//2))
 
     @top.setter
     def top(self, val):
-        self.setLocation(self.x, val)
+        self._y = int(val)
 
     @left.setter
     def left(self, val):
-        self.setLocation(val, self.y)
+        self._x = int(val)
 
     @bottom.setter
     def bottom(self, val):
-        self.setLocation(self.x, val-self.height)
+        self._y = int(val-self._height)
 
     @right.setter
     def right(self, val):
-        self.setLocation(val-self.width, self.y)
+        self._x = int(val-self._width)
 
     @topleft.setter
     def topleft(self, val):
-        self.setLocation(val[0], val[1])
+        self._x = int(val[0])
+        self._y = int(val[1])
 
     @bottomleft.setter
     def bottomleft(self, val):
-        self.setLocation(val[0], val[1]-self.height)
+        self._x = int(val[0])
+        self._y = int(val[1]-self._height)
 
     @topright.setter
     def topright(self, val):
-        self.setLocation(val[0]-self.width, val[1])
+        self._x = int(val[0]-self._width)
+        self._y = int(val[1])
 
     @bottomright.setter
     def bottomright(self, val):
-        self.setLocation(val[0]-self.width, val[1]-self.height)
+        self._x = int(val[0]-self._width)
+        self._y = int(val[1]-self._height)
 
     @midtop.setter
     def midtop(self, val):
-        self.setLocation(val[0]-(self.width//2), val[1])
+        self._x = int(val[0]-(self._width//2))
+        self._y = int(val[1])
 
     @midleft.setter
     def midleft(self, val):
-        self.setLocation(val[0], val[1]-(self.height//2))
+        self._x = int(val[0])
+        self._y = int(val[1]-(self._height//2))
 
     @midbottom.setter
     def midbottom(self, val):
-        self.setLocation(val[0]-(self.width//2), val[1]-self.height)
+        self._x = int(val[0]-(self._width//2))
+        self._y = int(val[1]-self._height)
 
     @midright.setter
     def midright(self, val):
-        self.setLocation(val[0]-self.width, val[1]-(self.height//2))
+        self._x = int(val[0]-self._width)
+        self._y = int(val[1]-(self._height//2))
 
     @size.setter
     def size(self, val):
-        self.setSize(val[0], val[1])
+        self._width = int(val[0])
+        self._height = int(val[1])
 
     @w.setter
     def w(self, val):
-        self.setSize(val, self.height)
+        self._width = int(val)
 
     @h.setter
     def h(self, val):
-        self.setSize(self.width, val)
+        self._height = int(val)
 
 
 class RectPool(object):
