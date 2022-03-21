@@ -215,7 +215,10 @@ class Rect(object):
         """
         Return Rect representing this rect clipped by rect.
         """
-        if not self.intersects(rect):
+        if not (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height)):
             return Rect(0,0,0,0)
         else:
             x = self._x if self._x > rect._x else rect._x
@@ -227,12 +230,6 @@ class Rect(object):
             r = rect._y + rect._height
             h = (s if s < r else r) - y
             return Rect(x, y, w, h)
-
-    def intersection(self, rect):
-        """
-        Return Rect representing this rect clipped by rect.
-        """
-        return self.clip(rect)
 
     def contains(self, rect):
         """
@@ -436,14 +433,20 @@ class Rect(object):
         """
         Return True if rect collides with this rect.
         """
-        return self.intersects(rect)
+        return (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height))
 
     def collidelist(self, rects):
         """
         Return index of rect in list that collide with this rect, otherwise returns -1.
         """
         for i, rect in enumerate(rects):
-            if self.intersects(rect):
+            if (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height)):
                 return i
         return -1
 
@@ -453,7 +456,10 @@ class Rect(object):
         """
         collided = []
         for i, rect in enumerate(rects):
-            if self.colliderect(rect):
+            if (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height)):
                 collided.append(i)
         return collided
 
@@ -461,9 +467,13 @@ class Rect(object):
         """
         Return (key,value) of first rect from rects dict that collide with this rect, otherwise returns None.
         """
-        for rect in rects.keys():
-            if self.colliderect(rects[rect]):
-                return (rect,rects[rect])
+        for rect_key in rects.keys():
+            rect = rects[rect_key]
+            if (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height)):
+                return (rect_key, rect)
         return None
 
     def collidedictall(self, rects):
@@ -471,9 +481,13 @@ class Rect(object):
         Return list of (key,value) from rects dict that collide with this rect.
         """
         collided = []
-        for rect in rects.keys():
-            if self.colliderect(rects[rect]):
-                collided.append((rect,rects[rect]))
+        for rect_key in rects.keys():
+            rect = rects[rect_key]
+            if (self._x < (rect._x + rect._width) and
+                rect._x < (self._x + self._width) and
+                self._y < (rect._y + rect._height) and
+                rect._y < (self._y + self._height)):
+                collided.append((rect_key, rect))
         return collided
 
     @property
@@ -676,22 +690,32 @@ class RectPool(object):
     """
 
     def __init__(self):
-        self._l = []
+        self._cache = []
+        self._length = 0
         self.add = self.append
         self.addAll = self.extend
 
     def append(self, item):
-        self._l.append(item)
+        """
+        Add Rect to pool.
+        """
+        self._cache.append(item)
+        self._length += 1
 
     def extend(self, lst):
-        self._l.extend(lst)
+        """
+        Add Rect list to pool.
+        """
+        self._cache.extend(lst)
+        self._length += len(lst)
 
     def get(self, x, y, width, height):
         """
         Return a Rect with x,y,width,height attributes.
         """
-        if len(self._l) > 0:
-            rect = self._l.pop()
+        if self._length > 0:
+            rect = self._cache.pop()
+            self._length -= 1
             rect._x = x
             rect._y = y
             rect._width = width
@@ -704,8 +728,9 @@ class RectPool(object):
         """
         Return a Rect with x,y,width,height attributes of the Rect argument.
         """
-        if len(self._l) > 0:
-            rect = self._l.pop()
+        if self._length > 0:
+            rect = self._cache.pop()
+            self._length -= 1
             rect._x = r._x
             rect._y = r._y
             rect._width = r._width
