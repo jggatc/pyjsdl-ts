@@ -29,9 +29,13 @@ def from_surface(surface, threshold=127):
     for y in range(0, height):
         xpix = 0
         i = (y*width)+3
+        bitset = mask.bit[y]
+        bit = bitset._bit
+        _data = bitset._data._data
         for x in range(0, width, 4):
             if data[i+x] > threshold:
-                mask.set_at((xpix,y))
+                index = ~(~(xpix/bit))
+                _data[index] = _data[index] | bitset._bitmask[xpix%bit]
             xpix += 1
     return mask
 
@@ -54,13 +58,17 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
         for y in range(0, height):
             xpix = 0
             i = y*width
+            bitset = mask.bit[y]
+            bit = bitset._bit
+            _data = bitset._data._data
             for x in range(0, width, 4):
                 ix = i+x
                 if (data[ix] == color.r and
                     data[ix+1] == color.g and
                     data[ix+2] == color.b and
                     data[ix+3] >= threshold[3]):
-                    mask.set_at((xpix,y))
+                    index = ~(~(xpix/bit))
+                    _data[index] = _data[index] | bitset._bitmask[xpix%bit]
                 xpix += 1
     else:
         color = Color(color)
@@ -76,13 +84,17 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
         for y in range(0, height):
             xpix = 0
             i = y*width
+            bitset = mask.bit[y]
+            bit = bitset._bit
+            _data = bitset._data._data
             for x in range(0, width, 4):
                 ix = i+x
                 if ((col['r1'] < data[ix] < col['r2']) and
                     (col['g1'] < data[ix+1] < col['g2']) and
                     (col['b1'] < data[ix+2] < col['b2']) and
                     (data[ix+3] > col['a'])):
-                    mask.set_at((xpix,y))
+                    index = ~(~(xpix/bit))
+                    _data[index] = _data[index] | bitset._bitmask[xpix%bit]
                 xpix += 1
     return mask
 
