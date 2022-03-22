@@ -42,7 +42,7 @@ class Clock(object):
                 env.canvas._framerate = 1000.0 / framerate
             else:
                 env.canvas._framerate = 0.0
-        self._time = self.time()
+        self._time = self._wnd.performance.now()
         self._time_diff = self._time - self._time_init
         self._time_init = self._time
         return self._time_diff
@@ -105,7 +105,7 @@ class Time(object):
         
         Return ms since program start.
         """
-        return self.time() - self._time_init
+        return self._wnd.performance.now() - self._time_init
 
     def delay(self, time):
         """
@@ -114,10 +114,10 @@ class Time(object):
         Pause for given time (in ms). Return ms paused.
         Suspends the program, preferably use time.wait.
         """
-        start = self.time()
+        start = self._wnd.performance.now()
         while True:
-            if self.time() - start > time:
-                return self.time() - start
+            if self._wnd.performance.now() - start > time:
+                return self._wnd.performance.now() - start
 
     def wait(self, time=0):
         """
@@ -134,7 +134,7 @@ class Time(object):
         else:
             if env.canvas._pause:
                 env.canvas._framerate = self._framerate
-                env.canvas._rendertime = self.time()
+                env.canvas._rendertime = self._wnd.performance.now()
                 env.canvas._pause = False
         return time
 
