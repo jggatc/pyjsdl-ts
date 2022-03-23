@@ -686,7 +686,10 @@ class RectPool(object):
     * rectPool.get
     * rectPool.copy
 
-    Rect pool accessed by rectPool instance through append method to add Rect, extend method to add Rect list, get method to return Rect set with x,y,width,height attributes, and copy method to return copy of a given Rect. If pool is empty, return is a new Rect.
+    Rect pool accessed by rectPool instance through append method to
+    add Rect, extend method to add Rect list, get method to return Rect
+    set with x,y,width,height attributes, and copy method to return
+    copy of a given Rect. If pool is empty, return is a new Rect.
     """
 
     def __init__(self):
@@ -694,6 +697,12 @@ class RectPool(object):
         self._length = 0
         self.add = self.append
         self.addAll = self.extend
+
+    def __len__(self):
+        """
+        Return pool size.
+        """
+        return self._length
 
     def append(self, item):
         """
@@ -706,8 +715,9 @@ class RectPool(object):
         """
         Add Rect list to pool.
         """
-        self._cache.extend(lst)
-        self._length += len(lst)
+        for item in lst:
+            self._cache.append(item)
+            self._length += 1
 
     def get(self, x, y, width, height):
         """
