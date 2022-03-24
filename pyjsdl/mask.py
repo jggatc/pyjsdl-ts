@@ -3,6 +3,7 @@
 
 from pyjsdl.pyjsarray import BitSet
 from pyjsdl.color import Color
+from pyjsdl.pylib import int
 # __pragma__ ('skip')
 import sys
 
@@ -223,4 +224,84 @@ class Mask(object):
                             for i in range(self.width)])
         bitstr = ''.join(cbitset)
         return bitstr
+
+
+def _overlap(mask1, mask2, offset):
+    if offset[0] > 0:
+        x1 = offset[0]
+        x2 = 0
+    else:
+        x1 = 0
+        x2 = -offset[0]
+    if offset[1] > 0:
+        y1 = offset[1]
+        y2 = 0
+    else:
+        y1 = 0
+        y2 = -offset[1]
+    w = min(mask1.width-x1, mask2.width-x2)
+    h = min(mask1.height-y1, mask2.height-y2)
+    if w > 0 and h > 0:
+        for y in range(h):
+            bitset1 = mask1.bit[y1+y]
+            bitset2 = mask2.bit[y2+y]
+            _bitset1 = _bitset_get(bitset1, x1, x1+w)
+            _bitset2 = _bitset_get(bitset2, x2, x2+w)
+            intersect = _intersects(_bitset1, _bitset2)
+            _bitsetPool_set(_bitset1)
+            _bitsetPool_set(_bitset2)
+            if intersect:
+                return True
+    return False
+
+
+def _intersects(bitset1, bitset2):
+    for dat in range(bitset1._data._data.length):
+        data1 = bitset1._data._data
+        data2 = bitset2._data._data
+        intersect = data1[dat] & data2[dat]
+        if intersect:
+            return True
+    return False
+
+
+def _bitset_get(bitset, index, toIndex):
+    data = bitset._data._data
+    _bitset = _bitsetPool_get(toIndex-index)
+    ix = 0
+    if toIndex > bitset._width:
+        toIndex = bitset._width
+    for i in range(index, toIndex):
+        _bitset_set(_bitset, ix,
+            bool(data[int(i/bitset._bit)] & bitset._bitmask[i%bitset._bit]))
+        ix += 1
+    return _bitset
+
+
+def _bitset_set(bitset, index, value):
+    data = bitset._data._data
+    if value:
+        data[int(index/bitset._bit)] = (
+            data[int(index/bitset._bit)] | bitset._bitmask[index%bitset._bit])
+    else:
+        data[int(index/bitset._bit)] = (
+            data[int(index/bitset._bit)] & ~(bitset._bitmask[index%bitset._bit]))
+
+
+_bitsetPool = {}
+
+def _bitsetPool_get(size):
+    if size not in _bitsetPool:
+        _bitsetPool[size] = []
+    if len(_bitsetPool[size]) > 0:
+        bitset = _bitsetPool[size].pop()
+    else:
+        bitset = BitSet(size)
+    return bitset
+
+def _bitsetPool_set(bitset):
+    data = bitset._data._data
+    for i in range(data.length):
+        data[i] = 0
+    _bitsetPool[bitset._width].append(bitset)
 

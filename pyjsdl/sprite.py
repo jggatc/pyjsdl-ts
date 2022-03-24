@@ -13,6 +13,7 @@ if sys.version_info < (3,):
 # __pragma__ ('noskip')
 
 from pyjsdl.util import Dict
+from pyjsdl.pylib import int
 
 __docformat__ = 'restructuredtext'
 
@@ -716,8 +717,13 @@ def spritecollide(sprite, group, dokill, collided=None):
     """
     collide = []
     collision = False
+    rect1 = sprite.rect
     for _sprite in group:
-        if sprite.rect.intersects(_sprite.rect):
+        rect2 = _sprite.rect
+        if (rect1._x < (rect2._x + rect2._width) and
+            rect2._x < (rect1._x + rect1._width) and
+            rect1._y < (rect2._y + rect2._height) and
+            rect2._y < (rect1._y + rect1._height)):
             if collided:
                 if not collided(sprite,_sprite):
                     continue
@@ -736,7 +742,12 @@ def collide_rect(sprite1, sprite2):
     Check if the rects of the two sprites intersect.
     Can be used as spritecollide callback function.
     """
-    return sprite1.rect.intersects(sprite2.rect)
+    rect1 = sprite1.rect
+    rect2 = sprite2.rect
+    return (rect1._x < (rect2._x + rect2._width) and
+            rect2._x < (rect1._x + rect1._width) and
+            rect1._y < (rect2._y + rect2._height) and
+            rect2._y < (rect1._y + rect1._height))
 
 
 def collide_rect_ratio(ratio):
@@ -762,14 +773,17 @@ class _collide_rect_ratio(object):
         r = sprite1.rect
         x = (r.width * self.ratio) - r.width
         y = (r.height * self.ratio) - r.height
-        r1 = rectPool.get(r.x - int(x*0.5), r.y - int(y*0.5),
-                          r.width + int(x), r.height + int(y))
+        rect1 = rectPool.get(r.x - int(x*0.5), r.y - int(y*0.5),
+                             r.width + int(x), r.height + int(y))
         r = sprite2.rect
         x = (r.width * self.ratio) - r.width
         y = (r.height * self.ratio) - r.height
-        r2 = rectPool.get(r.x - int(x*0.5), r.y - int(y*0.5),
-                          r.width + int(x), r.height + int(y))
-        collide = r1.intersects(r2)
+        rect2 = rectPool.get(r.x - int(x*0.5), r.y - int(y*0.5),
+                             r.width + int(x), r.height + int(y))
+        collide = (rect1._x < (rect2._x + rect2._width) and
+                   rect2._x < (rect1._x + rect1._width) and
+                   rect1._y < (rect2._y + rect2._height) and
+                   rect2._y < (rect1._y + rect1._height))
         rectPool.append(r1)
         rectPool.append(r2)
         return collide
@@ -872,8 +886,13 @@ def groupcollide(group1, group2, dokill1, dokill2):
     collide = Dict()
     collision = False
     for sprite1 in group1:
+        rect1 = sprite1.rect
         for sprite2 in group2:
-            if sprite1.rect.intersects(sprite2.rect):
+            rect2 = sprite2.rect
+            if (rect1._x < (rect2._x + rect2._width) and
+                rect2._x < (rect1._x + rect1._width) and
+                rect1._y < (rect2._y + rect2._height) and
+                rect2._y < (rect1._y + rect1._height)):
                 if sprite1 not in collide.keys():
                     collide.setdefault(sprite1, [])
                 collide.get(sprite1).append(sprite2)
@@ -895,8 +914,13 @@ def spritecollideany(sprite, group):
     
     Check if sprite intersect with any sprites in group.
     """
+    rect1 = sprite.rect
     for _sprite in group:
-        if sprite.rect.intersects(_sprite.rect):
+        rect2 = _sprite.rect
+        if (rect1._x < (rect2._x + rect2._width) and
+            rect2._x < (rect1._x + rect1._width) and
+            rect1._y < (rect2._y + rect2._height) and
+            rect2._y < (rect1._y + rect1._height)):
             return True
     return False
 
