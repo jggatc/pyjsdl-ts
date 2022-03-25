@@ -160,7 +160,8 @@ class Group(object):
         return self.__str__()
 
     def __iter__(self):
-        return iter(self._sprites.values())
+        for sprite in self._sprites.values():
+            yield sprite
 
     def __contains__(self, sprite):
         return str(id(sprite)) in self._sprites.keys()
@@ -229,8 +230,7 @@ class Group(object):
         """
         surface._blits([(sprite.image,sprite.rect) for sprite in self])
         if self._clear_active:
-            rectPool.extend(list(self._sprites_drawn.values()))
-                #list not req?
+            rectPool.extend(self._sprites_drawn.values())
             self._sprites_drawn.clear()
             for sprite in self._sprites.keys():
                 self._sprites_drawn[sprite] = rectPool.copy(
@@ -243,7 +243,7 @@ class Group(object):
         The background argument can be a callback function.
         """
         self._clear_active = True
-        if hasattr(background, 'width'):
+        if background.width:
             surface._blit_clear(background, self._sprites_drawn.values())
         else:
             for sprite in self._sprites_drawn.keys():
@@ -262,7 +262,7 @@ class Group(object):
         """
         Update sprites in group by calling sprite.update.
         """
-        for sprite in list(self._sprites.values()):
+        for sprite in self._sprites.values():
             sprite.update(*args)
         return None
 
@@ -363,8 +363,7 @@ class RenderUpdates(Group):
                 else:
                     self.changed_areas.append(
                         rectPool.copy(self._sprites[sprite].rect))
-            self.changed_areas.extend(list(self._sprites_drawn.values()))
-                #list() not req?
+            self.changed_areas.extend(self._sprites_drawn.values())
             self._sprites_drawn.clear()
             for sprite in self._sprites.keys():
                 self._sprites_drawn[sprite] = rectPool.copy(
@@ -372,8 +371,8 @@ class RenderUpdates(Group):
         else:
             rectPool.extend(self.changed_areas)
             self.changed_areas[:] = []
-            self.changed_areas.extend([rectPool.copy(sprite.rect)
-                                       for sprite in self._sprites.values()])
+            for sprite in self._sprites.values():
+                self.changed_areas.append(rectPool.copy(sprite.rect))
         return self.changed_areas
 
 
@@ -393,7 +392,8 @@ class OrderedUpdates(RenderUpdates):
         RenderUpdates.__init__(self, *sprites)
 
     def __iter__(self):
-        return iter(self._orderedsprites)
+        for sprite in self._orderedsprites:
+            yield sprite
 
     def sprites(self):
         """
