@@ -1,8 +1,22 @@
-0.25-dev
+0.26    2022-04-18
 -revise textarea object.
 -revise mouse set_cursor method.
 -update surface blit with optional rect return.
 -revise time set_timer method.
+-add str count method.
+-add str splitlines method.
+-add surface tostring method.
+-revise canvas clear method.
+-add surface alpha methods.
+-add surface blits method.
+-refactor surface blit to optimize.
+-revise surface resize.
+-refactor rect to optimize.
+-refactor mask to optimize.
+-refactor time to optimize.
+-refactor transform to optimize.
+-refactor sprite to optimize.
+-refactor sprite collide to optimize.
 
 0.25    2021-11-30
 -create pyjsdl-ts port.
