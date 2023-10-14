@@ -1,6 +1,19 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+# __pragma__ ('skip')
+__pragma__ = lambda *arg:None
+class window:
+    class performance:
+        now = lambda:None
+class Math:
+    abs = None
+class String:
+    class prototype:
+        count = None
+        splitlines = None
+# __pragma__ ('noskip')
+
 
 class Element:
 
