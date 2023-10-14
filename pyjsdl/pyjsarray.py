@@ -1,42 +1,14 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-#PyjsArray - Python-to-JavaScript TypedArray Module
-#Copyright (c) 2013 James Garnon
-
-#Permission is hereby granted, free of charge, to any person obtaining a copy
-#of this software and associated documentation files (the "Software"), to deal
-#in the Software without restriction, including without limitation the rights
-#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#copies of the Software, and to permit persons to whom the Software is
-#furnished to do so, subject to the following conditions:
-
-#The above copyright notice and this permission notice shall be included in
-#all copies or substantial portions of the Software.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-#THE SOFTWARE.
-
-#PyjsArray version 0.54
-#Project Site: https://gatc.ca/
-
-#ported to use with Transcrypt
-
 from math import ceil as _ceil, floor as _floor
+
+
 # __pragma__ ('skip')
-import sys
-
-def _compat():
-    global range
-    range = xrange
-
-if sys.version_info < (3,):
-    _compat()
+class window:
+    Uint8ClampedArray = Uint8Array = Uint16Array = Uint32Array = None
+    Int8Array = Int16Array = Int32Array = None
+    Float32Array = Float64Array = None
 # __pragma__ ('noskip')
 
 
