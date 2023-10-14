@@ -5,8 +5,6 @@ canvas = None
 
 frame = None
 
-pyjs_mode = None
-
 event = None
 
 
@@ -24,21 +22,12 @@ def get_frame():
     return frame
 
 
-def get_pyjsmode():
-    """
-    Return Pyjs mode object.
-    """
-    return pyjs_mode
-
-
 def set_env(key, val):
-    global canvas, frame, event, pyjs_mode
+    global canvas, frame, event
     if key == 'canvas':
         canvas = val
     elif key == 'frame':
         frame = val
     elif key == 'event':
         event = val
-    elif key == 'pyjs_mode':
-        pyjs_mode = val
 

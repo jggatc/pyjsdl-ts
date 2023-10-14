@@ -106,46 +106,6 @@ class Timer(object):
                 self.log.setCursorPos(len(text))
 
 
-# __pragma__ ('opov')
-
-class PyjsMode:
-    """
-    Check Pyjs mode used to compile application.
-    Attributes:
-        strict/optimized to specify mode
-        getattr_call/eq_call to specify functionality
-    """
-    def __init__(self):
-        self.getattr_call = self.test_getattr()
-        self.eq_call = self.test_eq()
-        self.strict, self.optimized = self.test_mode()
-
-    def test_mode(self):
-        """
-        Test if build mode is strict or optimized.
-        """
-        if self.getattr_call and self.eq_call:
-            return True, False
-        else:
-            return False, True
-
-    def test_getattr(self):
-        """
-        Test if object __getattr__ method is called.
-        """
-        return (Rect(0,0,20,20).center == (10,10))
-
-    def test_eq(self):
-        """
-        Test if object __eq__ method is called.
-        """
-        return (Rect(0,0,20,20) == Rect(0,0,20,20))
-
-# __pragma__ ('noopov')
-
-env.set_env('pyjs_mode', PyjsMode())
-
-
 def call(obj, func, args=()):
     """
     Call unbound method.
