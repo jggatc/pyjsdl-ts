@@ -20,6 +20,7 @@ class Canvas(Surface):
 
     def __init__(self, size, buffered):
         Surface.__init__(self, size)
+        self.setID('__canvas__')
         if isinstance(buffered, bool):
             self._bufferedimage = buffered
         else:
