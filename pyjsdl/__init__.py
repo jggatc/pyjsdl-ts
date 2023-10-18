@@ -42,6 +42,7 @@ from pyjsdl import mask
 from pyjsdl import font
 from pyjsdl import sprite
 from pyjsdl import cursors
+from pyjsdl import version
 from pyjsdl.constants import *
 
 
@@ -66,6 +67,7 @@ def init():
     mixer = Mixer()
     mouse = Mouse()
     key = Key()
+    version.set_ver(__version__)
 
 init()
 
