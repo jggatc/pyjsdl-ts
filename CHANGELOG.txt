@@ -1,6 +1,7 @@
 0.26_dev
 -revise to permit import in python.
 -revise canvas element.
+-revise surface alpha.
 
 0.26    2022-04-18
 -revise textarea object.
