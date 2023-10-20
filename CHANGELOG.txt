@@ -2,6 +2,7 @@
 -revise to permit import in python.
 -revise canvas element.
 -revise surface alpha.
+-update transform to preserve surface alpha.
 
 0.26    2022-04-18
 -revise textarea object.

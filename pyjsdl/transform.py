@@ -33,6 +33,8 @@ def rotate(surface, angle):
     surf.rotate(-theta)
     surf.drawImage(surface.canvas, -width_i/2, -height_i/2)
     surf.restoreContext()
+    surf._colorkey = surface._colorkey
+    surf._alpha = surface._alpha
     return surf
 
 
@@ -63,6 +65,8 @@ def rotozoom(surface, angle, size):
                    0, 0, surface.width, surface.height,
                    -width_i/2, -height_i/2, width_i, height_i)
     surf.restoreContext()
+    surf._colorkey = surface._colorkey
+    surf._alpha = surface._alpha
     return surf
 
 
@@ -78,6 +82,8 @@ def scale(surface, size, dest=None):
     surf.drawImage(surface.canvas,
                    0, 0, surface.width, surface.height,
                    0, 0, size[0], size[1])
+    surf._colorkey = surface._colorkey
+    surf._alpha = surface._alpha
     return surf
 
 
@@ -116,6 +122,8 @@ def flip(surface, xbool=True, ybool=False):
         surf.scale(1, -1)
     surf.drawImage(surface.canvas, 0, 0)
     surf.restoreContext()
+    surf._colorkey = surface._colorkey
+    surf._alpha = surface._alpha
     return surf
 
 # __pragma__ ('nokwargs')
