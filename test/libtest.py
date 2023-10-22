@@ -62,7 +62,7 @@ elif executor == 'transcrypt':
         has_assert = False
     except AssertionError:
         has_assert = True
-    _name = lambda f: __pragma__ ('js', {}, 'f.name')
+    _name = lambda f: __pragma__ ('js', {}, 'f.name;')
     _str = lambda n, t, r: 'Test {}  {} {}'.format(n, _name(t), r)
 
 
