@@ -122,3 +122,6 @@ def bounding_rect_return(setting):
     surface.bounding_rect_return(setting)
     draw.bounding_rect_return(setting)
 
+
+# __pragma__ ('js', {}, 'export {__name__};')
+

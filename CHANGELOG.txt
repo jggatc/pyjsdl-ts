@@ -3,6 +3,7 @@
 -revise canvas element.
 -revise surface alpha.
 -update transform to preserve surface alpha.
+-export module name variable.
 
 0.26    2022-04-18
 -revise textarea object.
