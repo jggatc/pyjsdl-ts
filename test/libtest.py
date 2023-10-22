@@ -29,7 +29,6 @@ else:
 # __pragma__ ('noskip')
 
 if platform is None:
-    # '__pragma__' statements declare ts options
     import pyjsdl as pg
     platform = 'js'
     executor = 'transcrypt'
@@ -63,8 +62,7 @@ elif executor == 'transcrypt':
         has_assert = False
     except AssertionError:
         has_assert = True
-    # __pragma__ ('noalias', 'name')
-    _name = lambda f: f.name
+    _name = lambda f: __pragma__ ('js', {}, 'f.name')
     _str = lambda n, t, r: 'Test {}  {} {}'.format(n, _name(t), r)
 
 
