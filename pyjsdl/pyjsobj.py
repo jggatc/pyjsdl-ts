@@ -189,7 +189,7 @@ class FocusElement(Element):
         element = obj.getElement()
         listener = _listener[self.__name__]
         element.removeEventListener('keydown', listener)
-        del _listener[self.__name__]
+        _listener.pop(self.__name__)
 
     def addFocusListener(self, obj):
         element = obj.getElement()

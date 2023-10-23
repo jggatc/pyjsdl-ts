@@ -4,6 +4,7 @@
 -revise surface alpha.
 -update transform to preserve surface alpha.
 -export module name variable.
+-revise dict item remove statement for opov issue.
 
 0.26    2022-04-18
 -revise textarea object.

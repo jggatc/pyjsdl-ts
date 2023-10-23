@@ -137,7 +137,7 @@ class Mixer:
                 if str(id) in self._channels.keys():
                     if self._channels[id] is not None:
                         self._channels[id].stop()
-                    del self._channels[id]
+                    self._channels.pop(id)
                 if id in self._channel_available:
                     self._channel_available.remove(id)
             self._channel_max = count
