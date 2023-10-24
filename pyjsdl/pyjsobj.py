@@ -537,7 +537,7 @@ class ImageLoader:
             self.load(image)
 
     def load(self, imageurl):
-        image = __new__(Image())
+        image = __new__(Image())    # __:noopov
         self.images.append(image)
         image.addEventListener('load', self.loaded, False)
         image.src = imageurl

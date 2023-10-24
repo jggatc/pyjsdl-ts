@@ -39,21 +39,21 @@ class TypedArray(object):
         """
         if data:
             if isinstance(data, int):
-                self._data = __new__(typedarray(data))
+                self._data = __new__(typedarray(data))    # __:noopov
             elif isinstance(data, (list,tuple)):
-                self._data = __new__(typedarray(data))
+                self._data = __new__(typedarray(data))    # __:noopov
             elif isinstance(data, TypedArray):
-                self._data = __new__(typedarray(data._data))
+                self._data = __new__(typedarray(data._data))    # __:noopov
             else:   #TypedArray or ArrayBuffer
                 if offset is None and length is None:
-                    self._data = __new__(typedarray(data))
+                    self._data = __new__(typedarray(data))    # __:noopov
                 else:
                     if offset is None:
                         offset = 0
                     if length is None:
-                        self._data = __new__(typedarray(data, offset))
+                        self._data = __new__(typedarray(data, offset))    # __:noopov
                     else:
-                        self._data = __new__(typedarray(data, offset, length))
+                        self._data = __new__(typedarray(data, offset, length))    # __:noopov
         else:
             self._data = None
 
