@@ -17,6 +17,8 @@ from pyjsdl.pylib import int
 
 __docformat__ = 'restructuredtext'
 
+# __pragma__ ('noopov')
+
 
 def id(obj):
     return obj._identity

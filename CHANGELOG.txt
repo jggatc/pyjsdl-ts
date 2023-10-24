@@ -6,6 +6,7 @@
 -export module name variable.
 -revise dict item remove statement for opov issue.
 -revise JS object instantiate statement for opov issue.
+-add noopov to ensure sprite group iter for opov issue.
 
 0.26    2022-04-18
 -revise textarea object.
