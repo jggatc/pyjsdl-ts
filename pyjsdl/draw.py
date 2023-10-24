@@ -25,7 +25,9 @@ def rect(surface, color, rect, width=0):
         _rect = Rect(rect)
     if width:
         surface.setLineWidth(width)
+        # __pragma__ ('opov')
         if surface._stroke_style != color:
+            # __pragma__ ('noopov')
             surface._stroke_style = color
             if hasattr(color, 'a'):
                 surface.setStrokeStyle(color)
@@ -33,7 +35,9 @@ def rect(surface, color, rect, width=0):
                 surface.setStrokeStyle(Color(color))
         surface.strokeRect(_rect.x, _rect.y, _rect.width, _rect.height)
     else:
+        # __pragma__ ('opov')
         if surface._fill_style != color:
+            # __pragma__ ('noopov')
             surface._fill_style = color
             if hasattr(color, 'a'):
                 surface.setFillStyle(color)
@@ -58,7 +62,9 @@ def circle(surface, color, position, radius, width=0):
     surface.arc(position[0], position[1], radius, 0, 2*_pi, False)
     if width:
         surface.setLineWidth(width)
+        # __pragma__ ('opov')
         if surface._stroke_style != color:
+            # __pragma__ ('noopov')
             surface._stroke_style = color
             if hasattr(color, 'a'):
                 surface.setStrokeStyle(color)
@@ -66,7 +72,9 @@ def circle(surface, color, position, radius, width=0):
                 surface.setStrokeStyle(Color(color))
         surface.stroke()
     else:
+        # __pragma__ ('opov')
         if surface._fill_style != color:
+            # __pragma__ ('noopov')
             surface._fill_style = color
             if hasattr(color, 'a'):
                 surface.setFillStyle(color)
@@ -106,7 +114,9 @@ def ellipse(surface, color, rect, width=0):
     surface.arc(0, 0, radius, 0, 2*_pi, False)
     if width:
         surface.setLineWidth(width)
+        # __pragma__ ('opov')
         if surface._stroke_style != color:
+            # __pragma__ ('noopov')
             surface._stroke_style = color
             if hasattr(color, 'a'):
                 surface.setStrokeStyle(color)
@@ -114,7 +124,9 @@ def ellipse(surface, color, rect, width=0):
                 surface.setStrokeStyle(Color(color))
         surface.stroke()
     else:
+        # __pragma__ ('opov')
         if surface._fill_style != color:
+            # __pragma__ ('noopov')
             surface._fill_style = color
             if hasattr(color, 'a'):
                 surface.setFillStyle(color)
@@ -146,7 +158,9 @@ def arc(surface, color, rect, start_angle, stop_angle, width=1):
                     int(_rect.width/2), -start_angle, -stop_angle, True)
         if width:
             surface.setLineWidth(width)
+            # __pragma__ ('opov')
             if surface._stroke_style != color:
+                # __pragma__ ('noopov')
                 surface._stroke_style = color
                 if hasattr(color, 'a'):
                     surface.setStrokeStyle(color)
@@ -155,7 +169,9 @@ def arc(surface, color, rect, start_angle, stop_angle, width=1):
             surface.stroke()
         else:
             surface.closePath()
+            # __pragma__ ('opov')
             if surface._fill_style != color:
+                # __pragma__ ('noopov')
                 surface._fill_style = color
                 if hasattr(color, 'a'):
                     surface.setFillStyle(color)
@@ -176,7 +192,9 @@ def arc(surface, color, rect, start_angle, stop_angle, width=1):
         surface.arc(0, 0, radius, -start_angle, -stop_angle, True)
         if width:
             surface.setLineWidth(width)
+            # __pragma__ ('opov')
             if surface._stroke_style != color:
+                # __pragma__ ('noopov')
                 surface._stroke_style = color
                 if hasattr(color, 'a'):
                     surface.setStrokeStyle(color)
@@ -185,7 +203,9 @@ def arc(surface, color, rect, start_angle, stop_angle, width=1):
             surface.stroke()
         else:
             surface.closePath()
+            # __pragma__ ('opov')
             if surface._fill_style != color:
+                # __pragma__ ('noopov')
                 surface._fill_style = color
                 if hasattr(color, 'a'):
                     surface.setFillStyle(color)
@@ -214,7 +234,9 @@ def polygon(surface, color, pointlist, width=0):
     surface.closePath()
     if width:
         surface.setLineWidth(width)
+        # __pragma__ ('opov')
         if surface._stroke_style != color:
+            # __pragma__ ('noopov')
             surface._stroke_style = color
             if hasattr(color, 'a'):
                 surface.setStrokeStyle(color)
@@ -222,7 +244,9 @@ def polygon(surface, color, pointlist, width=0):
                 surface.setStrokeStyle(Color(color))
         surface.stroke()
     else:
+        # __pragma__ ('opov')
         if surface._fill_style != color:
+            # __pragma__ ('noopov')
             surface._fill_style = color
             if hasattr(color, 'a'):
                 surface.setFillStyle(color)
@@ -253,7 +277,9 @@ def line(surface, color, point1, point2, width=1):
     surface.moveTo(*point1)
     surface.lineTo(*point2)
     surface.setLineWidth(width)
+    # __pragma__ ('opov')
     if surface._stroke_style != color:
+        # __pragma__ ('noopov')
         surface._stroke_style = color
         if hasattr(color, 'a'):
             surface.setStrokeStyle(color)
@@ -287,7 +313,9 @@ def lines(surface, color, closed, pointlist, width=1):
     if closed:
         surface.closePath()
     surface.setLineWidth(width)
+    # __pragma__ ('opov')
     if surface._stroke_style != color:
+        # __pragma__ ('noopov')
         surface._stroke_style = color
         if hasattr(color, 'a'):
             surface.setStrokeStyle(color)

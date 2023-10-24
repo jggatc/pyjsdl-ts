@@ -58,8 +58,8 @@ class Surface(HTML5Canvas):
         self._super_surface = None
         self._offset = (0,0)
         self._colorkey = None
-        self._stroke_style = None
-        self._fill_style = None
+        self._stroke_style = -1
+        self._fill_style = -1
         self._alpha = 1.0
         self._nonimplemented_methods()
 
@@ -373,7 +373,9 @@ class Surface(HTML5Canvas):
         Set color of a surface pixel.
         The arguments represent position x,y and color of pixel.
         """
+        # __pragma__ ('opov')
         if self._fill_style != color:
+            # __pragma__ ('noopov')
             self._fill_style = color
             if hasattr(color, 'a'):
                 _color = color
@@ -390,7 +392,9 @@ class Surface(HTML5Canvas):
         if color is None:
             HTML5Canvas.fill(self)
             return
+        # __pragma__ ('opov')
         if self._fill_style != color:
+            # __pragma__ ('noopov')
             self._fill_style = color
             if hasattr(color, 'a'):
                 self.setFillStyle(color)
