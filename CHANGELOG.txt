@@ -8,6 +8,7 @@
 -revise JS object instantiate statement for opov issue.
 -add noopov to ensure sprite group iter for opov issue.
 -revise draw color handling.
+-add vector copy method.
 
 0.26    2022-04-18
 -revise textarea object.
