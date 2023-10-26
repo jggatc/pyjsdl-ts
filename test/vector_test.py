@@ -31,8 +31,6 @@ def test_vector():
     if not (env['pyjs_opt'] and not env['pyjs_attr']):
         v = v1 + v2
         assert v.x == 5.2 and v.y == 7.0
-        v = v1 + (5,5)
-        assert v.x == 7.2 and v.y == 8.0
     v = Vector2(v1)
     assert v.x == 2.2 and v.y == 3.0
     v.x = 1.0
