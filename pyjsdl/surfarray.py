@@ -9,13 +9,6 @@ from pyjsdl.pyjsarray import Uint32Array
 from pyjsdl.pyjsarray import ImageData
 from pyjsdl.pyjsarray import ImageMatrix
 
-# __pragma__ ('skip')
-import sys
-
-if sys.version_info < (3,):
-    from pyjsdl.util import _range as range
-# __pragma__ ('noskip')
-
 __docformat__ = 'restructuredtext'
 
 __doc__ = 'Surface pixel manipulation'

@@ -4,12 +4,6 @@
 from pyjsdl.pyjsobj import HTML5Canvas
 from pyjsdl.rect import Rect, rectPool
 from pyjsdl.color import Color
-# __pragma__ ('skip')
-import sys
-
-if sys.version_info < (3,):
-    from pyjsdl.util import _range as range
-# __pragma__ ('noskip')
 
 __docformat__ = 'restructuredtext'
 
@@ -54,7 +48,7 @@ class Surface(HTML5Canvas):
         self.height = int(size[1])
         HTML5Canvas.__init__(self, self.width, self.height)
         HTML5Canvas.resize(self, self.width, self.height)
-        self._display = None    #display surface
+        self._display = None
         self._super_surface = None
         self._offset = (0,0)
         self._colorkey = None
@@ -434,7 +428,7 @@ class Surface(HTML5Canvas):
         """
         Return parent Surface of subsurface.
         """
-        return self._super_surface   #if delete, delete subsurface...
+        return self._super_surface
 
     def get_offset(self):
         """

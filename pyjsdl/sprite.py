@@ -3,15 +3,6 @@
 
 from pyjsdl.rect import rectPool
 from pyjsdl import mask
-# __pragma__ ('skip')
-import sys
-
-if sys.version_info < (3,):
-    from pyjsdl.util import _range as range
-    from pyjsdl.util import _dict as dict
-    from pyjsdl.util import _next as next
-# __pragma__ ('noskip')
-
 from pyjsdl.util import Dict
 from pyjsdl.pylib import int
 
@@ -771,7 +762,7 @@ class _collide_rect_ratio(object):
     def __init__(self, ratio):
         self.ratio = ratio
 
-    def __call__(self, sprite1, sprite2):   #__call__ not implemented in pyjs
+    def __call__(self, sprite1, sprite2):
         r = sprite1.rect
         x = (r.width * self.ratio) - r.width
         y = (r.height * self.ratio) - r.height
@@ -836,7 +827,7 @@ class _collide_circle_ratio(object):
     def __init__(self, ratio):
         self.ratio = ratio
 
-    def __call__(self, sprite1, sprite2):   #__call__ not implemented in pyjs
+    def __call__(self, sprite1, sprite2):
         if hasattr(sprite1, 'radius'):
             radius1 = sprite1.radius * self.ratio
         else:

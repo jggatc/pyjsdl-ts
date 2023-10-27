@@ -4,12 +4,6 @@
 from pyjsdl.pyjsarray import BitSet
 from pyjsdl.color import Color
 from pyjsdl.pylib import int
-# __pragma__ ('skip')
-import sys
-
-if sys.version_info < (3,):
-    from pyjsdl.util import _range as range
-# __pragma__ ('noskip')
 
 __docformat__ = 'restructuredtext'
 
