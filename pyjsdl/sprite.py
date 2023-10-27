@@ -777,8 +777,8 @@ class _collide_rect_ratio(object):
                    rect2._x < (rect1._x + rect1._width) and
                    rect1._y < (rect2._y + rect2._height) and
                    rect2._y < (rect1._y + rect1._height))
-        rectPool.append(r1)
-        rectPool.append(r2)
+        rectPool.append(rect1)
+        rectPool.append(rect2)
         return collide
 
 
