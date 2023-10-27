@@ -7,7 +7,7 @@ from pyjsdl import constants as Const
 __docformat__ = 'restructuredtext'
 
 
-class Key(object):
+class Key:
     """
     **pyjsdl.key**
     

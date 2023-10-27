@@ -94,7 +94,7 @@ def match_font(name):
     return font
 
 
-class Font(object):
+class Font:
     """
     **pyjsdl.font.Font**
     

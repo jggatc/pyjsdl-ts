@@ -94,7 +94,7 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
     return mask
 
 
-class Mask(object):
+class Mask:
     """
     **pyjsdl.mask.Mask**
     

@@ -8,7 +8,7 @@ from pyjsdl.pyjsobj import DOM
 __docformat__ = 'restructuredtext'
 
 
-class Mouse(object):
+class Mouse:
     """
     **pyjsdl.mouse**
     

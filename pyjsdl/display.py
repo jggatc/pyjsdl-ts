@@ -328,7 +328,7 @@ def run(timestamp):
     _canvas.render()
 
 
-class Callback(object):
+class Callback:
 
     __slots__ = ['run']
 
@@ -336,7 +336,7 @@ class Callback(object):
         self.run = cb
 
 
-class Display(object):
+class Display:
     """
     **pyjsdl.display**
 

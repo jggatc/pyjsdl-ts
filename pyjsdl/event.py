@@ -8,7 +8,7 @@ from pyjsdl import constants as Const
 __docformat__ = 'restructuredtext'
 
 
-class Event(object):
+class Event:
     """
     **pyjsdl.event**
     
@@ -351,7 +351,7 @@ class Event(object):
         self.get_grab = lambda *arg: False
 
 
-class UserEvent(object):
+class UserEvent:
 
     __slots__ = ['type', 'attr']
 
@@ -394,7 +394,7 @@ class UserEvent(object):
         return '<Event({}-{} {})>'.format(self.type, event_name, repr(self.attr))
 
 
-class JEvent(object):
+class JEvent:
     """
     Event object wraps browser event.
 

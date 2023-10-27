@@ -15,7 +15,7 @@ def id(obj):
     return obj._identity
 
 
-class Sprite(object):
+class Sprite:
     """
     **pyjsdl.sprite.Sprite**
     
@@ -115,7 +115,7 @@ class DirtySprite(Sprite):
         Sprite.__init__(self, *groups)
 
 
-class Group(object):
+class Group:
     """
     **pyjsdl.sprite.Group**
     
@@ -755,7 +755,7 @@ def collide_rect_ratio(ratio):
     return lambda sprite1,sprite2: obj.__call__(sprite1,sprite2)
 
 
-class _collide_rect_ratio(object):
+class _collide_rect_ratio:
 
     __slots__ = ['ratio']
 
@@ -820,7 +820,7 @@ def collide_circle_ratio(ratio):
     return lambda sprite1,sprite2: obj.__call__(sprite1,sprite2)
 
 
-class _collide_circle_ratio(object):
+class _collide_circle_ratio:
 
     __slots__ = ['ratio']
 

@@ -6,7 +6,7 @@ from pyjsdl.pylib import int
 __docformat__ = 'restructuredtext'
 
 
-class Rect(object):
+class Rect:
     """
     **pyjsdl.Rect**
     
@@ -677,7 +677,7 @@ class Rect(object):
         self._height = int(val)
 
 
-class RectPool(object):
+class RectPool:
     """
     **pyjsdl.rect.rectPool**
     

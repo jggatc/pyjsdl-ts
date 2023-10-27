@@ -278,7 +278,7 @@ class Mixer:
             raise AttributeError('Channel not available.')
 
 
-class Sound(object):
+class Sound:
     """
     **pyjsdl.mixer.Sound**
     
@@ -395,7 +395,7 @@ class Sound(object):
         return sound_object
 
 
-class Channel(object):
+class Channel:
     """
     **pyjsdl.mixer.Channel**
     
@@ -698,7 +698,7 @@ class Channel(object):
             return Const.NOEVENT
 
 
-class Music(object):
+class Music:
     """
     **pyjsdl.mixer.music**
 

@@ -6,7 +6,7 @@ from pyjsdl.rect import Rect
 from pyjsdl import env
 
 
-class Timer(object):
+class Timer:
     """
     Simple profiling timer.
     Output log can be directed to 'console' or to 'textarea'.

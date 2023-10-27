@@ -460,7 +460,7 @@ class Surface(HTML5Canvas):
         self.get_locks = lambda *arg: ()
 
 
-class Surf(object):
+class Surf:
 
     def __init__(self, image):
         self.canvas = image

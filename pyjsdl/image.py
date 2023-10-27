@@ -9,7 +9,7 @@ import pyjsdl
 __docformat__ = 'restructuredtext'
 
 
-class Image(object):
+class Image:
     """
     **pyjsdl.image**
     
