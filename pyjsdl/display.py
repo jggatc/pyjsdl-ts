@@ -25,10 +25,9 @@ class Canvas(Surface):
             self._bufferedimage = buffered
         else:
             self._bufferedimage = True
-        try:
-            if self.impl.canvasContext:
-                self._isCanvas = True
-        except:
+        if self.impl.canvasContext:
+            self._isCanvas = True
+        else:
             self._isCanvas = False
             self._bufferedimage = False
         if self._bufferedimage:

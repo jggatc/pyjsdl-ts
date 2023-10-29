@@ -48,9 +48,9 @@ class Image:
             for img in env.canvas.images.keys():
                 self.images[os.path.normpath(img)] = env.canvas.images[img]
         img_file = os.path.normpath(img_file)
-        try:
+        if img_file in self.images.keys():
             image = self.images[img_file]
-        except KeyError:
+        else:
             raise pyjsdl.error('Failed to retrieve image file {}'.format(img_file))
         return image
 

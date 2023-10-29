@@ -82,9 +82,9 @@ def blit_array(surface, array):
     Generates image pixels from array data.
     Arguments include destination Surface and array containing image data.
     """
-    try:
+    if hasattr(array, 'getImageData'):
         imagedata = array.getImageData()
-    except TypeError:
+    else:
         imagedata = surface.getImageData(0, 0, surface.width, surface.height)
         if len(array._shape) == 2:
             array2d = ImageMatrix(imagedata)
