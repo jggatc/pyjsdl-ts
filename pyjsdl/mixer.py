@@ -327,11 +327,8 @@ class Sound:
         channels = self._mixer._channels
         for id in self._mixer._channel_active:
             if id > -1:
-                try:
-                    if channels[id]._sound._id == self._id:
-                        channels[id].stop()
-                except AttributeError:
-                    continue
+                if channels[id]._sound._id == self._id:
+                    channels[id].stop()
         return None
 
     def fadeout(self, time):
@@ -341,11 +338,8 @@ class Sound:
         channels = self._mixer._channels
         for id in self._mixer._channel_active:
             if id > -1:
-                try:
-                    if channels[id]._sound._id == self._id:
-                        channels[id].fadeout(time)
-                except AttributeError:
-                    continue
+                if channels[id]._sound._id == self._id:
+                    channels[id].fadeout(time)
         return None
 
     def set_volume(self, volume):
@@ -374,11 +368,8 @@ class Sound:
         channel = 0
         for id in self._mixer._channel_active:
             if id > -1:
-                try:
-                    if channels[id]._sound._id == self._id:
-                        channel += 1
-                except AttributeError:
-                    continue
+                if channels[id]._sound._id == self._id:
+                    channel += 1
         return channel
 
     def get_length(self):
