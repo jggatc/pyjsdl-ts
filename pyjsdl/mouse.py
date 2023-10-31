@@ -57,12 +57,12 @@ class Mouse:
         """
         Return relative x,y change of mouse position since last call.
         """
-        try:
+        if self.mouseMoveRel['x'] is not None:
             rel = (self.mouseMove['x'] - self.mouseMoveRel['x'],
                    self.mouseMove['y'] - self.mouseMoveRel['y'])
             self.mouseMoveRel['x'] = self.mouseMove['x']
             self.mouseMoveRel['y'] = self.mouseMove['y']
-        except TypeError:
+        else:
             rel = (0, 0)
             if self.mouseMove['x'] != -1:
                 self.mouseMoveRel['x'] = self.mouseMove['x']
