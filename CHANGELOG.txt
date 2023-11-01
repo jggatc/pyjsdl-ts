@@ -10,6 +10,7 @@
 -revise draw color handling.
 -add vector copy method.
 -refactor vector to optimize.
+-revise mixer set_num_channels method.
 
 0.26    2022-04-18
 -revise textarea object.
