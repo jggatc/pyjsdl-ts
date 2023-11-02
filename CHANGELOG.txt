@@ -11,6 +11,7 @@
 -add vector copy method.
 -refactor vector to optimize.
 -revise mixer set_num_channels method.
+-refactor mixer music rewind method.
 
 0.26    2022-04-18
 -revise textarea object.
