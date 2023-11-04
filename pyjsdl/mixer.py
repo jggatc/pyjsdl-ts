@@ -1,7 +1,6 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-from pyjsdl.pyjsobj import Audio
 from pyjsdl.time import Time
 from pyjsdl import env
 from pyjsdl import constants as Const
@@ -300,7 +299,7 @@ class Sound:
         self._id = Sound._id
         Sound._id += 1
         if isinstance(sound_file, str):
-            self._sound_object = Audio(sound_file.replace('\\','/'))
+            self._sound_object = __new__(Audio(sound_file.replace('\\','/')))
         else:
             self._sound_object = sound_file
         self._sound_objects = []
@@ -375,13 +374,13 @@ class Sound:
         """
         Get length of sound sample.
         """
-        return self._sound_object.getDuration()
+        return self._sound_object.duration
 
     def _get_sound_object(self):
         if len(self._sound_objects) > 0:
             sound_object = self._sound_objects.pop()
         else:
-            sound_object = Audio(self._sound_object.getSrc())
+            sound_object = __new__(Audio(self._sound_object.src))
         return sound_object
 
 
@@ -430,7 +429,7 @@ class Channel:
     def _set_sound(self, sound):
         self._sound = sound
         self._sound_object = self._sound._get_sound_object()
-        self._sound_object.element.onended = self._ended_handler
+        self._sound_object.onended = self._ended_handler
 
     def play(self, sound, loops=0, maxtime=0, fade_ms=0):
         """
@@ -451,11 +450,10 @@ class Channel:
         if fade_ms:
             self._fadein = fade_ms / 1000.0
             self._mixer._process(self._id)
-            self._sound_object.element.volume = 0.01
+            self._sound_object.volume = 0.01
         else:
-            self._sound_object.element.volume = (self._volume
-                                                 * self._sound._volume)
-        promise = self._sound_object.element.play()
+            self._sound_object.volume = (self._volume * self._sound._volume)
+        promise = self._sound_object.play()
         if promise:
             promise.then(self._play_success).catch(self._play_failed)
         else:
@@ -482,11 +480,10 @@ class Channel:
         if fade_ms:
             self._fadein = fade_ms / 1000.0
             self._mixer._process(self._id)
-            self._sound_object.element.volume = 0.01
+            self._sound_object.volume = 0.01
         else:
-            self._sound_object.element.volume = (self._volume
-                                                 * self._sound._volume)
-        promise = self._sound_object.element.play()
+            self._sound_object.volume = (self._volume * self._sound._volume)
+        promise = self._sound_object.play()
         if promise:
             promise.then(self._play_success).catch(self._play_failed)
         else:
@@ -494,9 +491,8 @@ class Channel:
         return None
 
     def _replay(self):
-        self._sound_object.element.volume = (self._volume
-                                             * self._sound._volume)
-        promise = self._sound_object.element.play()
+        self._sound_object.volume = (self._volume * self._sound._volume)
+        promise = self._sound_object.play()
         if promise:
             promise.then(self._play_success).catch(self._play_failed)
         else:
@@ -508,38 +504,38 @@ class Channel:
         else:
             complete = True
             return complete
-        self._time = self._sound_object.element.currentTime
+        self._time = self._sound_object.currentTime
         complete = False
         if self._fadein:
             if self._time < self._fadein:
                 self._dvol = self._time / self._fadein
-                self._sound_object.element.volume = (self._volume
-                                                     * self._sound._volume
-                                                     * self._dvol)
+                self._sound_object.volume = (self._volume
+                                             * self._sound._volume
+                                             * self._dvol)
             else:
                 self._fadein = 0
                 complete = True
-                self._sound_object.element.volume = (self._volume
-                                                     * self._sound._volume)
+                self._sound_object.volume = (self._volume
+                                             * self._sound._volume)
         elif self._fadeout:
             if self._time < self._fadeout:
                 self._dvol = 1.0 - (self._time / self._fadeout)
-                self._sound_object.element.volume = (self._volume
-                                                     * self._sound._volume
-                                                     * self._dvol)
+                self._sound_object.volume = (self._volume
+                                             * self._sound._volume
+                                             * self._dvol)
             else:
                 self._fadeout = 0
                 complete = True
                 self._dvol = 0.01
-                self._sound_object.element.volume = (self._volume
-                                                     * self._sound._volume
-                                                     * self._dvol)
+                self._sound_object.volume = (self._volume
+                                             * self._sound._volume
+                                             * self._dvol)
                 self._loops = 0
                 self._onended()
         return complete
 
     def run(self):
-        time = self._sound_object.element.currentTime
+        time = self._sound_object.currentTime
         if self._maxtime:
             if time > self._maxtime:
                 self._maxtime = 0
@@ -566,9 +562,9 @@ class Channel:
         if self._sound:
             self._active = False
             self._mixer._deactivate_channel(self._id)
-            self._sound_object.element.onended = None
-            self._sound_object.element.pause()
-            self._sound_object.element.currentTime = 0
+            self._sound_object.onended = None
+            self._sound_object.pause()
+            self._sound_object.currentTime = 0
             self._sound._sound_objects.append(self._sound_object)
             self._sound = None
             self._sound_object = None
@@ -604,7 +600,7 @@ class Channel:
         """
         if self._sound:
             if self._pause:
-                promise = self._sound_object.element.play()
+                promise = self._sound_object.play()
                 if promise:
                     promise.then(self._unpause_success).catch(self._unpause_failed)
                 else:
@@ -625,8 +621,7 @@ class Channel:
         Stop sound after fade out time.
         """
         if self._sound:
-            self._fadeout = (self._sound_object.element.currentTime
-                             + (time/1000.0))
+            self._fadeout = (self._sound_object.currentTime + (time/1000.0))
             self._mixer._process(self._id)
         return None
 
@@ -640,8 +635,7 @@ class Channel:
             volume = 1.0
         self._volume = volume
         if self._active:
-            self._sound_object.element.volume = (self._volume
-                                                 * self._sound._volume)
+            self._sound_object.volume = (self._volume * self._sound._volume)
         return None
 
     def get_volume(self):
@@ -766,7 +760,7 @@ class Music:
         self._channel._active = False
         restart = not self._channel._pause
         self._channel.pause()
-        self._channel._sound_object.element.currentTime = 0
+        self._channel._sound_object.currentTime = 0
         if restart:
             self._channel.unpause()
         self._channel._active = True
