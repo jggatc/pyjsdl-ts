@@ -1,12 +1,10 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-from pyjsdl.pyjsobj import Color as _Color
-
 __docformat__ = 'restructuredtext'
 
 
-class Color(_Color):
+class Color:
 
     # __pragma__ ('opov')
 

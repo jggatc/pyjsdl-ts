@@ -552,12 +552,6 @@ def loadImages(imagelist, callback):
     ImageLoader(imagelist, callback)
 
 
-class Color:
-
-    def __init__(self):
-        pass
-
-
 class DOM:
 
     @staticmethod
