@@ -10,6 +10,7 @@ from pyjsdl import constants as Const
 arrow = diamond = broken_x = tri_left = tri_right = ()
 
 
+# __pragma__ ('kwargs')
 def compile(strings, black='X', white='.', xor='o'):
     """
     Compile binary data from cursor string.
@@ -38,6 +39,7 @@ def compile(strings, black='X', white='.', xor='o'):
         data.append(int(db))
         mask.append(int(mb))
     return tuple(data), tuple(mask)
+# __pragma__ ('nokwargs')
 
 
 def create_cursor(size, data, mask):
