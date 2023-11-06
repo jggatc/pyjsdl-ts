@@ -13,6 +13,7 @@ class Timer:
     If output is to textarea, may specify log length.
     """
 
+    # __pragma__ ('kwargs')
     def __init__(self, log='console', log_length=5):
         self.time = Time()
         self.time_i = self.get_time()
@@ -23,6 +24,7 @@ class Timer:
         self.log_num = 0
         self.log_scroll = True
         self.set_log(log, log_length)
+    # __pragma__ ('nokwargs')
 
     def get_time(self):
         """
@@ -36,6 +38,7 @@ class Timer:
         """
         self.time_i = self.get_time()
 
+    # __pragma__ ('kwargs')
     def lap_time(self, time_i=None, time_f=None, number=100, print_result=True):
         """
         Time lapsed since previous set_time.
@@ -61,7 +64,9 @@ class Timer:
                     entry = 'Time {}: {}'.format(self.log_num, t_ave)
                     self.print_log(entry)
             return t_ave
+    # __pragma__ ('nokwargs')
 
+    # __pragma__ ('kwargs')
     def set_log(self, log, log_length=5):
         """
         Set log output.
@@ -84,6 +89,7 @@ class Timer:
                 if self.log:
                     self.log.toggle(False)
                     self.log_list = []
+    # __pragma__ ('nokwargs')
 
     def onMouseDown(self, sender, x, y):
         self.log_scroll = False
