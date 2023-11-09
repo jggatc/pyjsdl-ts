@@ -26,7 +26,7 @@ def from_surface(surface, threshold=127):
         i = (y*width)+3
         bitset = mask.bit[y]
         bit = bitset._bit
-        _data = bitset._data._data
+        _data = bitset._data
         for x in range(0, width, 4):
             if data[i+x] > threshold:
                 index = ~(~(xpix/bit))
@@ -55,7 +55,7 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
             i = y*width
             bitset = mask.bit[y]
             bit = bitset._bit
-            _data = bitset._data._data
+            _data = bitset._data
             for x in range(0, width, 4):
                 ix = i+x
                 if (data[ix] == color.r and
@@ -81,7 +81,7 @@ def from_threshold(surface, color, threshold=(0,0,0,255)):
             i = y*width
             bitset = mask.bit[y]
             bit = bitset._bit
-            _data = bitset._data._data
+            _data = bitset._data
             for x in range(0, width, 4):
                 ix = i+x
                 if ((col['r1'] < data[ix] < col['r2']) and
@@ -250,9 +250,9 @@ def _overlap(mask1, mask2, offset):
 
 
 def _intersects(bitset1, bitset2):
-    for dat in range(bitset1._data._data.length):
-        data1 = bitset1._data._data
-        data2 = bitset2._data._data
+    for dat in range(bitset1._data.length):
+        data1 = bitset1._data
+        data2 = bitset2._data
         intersect = data1[dat] & data2[dat]
         if intersect:
             return True
@@ -260,7 +260,7 @@ def _intersects(bitset1, bitset2):
 
 
 def _bitset_get(bitset, index, toIndex):
-    data = bitset._data._data
+    data = bitset._data
     _bitset = _bitsetPool_get(toIndex-index)
     ix = 0
     if toIndex > bitset._width:
@@ -273,7 +273,7 @@ def _bitset_get(bitset, index, toIndex):
 
 
 def _bitset_set(bitset, index, value):
-    data = bitset._data._data
+    data = bitset._data
     if value:
         data[int(index/bitset._bit)] = (
             data[int(index/bitset._bit)] | bitset._bitmask[index%bitset._bit])
@@ -294,7 +294,7 @@ def _bitsetPool_get(size):
     return bitset
 
 def _bitsetPool_set(bitset):
-    data = bitset._data._data
+    data = bitset._data
     for i in range(data.length):
         data[i] = 0
     _bitsetPool[bitset._width].append(bitset)

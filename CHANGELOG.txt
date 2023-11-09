@@ -14,6 +14,7 @@
 -refactor mixer music rewind method.
 -revise mixer channel play promise handling.
 -refactor mixer audio object.
+-refactor pyjsarray for performance.
 
 0.26    2022-04-18
 -revise textarea object.
