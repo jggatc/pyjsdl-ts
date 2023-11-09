@@ -315,7 +315,7 @@ class Ndarray:
         if 'int' in self._dtype:
             vmax = len(str(max(self._data)))
             vmin = len(str(min(self._data)))
-            vlen = {True:vmax, False:vmin}[vmax>vmin]
+            vlen = vmax if (vmax>vmin) else vmin
         else:
             vlen = max(len('{}'.format(round(v,4))) for v in self._data)
         return vlen
@@ -365,8 +365,8 @@ class Ndarray:
         s = str(self.tolist())
         sl = len(self._shape)
         for d in range(1, sl):
-            s = s.replace(' '+'['*d, '\n'+' '*(sl+8-d)+'['*d)    # __:opov
-        return 'Ndarray({}, dtype={})'.format(s, repr(self._dtype))
+            s = s.replace(' '+'['*d, '\n'+' '*(sl+6-d)+'['*d)    # __:opov
+        return 'array({}, dtype={})'.format(s, self._dtype)
 
     def __len__(self):
         return self._shape[0]
