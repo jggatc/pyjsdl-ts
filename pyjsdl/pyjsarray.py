@@ -201,17 +201,27 @@ class Ndarray:
             _l = _l[0]
 
     def __getitem__(self, index):
-        if isinstance(index, (list,tuple)):
-            indexLn, shapeLn = len(index), len(self._shape)
-            if indexLn == shapeLn:
-                return self._data[sum([index[i]*self._indices[i] for i in range(indexLn)])]
+        if hasattr(index, '__iter__'):
+            if not hasattr(index, '_dtype'):
+                indexLn, shapeLn = len(index), len(self._shape)
+                if indexLn == shapeLn:
+                    return self._data[sum([index[i]*self._indices[i] for i in range(indexLn)])]
+                else:
+                    begin = sum([index[i]*self._indices[i] for i in range(indexLn)])
+                    end = begin + self._indices[indexLn-1]
+                    subarray = self._data.subarray(begin, end)
+                    array = Ndarray(subarray, self._dtype)
+                    array._shape = self._shape[indexLn:]
+                    array._indices = self._indices[indexLn:]
+                    return array
             else:
-                begin = sum([index[i]*self._indices[i] for i in range(indexLn)])
-                end = begin + self._indices[indexLn-1]
-                subarray = self._data.subarray(begin, end)
-                array = Ndarray(subarray, self._dtype)
-                array._shape = self._shape[indexLn:]
-                array._indices = self._indices[indexLn:]
+                true_value = sum(index._data)
+                array = Ndarray(true_value, self._dtype)
+                _i = 0
+                for i, val in enumerate(index._data):
+                    if val:
+                        array._data[_i] = self._data[i]
+                        _i += 1
                 return array
         else:
             if len(self._shape) == 1:
@@ -235,20 +245,31 @@ class Ndarray:
                 else:
                     lst.append(element)
             return lst
-        if isinstance(index, (list,tuple)):
-            indexLn, shapeLn = len(index), len(self._shape)
-            if indexLn == shapeLn:
-                self._data[sum([index[i]*self._indices[i] for i in range(indexLn)])] = value
-            else:
-                begin = sum([index[i]*self._indices[i] for i in range(indexLn)])
-                end = begin + self._indices[indexLn-1]
-                subarray = self._data.subarray(begin, end)
-                if isinstance(value, Ndarray):
-                    value = value._data
+        if hasattr(index, '__iter__'):
+            if not hasattr(index, '_dtype'):
+                indexLn, shapeLn = len(index), len(self._shape)
+                if indexLn == shapeLn:
+                    self._data[sum([index[i]*self._indices[i] for i in range(indexLn)])] = value
                 else:
-                    if isinstance(value[0], (list,tuple)):
+                    begin = sum([index[i]*self._indices[i] for i in range(indexLn)])
+                    end = begin + self._indices[indexLn-1]
+                    subarray = self._data.subarray(begin, end)
+                    if isinstance(value, Ndarray):
+                        value = value._data
+                    elif isinstance(value[0], (list,tuple)):
                         value = unpack(value)
-                subarray.set(value)
+                    subarray.set(value)
+            else:
+                if not hasattr(value, '__iter__'):
+                    for i, val in enumerate(index._data):
+                        if val:
+                            self._data[i] = value
+                else:
+                    _i = 0
+                    for i, val in enumerate(index._data):
+                        if val:
+                            self._data[i] = value._data[_i]
+                            _i += 1
         else:
             if len(self._shape) == 1:
                 self._data[index] = value
@@ -258,9 +279,8 @@ class Ndarray:
                 subarray = self._data.subarray(begin, end)
                 if isinstance(value, Ndarray):
                     value = value._data
-                else:
-                    if isinstance(value[0], (list,tuple)):
-                        value = unpack(value)
+                elif isinstance(value[0], (list,tuple)):
+                    value = unpack(value)
                 subarray.set(value)
         return None
 
