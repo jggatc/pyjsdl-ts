@@ -13,6 +13,7 @@ class window:
 
 
 # __pragma__ ('noopov')
+# __pragma__ ('noalias', 'isNaN')
 
 
 def Uint8ClampedArray(*args):
@@ -99,6 +100,8 @@ class Ndarray:
                'uint32':'uint32', 'I':'uint32', 3:'uint32',
                'float32':'float32', 'f':'float32', 7:'float32',
                'float64':'float64', 'd':'float64', 8:'float64'}
+
+    _opts = {'precision':4, 'nanstr':'nan', 'infstr':'inf'}
 
     def __init__(self, dim, dtype='float64'):
         """
@@ -317,7 +320,9 @@ class Ndarray:
             vmin = len(str(min(self._data)))
             vlen = vmax if (vmax>vmin) else vmin
         else:
-            vlen = max(len('{}'.format(round(v,4))) for v in self._data)
+            s = '{}.' + ('0' * Ndarray._opts['precision'])    # __:opov
+            vlen = max(len(s.format(int(round(v,Ndarray._opts['precision']))))
+                       for v in self._data if Number.isFinite(v))
         return vlen
 
     def _array_str(self, array, vlen, vstr):
@@ -330,9 +335,20 @@ class Ndarray:
                     s.append(sv)
             else:
                 for val in array:
-                    sv = '{}'.format(round(val,4))
-                    if '.' not in sv:
-                        sv = '{}.0000'.format(sv)
+                    if Number.isFinite(val):
+                        sv = '{}'.format(round(val,Ndarray._opts['precision']))
+                        if '.' not in sv:
+                            sv += '.'
+                        sv += (Ndarray._opts['precision']-len(sv.split('.')[1]))*'0'    # __:opov
+                    else:
+                        if Number.isNaN(val):
+                            sv = '{}'.format(Ndarray._opts['nanstr'])
+                        elif val == Number.POSITIVE_INFINITY:
+                            sv = '{}'.format(Ndarray._opts['infstr'])
+                        elif val == Number.NEGATIVE_INFINITY:
+                            sv = '-{}'.format(Ndarray._opts['infstr'])
+                        else:
+                            sv = '{}'.format(val)
                     sv = '{}{}'.format((vlen-len(sv))*' ', sv)    # __:opov
                     s.append(sv)
             vstr.append('[{}]'.format(' '.join(s)))
@@ -1060,6 +1076,26 @@ class NP:
         newarray._data.set(array._data)
         newarray._data.set(values, len(array))
         return newarray
+
+    # __pragma__ ('kwargs')
+    def set_printoptions(self, precision=None, nanstr=None, infstr=None):
+        """
+        Set array print options.
+        """
+        if precision is not None:
+            Ndarray._opts['precision'] = int(precision)
+        if nanstr is not None:
+            Ndarray._opts['nanstr'] = str(nanstr)
+        if infstr is not None:
+            Ndarray._opts['infstr'] = str(infstr)
+    # __pragma__ ('nokwargs')
+
+    def get_printoptions(self):
+        """
+        Get array print options.
+        """
+        return dict(Ndarray._opts)
+
 
 np = NP()
 
