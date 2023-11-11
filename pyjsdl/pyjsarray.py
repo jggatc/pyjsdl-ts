@@ -650,7 +650,7 @@ class Ndarray:
                     result = 0
                     for k in range(m):
                         result += (_x_data[i*m+k] * _y_data[k*p+j])
-                    _array_data[i*p+j] = result    # __:opov
+                    _array_data[i*p+j] = result
         return array
 
     def __iadd__(self, other):
@@ -922,7 +922,7 @@ class Ndarray:
         if size != array_size:
             raise TypeError("array size cannot change")
         subarray = self._data.subarray(0)
-        array = Ndarray(subarray)
+        array = Ndarray(subarray, self._dtype)
         array._shape = dim
         indices = []
         for i in array._shape:
