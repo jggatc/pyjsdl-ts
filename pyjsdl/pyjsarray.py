@@ -3,7 +3,8 @@
 
 from math import ceil as _ceil, floor as _floor, sqrt as _sqrt
 from math import log as _log, sin as _sin, cos as _cos, pi as _pi
-from random import random as _random, randint as _randint, choice as _choice
+from random import random as _random, randint as _randint
+from random import choice as _choice, shuffle as _shuffle
 
 
 # __pragma__ ('skip')
@@ -1168,28 +1169,34 @@ np = NP()
 class Random:
 
     def __init__(self):
-        self.gauss_next = None
-        self.pi2 = _pi * 2
+        self._gauss_next = None
+        self._pi2 = _pi * 2
 
     def normal(self, mu, sigma, size):
+        """
+        Return array with values from gaussian distribution.
+        """
         array = Ndarray(size, 'float64')
         data = array._data
-        gauss = self.gauss
+        gauss = self._gauss
         for i in range(data.length):
             data[i] = gauss(mu, sigma)
         return array
 
-    def gauss(self, mu, sigma):
-        z = self.gauss_next
-        self.gauss_next = None
+    def _gauss(self, mu, sigma):
+        z = self._gauss_next
+        self._gauss_next = None
         if z is None:
-            x2pi = _random() * self.pi2
+            x2pi = _random() * self._pi2
             g2rad = _sqrt(-2.0 * _log(1.0 - _random()))
             z = _cos(x2pi) * g2rad
-            self.gauss_next = _sin(x2pi) * g2rad
+            self._gauss_next = _sin(x2pi) * g2rad
         return mu + z * sigma
 
     def random(self, size=None):
+        """
+        Return array with random values between 0.0 and 1.0.
+        """
         array = Ndarray(size, 'float64')
         data = array._data
         for i in range(data.length):
@@ -1198,6 +1205,10 @@ class Random:
 
     # __pragma__ ('kwargs')
     def randint(self, low, high=None, size=None, dtype='int32'):
+        """
+        Return array with random integers between low and high.
+        If high is None, values will be 0 to low.
+        """
         array = Ndarray(size, dtype)
         data = array._data
         if high is None:
@@ -1212,6 +1223,10 @@ class Random:
     # __pragma__ ('nokwargs')
 
     def choice(self, seq, size=None):
+        """
+        Return array with random values from seq iterable.
+        If seq is an int, then values from range(seq).
+        """
         if Number.isInteger(seq):
             _seq = range(seq)
         else:
@@ -1221,6 +1236,40 @@ class Random:
         data = array._data
         for i in range(data.length):
             data[i] = _choice(_seq)
+        return array
+
+    def shuffle(self, array):
+        """
+        Shuffle first axis of array.
+        """
+        if len(array._shape) == 1:
+            _shuffle(array._data)
+        else:
+            for i in range(len(array)-1, 0, -1):
+                j = _randint(0, i)
+                if i == j:
+                    continue
+                # __pragma__ ('opov')
+                temp = array[i].copy()
+                array[i] = array[j]
+                array[j] = temp
+                # __pragma__ ('noopov')
+
+    def permutation(self, seq):
+        """
+        Return array with permutated values from seq iterable.
+        If seq is an int, then values from range(seq).
+        """
+        if Number.isInteger(seq):
+            _seq = range(seq)
+        else:
+            _seq = seq
+        if not hasattr(_seq, '_shape'):
+            dtype = np._get_dtype(_seq)
+            array = Ndarray(_seq, dtype)
+        else:
+            array = _seq.copy()
+        self.shuffle(array)
         return array
 
 
