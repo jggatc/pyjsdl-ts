@@ -1172,10 +1172,13 @@ class Random:
         self._gauss_next = None
         self._pi2 = _pi * 2
 
-    def normal(self, mu, sigma, size):
+    def normal(self, mu, sigma, size=None):
         """
-        Return array with values from gaussian distribution.
+        Sample from gaussian distribution of mean mu and standard deviation sigma.
+        Return as an array defined by size or a single value if None.
         """
+        if size is None:
+            return self._gauss(mu, sigma)
         array = Ndarray(size, 'float64')
         data = array._data
         gauss = self._gauss
@@ -1195,8 +1198,11 @@ class Random:
 
     def random(self, size=None):
         """
-        Return array with random values between 0.0 and 1.0.
+        Sample from random values between 0.0 and 1.0.
+        Return as an array defined by size or a single value if None.
         """
+        if size is None:
+            return _random()
         array = Ndarray(size, 'float64')
         data = array._data
         for i in range(data.length):
@@ -1206,17 +1212,20 @@ class Random:
     # __pragma__ ('kwargs')
     def randint(self, low, high=None, size=None, dtype='int32'):
         """
-        Return array with random integers between low and high.
+        Sample from random integers between low and high.
         If high is None, values will be 0 to low.
+        Return as an array defined by size or a single value if None.
         """
-        array = Ndarray(size, dtype)
-        data = array._data
         if high is None:
             a = 0
             b = low
         else:
             a = low
             b = high
+        if size is None:
+            return _randint(a, b)
+        array = Ndarray(size, dtype)
+        data = array._data
         for i in range(data.length):
             data[i] = _randint(a, b)
         return array
@@ -1224,13 +1233,16 @@ class Random:
 
     def choice(self, seq, size=None):
         """
-        Return array with random values from seq iterable.
+        Sample from random values from seq iterable.
         If seq is an int, then values from range(seq).
+        Return as an array defined by size or a single value if None.
         """
         if Number.isInteger(seq):
             _seq = range(seq)
         else:
             _seq = seq
+        if size is None:
+            return _choice(_seq)
         dtype = np._get_dtype(_seq)
         array = Ndarray(size, dtype)
         data = array._data
@@ -1242,6 +1254,9 @@ class Random:
         """
         Shuffle first axis of array.
         """
+        if not hasattr(array, '_shape'):
+            _shuffle(array)
+            return None
         if len(array._shape) == 1:
             _shuffle(array._data)
         else:
@@ -1254,6 +1269,7 @@ class Random:
                 array[i] = array[j]
                 array[j] = temp
                 # __pragma__ ('noopov')
+        return None
 
     def permutation(self, seq):
         """
