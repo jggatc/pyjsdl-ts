@@ -884,24 +884,6 @@ class Ndarray:
                 other = Ndarray(list(other), self._dtype)
         return other
 
-    def op(self, operator, other):
-        """
-        Arithemtic operation across array elements.
-        Arguments include operator and int/array.
-        Operators: 'add', 'sub', 'mul', 'div', etc.
-        Return array of the operation.
-        """
-        return getattr(self, '__'+operator+'__')(other)
-
-    def cmp(self, operator, other):
-        """
-        Comparison operation across array elements.
-        Arguments include operator and int/array.
-        Operators: 'lt', 'le', 'eq', 'ne', 'gt', 'ge'.
-        Return comparison array.
-        """
-        return getattr(self, '__'+operator+'__')(other)
-
     def matmul(self, other):
         """
         Matrix multiplication.
