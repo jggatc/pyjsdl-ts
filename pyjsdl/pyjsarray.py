@@ -892,6 +892,88 @@ class Ndarray:
         """
         return self.__matmul__(other)
 
+    # __pragma__ ('kwargs')
+    def max(self, axis=None):
+        """
+        Return maximum of array or of given axis.
+        """
+        if axis is None:
+            return max(self._data)
+        if axis > len(self._shape)-1:
+            raise IndexError('axis out of bound')
+        shape = list(self._shape)
+        shape.pop(axis)
+        shape = tuple(shape)
+        result = Ndarray(shape, self._dtype)
+        result.fill(min(self._data))
+        return self._max(self, axis, 0, self._shape, 0, result)
+    # __pragma__ ('nokwargs')
+
+    def _max(self, array, axis, curr_axis, shape, dim, result):
+        if curr_axis == axis:
+            if axis != len(shape)-1:
+                res = result._data
+                for i in range(len(array)):
+                    arr = array[i]._data    # __:opov
+                    for j in range(result._data.length):
+                        if res[j] < arr[j]:
+                            res[j] = arr[j]
+            else:
+                res = result._data
+                arr = array._data
+                for i in range(len(array)):
+                    if res[dim] < arr[i]:
+                        res[dim] = arr[i]
+        elif curr_axis < len(shape):
+            if len(result._shape) > 1:
+                for dim in range(shape[curr_axis]):
+                    self._max(array[dim], axis, curr_axis+1, shape, dim, result[dim])    # __:opov
+            else:
+                for dim in range(shape[curr_axis]):
+                    self._max(array[dim], axis, curr_axis+1, shape, dim, result)    # __:opov
+        return result
+
+    # __pragma__ ('kwargs')
+    def min(self, axis=None):
+        """
+        Return minimum of array or of given axis.
+        """
+        if axis is None:
+            return min(self._data)
+        if axis > len(self._shape)-1:
+            raise IndexError('axis out of bound')
+        shape = list(self._shape)
+        shape.pop(axis)
+        shape = tuple(shape)
+        result = Ndarray(shape, self._dtype)
+        result.fill(max(self._data))
+        return self._min(self, axis, 0, self._shape, 0, result)
+    # __pragma__ ('nokwargs')
+
+    def _min(self, array, axis, curr_axis, shape, dim, result):
+        if curr_axis == axis:
+            if axis != len(shape)-1:
+                res = result._data
+                for i in range(len(array)):
+                    arr = array[i]._data    # __:opov
+                    for j in range(result._data.length):
+                        if res[j] > arr[j]:
+                            res[j] = arr[j]
+            else:
+                res = result._data
+                arr = array._data
+                for i in range(len(array)):
+                    if res[dim] > arr[i]:
+                        res[dim] = arr[i]
+        elif curr_axis < len(shape):
+            if len(result._shape) > 1:
+                for dim in range(shape[curr_axis]):
+                    self._min(array[dim], axis, curr_axis+1, shape, dim, result[dim])    # __:opov
+            else:
+                for dim in range(shape[curr_axis]):
+                    self._min(array[dim], axis, curr_axis+1, shape, dim, result)    # __:opov
+        return result
+
     def reshape(self, dim):
         """
         Return view of array with new shape.
