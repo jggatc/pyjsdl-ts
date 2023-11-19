@@ -974,6 +974,41 @@ class Ndarray:
                     self._min(array[dim], axis, curr_axis+1, shape, dim, result)    # __:opov
         return result
 
+    # __pragma__ ('kwargs')
+    def sum(self, axis=None):
+        if axis is None:
+            return sum(self._data)
+        if axis > len(self._shape)-1:
+            raise IndexError('axis out of bound')
+        shape = list(self._shape)
+        shape.pop(axis)
+        shape = tuple(shape)
+        result = Ndarray(shape, self._dtype)
+        return self._sum(self, axis, 0, self._shape, 0, result)
+    # __pragma__ ('nokwargs')
+
+    def _sum(self, array, axis, curr_axis, shape, dim, result):
+        if curr_axis == axis:
+            if axis != len(shape)-1:
+                res = result._data
+                for i in range(len(array)):
+                    arr = array[i]._data    # __:opov
+                    for j in range(result._data.length):
+                        res[j] += arr[j]
+            else:
+                res = result._data
+                arr = array._data
+                for i in range(len(array)):
+                    res[dim] += arr[i]
+        elif curr_axis < len(shape):
+            if len(result._shape) > 1:
+                for dim in range(shape[curr_axis]):
+                    self._sum(array[dim], axis, curr_axis+1, shape, dim, result[dim])    # __:opov
+            else:
+                for dim in range(shape[curr_axis]):
+                    self._sum(array[dim], axis, curr_axis+1, shape, dim, result)    # __:opov
+        return result
+
     def reshape(self, dim):
         """
         Return view of array with new shape.
