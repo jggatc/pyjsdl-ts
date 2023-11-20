@@ -901,9 +901,8 @@ class Ndarray:
             return max(self._data)
         if axis > len(self._shape)-1:
             raise IndexError('axis out of bound')
-        shape = list(self._shape)
-        shape.pop(axis)
-        shape = tuple(shape)
+        shape = tuple([i for index, i in enumerate(self._shape)
+                       if index != axis])
         result = Ndarray(shape, self._dtype)
         result.fill(min(self._data))
         return self._max(self, axis, 0, self._shape, 0, result)
@@ -942,9 +941,8 @@ class Ndarray:
             return min(self._data)
         if axis > len(self._shape)-1:
             raise IndexError('axis out of bound')
-        shape = list(self._shape)
-        shape.pop(axis)
-        shape = tuple(shape)
+        shape = tuple([i for index, i in enumerate(self._shape)
+                       if index != axis])
         result = Ndarray(shape, self._dtype)
         result.fill(max(self._data))
         return self._min(self, axis, 0, self._shape, 0, result)
@@ -976,13 +974,15 @@ class Ndarray:
 
     # __pragma__ ('kwargs')
     def sum(self, axis=None):
+        """
+        Return sum of array or of given axis.
+        """
         if axis is None:
             return sum(self._data)
         if axis > len(self._shape)-1:
             raise IndexError('axis out of bound')
-        shape = list(self._shape)
-        shape.pop(axis)
-        shape = tuple(shape)
+        shape = tuple([i for index, i in enumerate(self._shape)
+                       if index != axis])
         result = Ndarray(shape, self._dtype)
         return self._sum(self, axis, 0, self._shape, 0, result)
     # __pragma__ ('nokwargs')
