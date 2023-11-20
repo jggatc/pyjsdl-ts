@@ -12,6 +12,10 @@ class window:
     Uint8ClampedArray = Uint8Array = Uint16Array = Uint32Array = None
     Int8Array = Int16Array = Int32Array = None
     Float32Array = Float64Array = None
+
+class Object:
+    def getPrototypeOf(*args):
+        return None
 # __pragma__ ('noskip')
 
 
@@ -911,18 +915,18 @@ class Ndarray:
     def _max(self, array, axis, curr_axis, shape, dim, result):
         if curr_axis == axis:
             if axis != len(shape)-1:
-                res = result._data
+                res_dat = result._data
                 for i in range(len(array)):
-                    arr = array[i]._data    # __:opov
+                    arr_dat = array[i]._data    # __:opov
                     for j in range(result._data.length):
-                        if res[j] < arr[j]:
-                            res[j] = arr[j]
+                        if res_dat[j] < arr_dat[j]:
+                            res_dat[j] = arr_dat[j]
             else:
-                res = result._data
-                arr = array._data
+                res_dat = result._data
+                arr_dat = array._data
                 for i in range(len(array)):
-                    if res[dim] < arr[i]:
-                        res[dim] = arr[i]
+                    if res_dat[dim] < arr_dat[i]:
+                        res_dat[dim] = arr_dat[i]
         elif curr_axis < len(shape):
             if len(result._shape) > 1:
                 for dim in range(shape[curr_axis]):
@@ -951,18 +955,18 @@ class Ndarray:
     def _min(self, array, axis, curr_axis, shape, dim, result):
         if curr_axis == axis:
             if axis != len(shape)-1:
-                res = result._data
+                res_dat = result._data
                 for i in range(len(array)):
-                    arr = array[i]._data    # __:opov
+                    arr_dat = array[i]._data    # __:opov
                     for j in range(result._data.length):
-                        if res[j] > arr[j]:
-                            res[j] = arr[j]
+                        if res_dat[j] > arr_dat[j]:
+                            res_dat[j] = arr_dat[j]
             else:
-                res = result._data
-                arr = array._data
+                res_dat = result._data
+                arr_dat = array._data
                 for i in range(len(array)):
-                    if res[dim] > arr[i]:
-                        res[dim] = arr[i]
+                    if res_dat[dim] > arr_dat[i]:
+                        res_dat[dim] = arr_dat[i]
         elif curr_axis < len(shape):
             if len(result._shape) > 1:
                 for dim in range(shape[curr_axis]):
@@ -990,16 +994,16 @@ class Ndarray:
     def _sum(self, array, axis, curr_axis, shape, dim, result):
         if curr_axis == axis:
             if axis != len(shape)-1:
-                res = result._data
+                res_dat = result._data
                 for i in range(len(array)):
-                    arr = array[i]._data    # __:opov
+                    arr_dat = array[i]._data    # __:opov
                     for j in range(result._data.length):
-                        res[j] += arr[j]
+                        res_dat[j] += arr_dat[j]
             else:
-                res = result._data
-                arr = array._data
+                res_dat = result._data
+                arr_dat = array._data
                 for i in range(len(array)):
-                    res[dim] += arr[i]
+                    res_dat[dim] += arr_dat[i]
         elif curr_axis < len(shape):
             if len(result._shape) > 1:
                 for dim in range(shape[curr_axis]):
