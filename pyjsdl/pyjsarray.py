@@ -888,6 +888,39 @@ class Ndarray:
                 other = Ndarray(list(other), self._dtype)
         return other
 
+    def dot(self, other):
+        """
+        Return dot product.
+        """
+        if not hasattr(other, '__iter__'):
+            data = self._data
+            ndarray = self.empty()
+            ndarray_data = ndarray._data
+            for i in range(len(data)):
+                ndarray_data[i] = data[i] * other
+            return ndarray
+        else:
+            other_array = self._get_array(other)
+            if len(other_array._shape) == 1:
+                if len(self._shape) == 1:
+                    data = self._data
+                    other_data = other_array._data
+                    result = 0
+                    for i in range(len(data)):
+                        result += data[i] * other_data[i]
+                    return result
+                else:
+                    result = Ndarray(self._shape[0], self._dtype)
+                    other_data = other_array._data
+                    for index, arr in enumerate(self):
+                        data = arr._data
+                        res_data = result._data    # __:opov
+                        for i in range(len(data)):
+                            res_data[index] += data[i] * other_data[i]
+                    return result
+            else:
+                return self.__matmul__(other_array)
+
     def matmul(self, other):
         """
         Return matrix multiplied array.
@@ -1328,6 +1361,18 @@ class NP:
         newarray._data.set(array._data)
         newarray._data.set(values, len(array))
         return newarray
+
+    def dot(self, a, b):
+        """
+        Return dot product.
+        """
+        return a.dot(b)
+
+    def matmul(self, a, b):
+        """
+        Return matrix multiplied array.
+        """
+        return a.__matmul__(b)
 
     # __pragma__ ('kwargs')
     def set_printoptions(self, precision=None, nanstr=None, infstr=None):
