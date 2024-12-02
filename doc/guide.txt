@@ -9,7 +9,7 @@ source env/bin/activate
 pip install --upgrade pip setuptools wheel
 pip install transcrypt
 
-To compile script.py, use the command 'transcrypt -n script.py' that will compile to the __target__ folder. Place data folder in script folder. Create script.html file in script folder to launch the code, for instance:
+To compile script.py, use the command 'transcrypt -n script.py' that will compile to the __target__ folder. Place data folder in script folder. Create script.html file in script folder to launch the code, with a script link to the compiled JavaScript app and an element with id '__panel__' to which the canvas will be added, for instance:
 
 <!doctype html>
 <html>
@@ -24,7 +24,54 @@ The script.html file can be launched direct, or loaded in another Web page using
 
 <iframe src="https://computer.com/app_folder/script.html" marginwidth="0" marginheight="0" hspace="0" vspace="0" scrolling="no" width="400" height="300" frameborder="0"></iframe>
 
-Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. To run on a local HTTP server, use command 'python3 -m http.server' and browse to localhost:8000. During development, use the web browser devtools console that displays print and error output, and to maintain updated development changes set devtools to open with cache disabled. The app can also run on the desktop using the app.py script, check instructions within the script.
+Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application, consisting of script html file along with __target__ and optional data folders, can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. To run on a local HTTP server, use command 'python3 -m http.server' and browse to localhost:8000. During development, use the web browser devtools console that displays print and error output, and to maintain updated development changes set devtools to open with cache disabled. The app can also run on the desktop using the app.py script, check instructions within the script.
+
+For efficiency Transcrypt uses __pragma__ directives to handle Python special methods, as described in Transcrypt documentation. The __pragma__ directive can be placed at the start of the script, or more efficently by surround code with the directive. For instance, iteration of a dictionary keys can be done:
+
+option1:
+for key in adict.keys():
+    print(key)
+option2:
+# __pragma__ ('iconv')
+for key in adict:
+    print(key)
+# __pragma__ ('noiconv')
+
+For Python object truth value such as checking empty list:
+alist = []
+option1:
+if len(alist) == 0:
+    print('empty list')
+option2:
+# __pragma__ ('tconv')
+if not alist:
+    print('empty list')
+# __pragma__ ('notconv')
+
+For function keyword args:
+# __pragma__ ('kwargs')
+def inc(a, b=1):
+    return a+b
+# __pragma__ ('nokwargs')
+
+For objects, operator and index functionality requires __pragma__ ('opov'). This is required for these functionality for Pyjsdl modules rect, vector, and pyjsarray. For instance place "# __pragma__ ('opov')" at the top of the script or surround specific code as:
+
+# __pragma__ ('opov')
+rect = Rect(0,0,10,10)
+x = rect[0]
+y = rect[1]
+# __pragma__ ('noopov')
+
+For Python statements to be skipped by Transcrypt, use __pragma__ ('skip'):
+
+platform = None
+# __pragma__ ('skip')
+import pygame
+platform = 'pc'
+# __pragma__ ('noskip')
+if not platform:
+    import pyjsdl as pygame
+    platform = 'js'
 
 Further information is available on the Pyjsdl project page (https://gatc.ca/projects/pyjsdl-ts/) and in the API documentation (https://gatc.ca/projects/pyjsdl-ts/doc/).
 
