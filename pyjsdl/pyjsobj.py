@@ -197,6 +197,9 @@ class FocusElement(Element):
         element.addEventListener('focus', self.onFocus)
         element.addEventListener('blur', self.onBlur)
 
+    def addVisibilityChangeListener(self):
+        document.addEventListener('visibilitychange', self.onVisibilityChange)
+
     def sinkEvents(self, events):
         self._sink_events = events
 
@@ -246,6 +249,9 @@ class FocusElement(Element):
         pass
 
     def onBlur(self, event):
+        pass
+
+    def onVisibilityChange(self, event):
         pass
 
     def focus(self):

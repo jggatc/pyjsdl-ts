@@ -5,6 +5,7 @@ from pyjsdl.surface import Surface
 from pyjsdl.rect import Rect
 from pyjsdl.time import Time
 from pyjsdl import env
+from pyjsdl import constants as Const
 from pyjsdl.pyjsobj import RootPanel, VerticalPanel, loadImages, TextBox, TextArea, Event, requestAnimationFrameInit
 
 __docformat__ = 'restructuredtext'
@@ -41,6 +42,8 @@ class Canvas(Surface):
         self.event = env.event
         self.addMouseListener(self)
         self.addKeyEventListener(self)
+        self.addFocusListener(self)
+        self.addVisibilityChangeListener()
         self.sinkEvents(Event.ONMOUSEDOWN |
                         Event.ONMOUSEUP |
                         Event.ONMOUSEMOVE |
@@ -48,7 +51,8 @@ class Canvas(Surface):
                         Event.ONMOUSEWHEEL |
                         Event.ONKEYDOWN |
                         Event.ONKEYPRESS |
-                        Event.ONKEYUP)
+                        Event.ONFOCUS |
+                        Event.ONBLUR)
         self.onContextMenu = None
         self.preventContextMenu()
         self.evt = self.event.eventObj
@@ -102,8 +106,9 @@ class Canvas(Surface):
             self.event._updateQueue(self.evt[event.js_type](event))
         self.event.mousePress[event.button] = False
 
-    def onMouseEnter(self, sender):
+    def onMouseEnter(self, event):
         self.mouse_entered = True
+        self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseLeave(self, event):
         self.event.mousePress[0] = False
@@ -116,6 +121,7 @@ class Canvas(Surface):
         for keycode in self.modKeyCode:
             if self.event.keyPress[keycode]:
                 self.event.keyPress[keycode] = False
+        self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseWheel(self, event):
         if event.js_type in self.event.events:
@@ -176,6 +182,15 @@ class Canvas(Surface):
             self.event.keyPressCode[self.event.keyCode] = keycode
             self.event._updateQueue(self.evt[event.js_type](event))
         event.preventDefault()
+
+    def onFocus(self, event):
+        self.event._updateQueue(self.evt[event.js_type](event))
+
+    def onBlur(self, event):
+        self.event._updateQueue(self.evt[event.js_type](event))
+
+    def onVisibilityChange(self, event):
+        self.event._updateQueue(self.evt[event.js_type](event))
 
     def _isPaused(self, keycode):
         if keycode not in self.keyHeld:
