@@ -16,6 +16,7 @@
 -refactor mixer audio object.
 -refactor pyjsarray for performance.
 -add activeevent.
+-add closeevent.
 
 0.26    2022-04-18
 -revise textarea object.

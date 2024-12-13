@@ -122,6 +122,38 @@ def call(obj, func, args=()):
         "return func.apply(obj, args);")
 
 
+def createEvent(eventObject, eventType, eventOptions=None):
+    """
+    Create JavaScript event.
+
+    For instance:
+        MouseEvent type 'mousedown', handled as a MouseButtonDown event.
+        PageTransitionEvent type 'pagehide', handled as a Quit event.
+    Default options are {'bubbles':True, 'cancelable':True}.
+    """
+    options = {'bubbles':True, 'cancelable':True}
+    if eventOptions is not None:
+        for key in eventOptions:
+            options[key] = eventOptions[key]
+    event = __new__(eventObject(eventType, options))
+    return event
+
+
+def dispatchEvent(event, element=None):
+    """
+    Dispatch JavaScript event.
+
+    The event is dispatched to the element.
+    Default element is the canvas.
+    """
+    if element is None:
+        element = document.getElementsByTagName('canvas').item(0)
+        if element is None:
+            return False
+    element.dispatchEvent(event)
+    return True
+
+
 def id(obj):
     return obj._identity
 

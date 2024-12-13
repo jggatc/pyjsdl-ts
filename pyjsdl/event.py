@@ -57,6 +57,7 @@ class Event:
                           Const.KEYDOWN: 'KeyDown',
                           Const.KEYUP: 'KeyUp',
                           Const.ACTIVEEVENT: 'ActiveEvent',
+                          Const.QUIT: 'Quit',
                           'mousemove': 'MouseMotion',
                           'mousedown': 'MouseButtonDown',
                           'mouseup': 'MouseButtonUp',
@@ -66,16 +67,17 @@ class Event:
                           'mouseleave': 'ActiveEvent',
                           'focus': 'ActiveEvent',
                           'blur': 'ActiveEvent',
-                          'visibilitychange': 'ActiveEvent'}
+                          'visibilitychange': 'ActiveEvent',
+                          'pagehide': 'Quit'}
         self.eventType = [Const.MOUSEMOTION,
                           Const.MOUSEBUTTONDOWN, Const.MOUSEBUTTONUP,
                           Const.KEYDOWN, Const.KEYUP,
-                          Const.ACTIVEEVENT,
+                          Const.ACTIVEEVENT, Const.QUIT,
                           'mousemove', 'mousedown', 'mouseup',
                           'wheel', 'mousewheel', 'DOMMouseScroll',
                           'keydown', 'keypress', 'keyup',
                           'mouseenter', 'mouseleave',
-                          'focus', 'blur', 'visibilitychange']
+                          'focus', 'blur', 'visibilitychange', 'pagehide']
         self.events = set(self.eventType)
         self.eventTypes = {Const.MOUSEMOTION:
                                set([Const.MOUSEMOTION, 'mousemove']),
@@ -91,7 +93,9 @@ class Event:
                            Const.ACTIVEEVENT:
                                set([Const.ACTIVEEVENT,
                                    'mouseenter', 'mouseleave',
-                                   'focus', 'blur', 'visibilitychange'])}
+                                   'focus', 'blur', 'visibilitychange']),
+                           Const.QUIT:
+                               set([Const.QUIT, 'pagehide'])}
         self.eventObj = {'mousedown': MouseDownEvent,
                          'mouseup': MouseUpEvent,
                          'wheel': MouseWheelEvent,
@@ -104,7 +108,8 @@ class Event:
                          'mouseleave': MouseFocusEvent,
                          'focus': InputFocusEvent,
                          'blur': InputFocusEvent,
-                         'visibilitychange': VisibilityEvent}
+                         'visibilitychange': VisibilityEvent,
+                         'pagehide': PageHide}
         self.modKey = key._modKey
         self.specialKey = key._specialKey
         self.modKeyCode = key._modKeyCode
@@ -424,7 +429,7 @@ class JEvent:
     Event object attributes:
 
     * type: MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION,
-            KEYDOWN, KEYUP, ACTIVEEVENT
+            KEYDOWN, KEYUP, ACTIVEEVENT, QUIT
     * button: mouse button pressed (1-5)
     * buttons: mouse buttons pressed (1,2,3)
     * pos: mouse position (x,y)
@@ -585,6 +590,7 @@ class KeyDownEvent(KeyEvent):
                      (event.ctrlKey * Const.KMOD_CTRL) |
                      (event.shiftKey * Const.KMOD_SHIFT) )
 
+
 class KeyUpEvent(KeyEvent):
 
     __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
@@ -683,6 +689,7 @@ class MouseFocusEvent(JEvent):
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {'mouseenter': 1, 'mouseleave': 0}
+    _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
         self.event = event
@@ -695,6 +702,7 @@ class InputFocusEvent(JEvent):
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {'focus': 1, 'blur': 0}
+    _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
         self.event = event
@@ -707,12 +715,23 @@ class VisibilityEvent(JEvent):
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {True: 1, False: 0}
+    _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
         self.event = event
         self.type = Const.ACTIVEEVENT
         self.state = Const.APPACTIVE
         self.gain = self._gain[not document.hidden]
+
+
+class PageHide(JEvent):
+
+    __slots__ = ['type', 'event']
+    _eventName = {Const.QUIT: 'Quit'}
+
+    def __init__(self, event):
+        self.event = event
+        self.type = Const.QUIT
 
 
 class TouchListener:

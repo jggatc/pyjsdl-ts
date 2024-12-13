@@ -200,6 +200,9 @@ class FocusElement(Element):
     def addVisibilityChangeListener(self):
         document.addEventListener('visibilitychange', self.onVisibilityChange)
 
+    def addPageHideListener(self):
+        window.addEventListener('pagehide', self.onPageHide)
+
     def sinkEvents(self, events):
         self._sink_events = events
 
@@ -252,6 +255,9 @@ class FocusElement(Element):
         pass
 
     def onVisibilityChange(self, event):
+        pass
+
+    def onPageHide(self, event):
         pass
 
     def focus(self):

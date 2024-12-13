@@ -44,6 +44,7 @@ class Canvas(Surface):
         self.addKeyEventListener(self)
         self.addFocusListener(self)
         self.addVisibilityChangeListener()
+        self.addPageHideListener()
         self.sinkEvents(Event.ONMOUSEDOWN |
                         Event.ONMOUSEUP |
                         Event.ONMOUSEMOVE |
@@ -190,6 +191,9 @@ class Canvas(Surface):
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onVisibilityChange(self, event):
+        self.event._updateQueue(self.evt[event.js_type](event))
+
+    def onPageHide(self, event):
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def _isPaused(self, keycode):
