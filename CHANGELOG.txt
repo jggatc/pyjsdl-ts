@@ -17,6 +17,7 @@
 -refactor pyjsarray for performance.
 -add activeevent.
 -add closeevent.
+-add display set_icon.
 
 0.26    2022-04-18
 -revise textarea object.

@@ -574,6 +574,18 @@ class DOM:
     def setStyleAttribute(element, attr, val):
         element.style[attr] = val
 
+
+def set_icon(icon):
+    if hasattr(icon, 'canvas'):
+        icon = icon.canvas.toDataURL()
+    link = parent.document.querySelector("link[rel~='icon']")
+    if not link:
+        link = parent.document.createElement('link')
+        link.rel = 'icon'
+        parent.document.head.appendChild(link)
+    link.href = icon
+
+
 class Event:
     pass
 
