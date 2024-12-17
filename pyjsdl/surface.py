@@ -478,14 +478,19 @@ class Surf:
     def get_height(self):
         return self.height
 
+    # __pragma__ ('kwargs')
+
+    def get_rect(self, **attr):
+        rect = Rect(0, 0, self.width, self.height)
+        for key in attr.keys():
+            setattr(rect, key, attr[key])
+        return rect
+
+    # __pragma__ ('nokwargs')
+
     def _nonimplemented_methods(self):
         self.convert = lambda *arg: self
         self.convert_alpha = lambda *arg: self
-        self.lock = lambda *arg: None
-        self.unlock = lambda *arg: None
-        self.mustlock = lambda *arg: False
-        self.get_locked = lambda *arg: False
-        self.get_locks = lambda *arg: ()
 
 
 class IndexSizeError(Exception):
