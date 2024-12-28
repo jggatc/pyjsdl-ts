@@ -1,6 +1,8 @@
-#Libtest
+"""
+Libtest
 
-#check doc/libtest.txt for information
+Check doc/libtest.txt for information.
+"""
 
 
 platform = None
@@ -62,7 +64,8 @@ elif executor == 'transcrypt':
         has_assert = False
     except AssertionError:
         has_assert = True
-    _name = lambda f: __pragma__ ('js', {}, 'f.name;')
+    # __pragma__ ('noalias', 'name')
+    _name = lambda f: f.name
     _str = lambda n, t, r: 'Test {}  {} {}'.format(n, _name(t), r)
 
 
@@ -120,6 +123,20 @@ lib_tests = [surface_test,
              vector_test]
 
 
+lib_test_name = {'surface_test': surface_test,
+                 'rect_test': rect_test,
+                 'draw_test': draw_test,
+                 'transform_test': transform_test,
+                 'surfarray_test': surfarray_test,
+                 'mask_test': mask_test,
+                 'color_test': color_test,
+                 'cursor_test': cursor_test,
+                 'sprite_test': sprite_test,
+                 'event_test': event_test,
+                 'time_test': time_test,
+                 'vector_test': vector_test}
+
+
 env = {}
 log = None
 tests = []
@@ -128,7 +145,7 @@ tests_failed = []
 tests_success = True
 tests_skipped = False
 test_repeat = False
-catch_exc = False
+catch_exc = True
 
 
 def tests_init():
@@ -218,7 +235,17 @@ def test_complete():
     pg.quit()
 
 
-def main():
+def main(tests=None, catch_exception=None):
+    if tests is not None:
+        if isinstance(tests, list) and len(tests) > 0:
+            lib_tests[:] = []
+            for test in tests:
+                _test = lib_test_name[test]
+                lib_tests.append(_test)
+    if catch_exception is not None:
+        if catch_exception in (True, False):
+            global catch_exc
+            catch_exc = catch_exception
     tests_init()
     if env['platform'] in ('pc', 'jvm'):
         run_tests()
