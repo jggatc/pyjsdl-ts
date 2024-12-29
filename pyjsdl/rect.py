@@ -135,16 +135,28 @@ class Rect:
         return self._width and self._height
 
     def __eq__(self, other):
-        return (self._x == other._x and
-                self._y == other._y and
-                self._width == other._width
-                and self._height == other._height)
+        if hasattr(other, '_x'):
+            return (self._x == other._x and
+                    self._y == other._y and
+                    self._width == other._width
+                    and self._height == other._height)
+        else:
+            return (self._x == other[0] and
+                    self._y == other[1] and
+                    self._width == other[2]
+                    and self._height == other[3])
 
     def __ne__(self, other):
-        return (self._x != other._x or
-                self._y != other._y or
-                self._width != other._width or
-                self._height != other._height)
+        if hasattr(other, '_x'):
+            return (self._x != other._x or
+                    self._y != other._y or
+                    self._width != other._width or
+                    self._height != other._height)
+        else:
+            return (self._x != other[0] or
+                    self._y != other[1] or
+                    self._width != other[2] or
+                    self._height != other[3])
 
     def copy(self):
         """
