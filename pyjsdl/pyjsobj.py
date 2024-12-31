@@ -721,3 +721,33 @@ String.prototype.splitlines = function () {
 };
     """)
 
+
+__pragma__ ('js', {},
+"""
+Array.prototype.__add__ = function (aList) {
+    if (typeof aList == 'object' && '__radd__' in aList) {
+        return aList.__radd__ (this);
+    }
+    else {
+    return list (this.concat (aList));
+    }
+};
+""")
+
+
+__pragma__ ('js', {},
+"""
+Array.prototype.__mul__ = function (scalar) {
+    if (typeof scalar == 'object' && '__rmul__' in scalar) {
+        return scalar.__rmul__ (this);
+    }
+    else {
+    let result = this;
+    for (let i = 1; i < scalar; i++) {
+        result = result.concat (this);
+    }
+    return result;
+    }
+};
+""")
+
