@@ -724,12 +724,12 @@ String.prototype.splitlines = function () {
 
 __pragma__ ('js', {},
 """
-Array.prototype.__add__ = function (aList) {
-    if (typeof aList == 'object' && '__radd__' in aList) {
-        return aList.__radd__ (this);
+Array.prototype.__add__ = function (other) {
+    if (typeof other == 'object' && '__radd__' in other) {
+        return other.__radd__ (this);
     }
     else {
-    return list (this.concat (aList));
+    return list (this.concat (other));
     }
 };
 """)
@@ -737,13 +737,13 @@ Array.prototype.__add__ = function (aList) {
 
 __pragma__ ('js', {},
 """
-Array.prototype.__mul__ = function (scalar) {
-    if (typeof scalar == 'object' && '__rmul__' in scalar) {
-        return scalar.__rmul__ (this);
+Array.prototype.__mul__ = function (other) {
+    if (typeof other == 'object' && '__rmul__' in other) {
+        return other.__rmul__ (this);
     }
     else {
     let result = this;
-    for (let i = 1; i < scalar; i++) {
+    for (let i = 1; i < other; i++) {
         result = result.concat (this);
     }
     return result;
