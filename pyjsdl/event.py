@@ -307,6 +307,7 @@ class Event:
     def set_blocked(self, eventType):
         """
         Block specified event type(s) from queue.
+        If None is argument, all event types are blocked.
         """
         if eventType is not None:
             if isinstance(eventType, (tuple,list)):
@@ -317,12 +318,13 @@ class Event:
                 self.events = self.events.difference(
                                   self.eventTypes[eventType])
         else:
-            self.events = set(self.eventType)
+            self.events.clear()
         return None
 
     def set_allowed(self, eventType):
         """
         Set allowed event type(s) on queue.
+        If None is argument, all event types are allowed.
         """
         if eventType is not None:
             if isinstance(eventType, (tuple,list)):
@@ -333,7 +335,7 @@ class Event:
                 self.events = self.events.union(
                                   self.eventTypes[eventType])
         else:
-            self.events.clear()
+            self.events = set(self.eventType)
         return None
 
     def get_blocked(self, eventType):
