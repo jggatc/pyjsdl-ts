@@ -21,6 +21,7 @@
 -update color object.
 -update rect comparison methods.
 -revise vector methods for tuple argument.
+-revise sprite to optimize.
 
 0.26    2022-04-18
 -revise textarea object.

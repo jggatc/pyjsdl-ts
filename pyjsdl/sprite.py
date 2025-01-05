@@ -74,7 +74,7 @@ class Sprite:
         """
         Remove sprite from all member groups.
         """
-        for group in list(self._groups.values()):
+        for group in self._groups.values():
             group.remove(self)
         return None
 
@@ -82,7 +82,7 @@ class Sprite:
         """
         Return True if sprite is member of any groups.
         """
-        if len(self._groups.keys()) > 0:
+        if len(self._groups) > 0:
             return True
         else:
             return False
@@ -91,7 +91,7 @@ class Sprite:
         """
         Return list of groups that sprite is a member.
         """
-        return list(self._groups.values())
+        return self._groups.values()
 
     def update(self, *args):
         """
@@ -156,17 +156,21 @@ class Group:
         for sprite in self._sprites.values():
             yield sprite
 
+    def __getitem__(self, index):
+        #opov pragma disrupts __iter__ call, uses suboptimal __getitem__/__len__
+        return self._sprites.values()[index]
+
     def __contains__(self, sprite):
-        return str(id(sprite)) in self._sprites.keys()
+        return str(id(sprite)) in self._sprites
 
     def __len__(self):
-        return len(self._sprites.keys())
+        return len(self._sprites)
 
     def sprites(self):
         """
         Return list of sprites in the group.
         """
-        return list(self._sprites.values())
+        return self._sprites.values()
 
     def copy(self):
         """
@@ -183,7 +187,7 @@ class Group:
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) not in self._sprites.keys():
+                if str(spriteID) not in self._sprites:
                     self._sprites[spriteID] = sprite
                     sprite._groups[id(self)] = self
             else:
@@ -197,7 +201,7 @@ class Group:
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) in self._sprites.keys():
+                if str(spriteID) in self._sprites:
                     self._sprites.pop(spriteID)
                     sprite._groups.pop(id(self))
             else:
@@ -210,7 +214,7 @@ class Group:
         """
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
-                if str(id(sprite)) not in self._sprites.keys():
+                if str(id(sprite)) not in self._sprites:
                     return False
             else:
                 if not self.has(*sprite):
@@ -295,13 +299,6 @@ class GroupSingle(Group):
         else:
             Group.__init__(self)
 
-    def __getattr__(self, attr):
-        if attr == 'sprite':
-            if len(self._sprites.keys()) > 0:
-                return list(self._sprites.values())[0]
-            else:
-                return None
-
     def add(self, sprite):
         """
         Add sprite to group, replacing existing sprite.
@@ -311,13 +308,17 @@ class GroupSingle(Group):
         sprite._groups[id(self)] = self
         return None
 
-    def update(self, *args):
-        """
-        Update sprite by calling Sprite.update.
-        """
-        if len(self._sprites.keys()) > 0:
-            list(self._sprites.values())[0].update(*args)
-        return None
+    @property
+    def sprite(self):
+        return self._sprites.values()[0] if len(self._sprites) > 0 else None
+
+    @sprite.setter
+    def sprite(self, sprite):
+        self.add(sprite)
+
+    @sprite.deleter
+    def sprite(self):
+        raise TypeError('Cannot delete the sprite attribute')
 
 
 class RenderUpdates(Group):
@@ -345,7 +346,7 @@ class RenderUpdates(Group):
             rectPool.extend(self.changed_areas)
             self.changed_areas[:] = []
             for sprite in self._sprites.keys():
-                if sprite in self._sprites_drawn.keys():
+                if sprite in self._sprites_drawn:
                     if self._sprites_drawn[sprite].intersects(
                                    self._sprites[sprite].rect):
                         self._sprites_drawn[sprite].union_ip(
@@ -409,7 +410,7 @@ class OrderedUpdates(RenderUpdates):
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) not in self._sprites.keys():
+                if str(spriteID) not in self._sprites:
                     self._sprites[spriteID] = sprite
                     sprite._groups[id(self)] = self
                     self._orderedsprites.append(sprite)
@@ -424,7 +425,7 @@ class OrderedUpdates(RenderUpdates):
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) in self._sprites.keys():
+                if str(spriteID) in self._sprites:
                     self._sprites.pop(spriteID)
                     sprite._groups.pop(id(self))
                     self._orderedsprites.remove(sprite)
@@ -462,11 +463,11 @@ class LayeredUpdates(OrderedUpdates):
         """
         self._layer = {}
         self._layers = []
-        if 'default_layer' not in kwargs.keys():
+        if 'default_layer' not in kwargs:
             self._default_layer = 0
         else:
             self._default_layer = kwargs['default_layer']
-        if 'layer' not in kwargs.keys():
+        if 'layer' not in kwargs:
             self._override_layer = None
         else:
             self._override_layer = kwargs['layer']
@@ -498,12 +499,12 @@ class LayeredUpdates(OrderedUpdates):
         derived from sprite _layer attribute or if absent default layer.
         If layer keyword argument is provided it is used.
         """
-        if 'layer' in kwargs.keys():
+        if 'layer' in kwargs:
             self._override_layer = kwargs['layer']
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) not in self._sprites.keys():
+                if str(spriteID) not in self._sprites:
                     self._sprites[spriteID] = sprite
                     sprite._groups[id(self)] = self
                     if self._override_layer is not None:
@@ -512,7 +513,7 @@ class LayeredUpdates(OrderedUpdates):
                         layer = sprite._layer
                     else:
                         layer = self._default_layer
-                    if str(layer) not in self._layer.keys():
+                    if str(layer) not in self._layer:
                         self._add_layer(layer)
                     self._layer[layer]['sprite'].add(spriteID)
                     i = self._layer[layer]['index'][1]
@@ -551,7 +552,7 @@ class LayeredUpdates(OrderedUpdates):
         for sprite in sprites:
             if hasattr(sprite, '_groups'):
                 spriteID = id(sprite)
-                if str(spriteID) in self._sprites.keys():
+                if str(spriteID) in self._sprites:
                     self._sprites.pop(spriteID)
                     sprite._groups.pop(id(self))
                     for layer in self._layers:
@@ -886,7 +887,7 @@ def groupcollide(group1, group2, dokill1, dokill2):
                 rect2._x < (rect1._x + rect1._width) and
                 rect1._y < (rect2._y + rect2._height) and
                 rect2._y < (rect1._y + rect1._height)):
-                if sprite1 not in collide.keys():
+                if sprite1 not in collide:
                     collide.setdefault(sprite1, [])
                 collide.get(sprite1).append(sprite2)
                 collision = True
