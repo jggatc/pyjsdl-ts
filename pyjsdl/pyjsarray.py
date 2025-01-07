@@ -1286,6 +1286,9 @@ class Ndarray:
         """
         return self._data
 
+    def toString(self):
+        return self.__str__()
+
 
 ndarray = Ndarray
 array = Ndarray
@@ -1897,6 +1900,9 @@ class BitSet:
         new_bitset._data = data
         new_bitset._width = self._width
         return new_bitset
+
+    def toString(self):
+        return self.__str__()
 
 
 class BitSet16(BitSet):

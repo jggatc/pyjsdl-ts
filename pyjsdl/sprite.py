@@ -99,6 +99,12 @@ class Sprite:
         """
         pass
 
+    def js_update(self, *args):
+        self.update(*args)
+
+    def toString(self):
+        return self.__str__()
+
 
 class DirtySprite(Sprite):
     """
@@ -262,6 +268,12 @@ class Group:
         for sprite in self._sprites.values():
             sprite.update(*args)
         return None
+
+    def js_update(self, *args):
+        self.update(*args)
+
+    def toString(self):
+        return self.__str__()
 
 
 class RenderPlain(Group):

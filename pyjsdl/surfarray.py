@@ -126,6 +126,9 @@ class ImageMatrixRGB(ImageMatrix):
     def __repr__(self):
         return self.__str__()
 
+    def toString(self):
+        return self.__str__()
+
 
 class ImageRGB(Ndarray):
     """
@@ -186,6 +189,9 @@ class ImageMatrixAlpha(ImageMatrix):
         return None
 
     def __repr__(self):
+        return self.__str__()
+
+    def toString(self):
         return self.__str__()
 
 
@@ -255,6 +261,9 @@ class ImageMatrixInteger(ImageMatrix):
         return None
 
     def __repr__(self):
+        return self.__str__()
+
+    def toString(self):
         return self.__str__()
 
 

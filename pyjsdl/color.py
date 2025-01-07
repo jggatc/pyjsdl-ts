@@ -346,6 +346,12 @@ class Color:
     def hsla(self, val):
         self.r, self.g, self.b, self.a = _hsla_to_rgba(*val)
 
+    def js_update(self, *color):
+        self.update(*color)
+
+    def toString(self):
+        return self.__str__()
+
 
 def _rgb_to_cmy(r, g, b):
     r, g, b = r/255.0, g/255.0, b/255.0

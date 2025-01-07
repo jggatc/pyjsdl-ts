@@ -611,6 +611,9 @@ class Display:
             self.flip()
         return None
 
+    def js_update(self, rect_list=None):
+        self.update(rect_list)
+
 
 def _update(canvas, rect_list):
     for rect in rect_list:

@@ -326,6 +326,9 @@ Example of font file declaration:
         """
         return int(self.fontsize*1.2)
 
+    def toString(self):
+        return self.__str__()
+
     def _nonimplemented_methods(self):
         self.metrics = lambda *arg: []
         self.get_height = lambda *arg: 0

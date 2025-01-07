@@ -502,6 +502,9 @@ class Rect:
                 collided.append((rect_key, rect))
         return collided
 
+    def toString(self):
+        return self.__str__()
+
     @property
     def x(self):
         return self._x

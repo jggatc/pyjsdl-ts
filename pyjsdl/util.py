@@ -219,3 +219,6 @@ class Dict:
         for k in self._dk.keys():
             yield (self._dk[k], self._dv[k])
 
+    def toString(self):
+        return self.__str__()
+

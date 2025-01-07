@@ -22,6 +22,7 @@
 -update rect comparison methods.
 -revise vector methods for tuple argument.
 -revise sprite to optimize.
+-revise for javascript interoperability.
 
 0.26    2022-04-18
 -revise textarea object.

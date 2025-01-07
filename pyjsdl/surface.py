@@ -507,6 +507,9 @@ class Surf:
     def get_alpha(self):
         return int(self._alpha*255)
 
+    def toString(self):
+        return self.__str__()
+
 
 class IndexSizeError(Exception):
     pass
