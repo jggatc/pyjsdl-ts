@@ -123,12 +123,6 @@ class ImageMatrixRGB(ImageMatrix):
         ImageMatrix.__setitem__(self, index, value)
         return None
 
-    def __repr__(self):
-        return self.__str__()
-
-    def toString(self):
-        return self.__str__()
-
 
 class ImageRGB(Ndarray):
     """
@@ -187,12 +181,6 @@ class ImageMatrixAlpha(ImageMatrix):
     def __setitem__(self, index, value):
         ImageMatrix.__setitem__(self, (index[1], index[0], 3), value)
         return None
-
-    def __repr__(self):
-        return self.__str__()
-
-    def toString(self):
-        return self.__str__()
 
 
 class ImageAlpha(Ndarray):
@@ -259,12 +247,6 @@ class ImageMatrixInteger(ImageMatrix):
                                        value>>24 & 0xff))
         # __pragma__ ('noopov')
         return None
-
-    def __repr__(self):
-        return self.__str__()
-
-    def toString(self):
-        return self.__str__()
 
 
 class ImageInteger(Ndarray):
