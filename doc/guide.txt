@@ -26,6 +26,20 @@ The script.html file can be launched direct, or loaded in another Web page using
 
 Some additional changes to the Python script may be necessary for Transcrypt compilation. A web application, consisting of script html file along with __target__ and optional data folders, can be deployed following compilation to JavaScript, which can run in a web browser on a pc or mobile. To run on a local HTTP server, use command 'python3 -m http.server' and browse to localhost:8000. During development, use the web browser devtools console that displays print and error output, and to maintain updated development changes set devtools to open with cache disabled. The app can also run on the desktop using the app.py script, check instructions within the script.
 
+The module can also be used from a JavaScript application. Create a folder containing the Transcrypt-compiled module with the command 'transcrypt -n main.py -od pyjsdl-lib' and place a link to 'pyjsdl-lib/main.js' in a script.html file, for instance:
+
+<!doctype html>
+<html>
+<body>
+    <h2>Pyjsdl JS App</h2>
+    <div id="__panel__"></div>
+    <script type='module' src="pyjsdl-lib/main.js"></script>
+    <script defer src="./js_app.js"></script>
+</body>
+</html>
+
+The module should be available in JavaScript as 'pyjsdl', also available as 'window.pyjsdl', and can be accessed through the module's API. There are some minor differences with JavaScript access. Since JavaScript does not have a tuple type, any pass of tuple argument to the module should be a JavaScript Array [], for instance 'pyjsdl.Surface([w,h])'. Displaying object information with console.log can be done with 'object.toString()'. Other than these few differences, the JavaScript application can utilize the module similar to described for a Python application, and providing a callback to pyjsdl.setup() to run the application.
+
 For efficiency Transcrypt uses __pragma__ directives to handle Python special methods, as described in Transcrypt documentation. The __pragma__ directive can be placed at the start of the script, or more efficently by surround code with the directive. For instance, iteration of a dictionary keys can be done:
 
 option1:
