@@ -4,6 +4,7 @@
 from pyjsdl.pyjsobj import HTML5Canvas
 from pyjsdl.rect import Rect, rectPool
 from pyjsdl.color import Color
+from pyjsdl.pyjsobj import _hasattr as hasattr
 
 __docformat__ = 'restructuredtext'
 
@@ -160,7 +161,7 @@ class Surface(HTML5Canvas):
         Draw given surface on this surface at position.
         Optional area delimitates the region of given surface to draw.
         """
-        if not position._width:
+        if not hasattr(position, '_width'):
             x = position[0]
             y = position[1]
         else:
@@ -176,7 +177,7 @@ class Surface(HTML5Canvas):
             else:
                 return None
         else:
-            if not area._width:
+            if not hasattr(area, '_width'):
                 ax = area[0]
                 ay = area[1]
                 aw = area[2]
@@ -218,7 +219,7 @@ class Surface(HTML5Canvas):
         for blit in blit_sequence:
             surface = blit[0]
             position = blit[1]
-            if not position._width:
+            if not hasattr(position, '_width'):
                 x = position[0]
                 y = position[1]
             else:
@@ -226,7 +227,7 @@ class Surface(HTML5Canvas):
                 y = position.y
             if len(blit) > 2:
                 area = blit[2]
-                if not area._width:
+                if not hasattr(area, '_width'):
                     ax = area[0]
                     ay = area[1]
                     aw = area[2]
@@ -466,6 +467,8 @@ class Surf:
         self.canvas = image
         self.width = self.canvas.width
         self.height = self.canvas.height
+        self._display = None
+        self._colorkey = None
         self._alpha = 1.0
         self.convert = lambda *arg: self
         self.convert_alpha = lambda *arg: self

@@ -694,6 +694,14 @@ def performanceNowPolyfill():
 fabs = Math.abs
 
 
+__pragma__ ('js', {},
+"""
+export function _hasattr (obj, name) {
+    return name in obj;
+};
+""")
+
+
 if not String.prototype.count:
     __pragma__ ('js', {},
     """
