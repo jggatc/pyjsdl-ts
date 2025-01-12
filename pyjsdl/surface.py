@@ -4,7 +4,7 @@
 from pyjsdl.pyjsobj import HTML5Canvas
 from pyjsdl.rect import Rect, rectPool
 from pyjsdl.color import Color
-from pyjsdl.pyjsobj import _hasattr as hasattr
+from pyjsdl.pyjsobj import hasattr_v1 as hasattr
 
 __docformat__ = 'restructuredtext'
 

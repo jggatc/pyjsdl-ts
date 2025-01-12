@@ -694,10 +694,16 @@ def performanceNowPolyfill():
 fabs = Math.abs
 
 
-__pragma__ ('js', {},
-"""
-export function _hasattr (obj, name) {
+hasattr_v1 = __pragma__ ('js', {},
+"""function (obj, name) {
     return name in obj;
+};
+""")
+
+
+hasattr_v2 = __pragma__ ('js', {},
+"""function (obj, name) {
+    return typeof obj === 'object' && name in obj;
 };
 """)
 
