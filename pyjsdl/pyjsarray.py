@@ -16,11 +16,20 @@ class window:
 class Object:
     def getPrototypeOf(*args):
         return None
+
+__pragma__ = lambda *arg:None
 # __pragma__ ('noskip')
 
 
 # __pragma__ ('noopov')
 # __pragma__ ('noalias', 'isNaN')
+
+
+hasattr = __pragma__ ('js', {},
+"""function (obj, name) {
+    return typeof obj === 'object' && name in obj;
+};
+""")
 
 
 def Uint8ClampedArray(*args):
