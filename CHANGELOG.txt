@@ -25,6 +25,7 @@
 -revise for javascript interoperability.
 -revise vector elementwise object.
 -revise vector operator methods.
+-revise vector object instantiation.
 
 0.26    2022-04-18
 -revise textarea object.
