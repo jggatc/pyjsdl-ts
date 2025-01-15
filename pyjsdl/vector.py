@@ -2,6 +2,7 @@
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
 from math import sin, cos, atan2, pi, floor
+from pyjsdl.pyjsobj import hasattr_v2 as hasattr
 
 
 class Vector2:
@@ -18,8 +19,8 @@ class Vector2:
             self._x = float(x)
             self._y = float(y)
         elif x is not None:
-            self._x = float(x[0])     # __:opov
-            self._y = float(x[1])     # __:opov
+            self._x = float(x[0])    # __:opov
+            self._y = float(x[1])    # __:opov
         else:
             self._x = 0.0
             self._y = 0.0
@@ -397,8 +398,8 @@ class Vector2:
             self._x = float(x)
             self._y = float(y)
         elif x is not None:
-            self._x = float(x[0])     # __:opov
-            self._y = float(x[1])     # __:opov
+            self._x = float(x[0])    # __:opov
+            self._y = float(x[1])    # __:opov
         else:
             self._x = 0.0
             self._y = 0.0
@@ -413,50 +414,59 @@ class Vector2:
         if hasattr(other, '_x'):
             return Vector2(self._x + other._x, self._y + other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._x + other[0], self._y + other[1])
+            return Vector2(self._x + other[0], self._y + other[1])    # __:opov
         else:
-            return Vector2(self._x + other, self._y + other)
+            raise TypeError('unsupported operand')
 
     def __sub__(self, other):
         if hasattr(other, '_x'):
             return Vector2(self._x - other._x, self._y - other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._x - other[0], self._y - other[1])
+            return Vector2(self._x - other[0], self._y - other[1])    # __:opov
         else:
-            return Vector2(self._x - other, self._y - other)
+            raise TypeError('unsupported operand')
 
     def __mul__(self, other):
         if hasattr(other, '_x'):
-            if not isinstance(other, VectorElementwiseProxy):
-                return (self._x * other._x) + (self._y * other._y)
-            else:
-                return Vector2(self._x * other._x, self._y * other._y)
+            return (self._x * other._x) + (self._y * other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._x * other[0], self._y * other[1])
+            if not hasattr(other, '_v'):
+                return (self._x * other[0]) + (self._y * other[1])
+            else:
+                return Vector2(self._x * other[0], self._y * other[1])    # __:opov
         else:
             return Vector2(self._x * other, self._y * other)
 
     def __div__(self, other):
         if hasattr(other, '_x'):
-            return Vector2(self._x / other._x, self._y / other._y)
+            raise TypeError('unsupported operand')
         elif hasattr(other, '__iter__'):
-            return Vector2(self._x / other[0], self._y / other[1])
+            if not hasattr(other, '_v'):
+                return Vector2(self._x / other[0], self._y / other[1])
+            else:
+                return Vector2(self._x / other[0], self._y / other[1])    # __:opov
         else:
             return Vector2(self._x / other, self._y / other)
 
     def __truediv__(self, other):
         if hasattr(other, '_x'):
-            return Vector2(self._x / other._x, self._y / other._y)
+            raise TypeError('unsupported operand')
         elif hasattr(other, '__iter__'):
-            return Vector2(self._x / other[0], self._y / other[1])
+            if not hasattr(other, '_v'):
+                return Vector2(self._x / other[0], self._y / other[1])
+            else:
+                return Vector2(self._x / other[0], self._y / other[1])    # __:opov
         else:
             return Vector2(self._x / other, self._y / other)
 
     def __floordiv__(self, other):
         if hasattr(other, '_x'):
-            return Vector2(floor(self._x/other._x), floor(self._y/other._y))
+            raise TypeError('unsupported operand')
         elif hasattr(other, '__iter__'):
-            return Vector2(floor(self._x/other[0]), floor(self._y/other[1]))
+            if not hasattr(other, '_v'):
+                return Vector2(floor(self._x/other[0]), floor(self._y/other[1]))
+            else:
+                return Vector2(floor(self._x/other[0]), floor(self._y/other[1]))    # __:opov
         else:
             return Vector2(floor(self._x/other), floor(self._y/other))
 
@@ -465,108 +475,90 @@ class Vector2:
             return ( abs(self._x - other._x) < 0.000001 and
                      abs(self._y - other._y) < 0.000001 )
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             return ( abs(self._x - other[0]) < 0.000001 and
                      abs(self._y - other[1]) < 0.000001 )
+            # __pragma__ ('noopov')
         else:
-            return ( abs(self._x - other) < 0.000001 and
-                     abs(self._y - other) < 0.000001 )
+            return False
 
     def __ne__(self, other):
         if hasattr(other, '_x'):
             return ( abs(self._x - other._x) > 0.000001 or
                      abs(self._y - other._y) > 0.000001 )
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             return ( abs(self._x - other[0]) > 0.000001 or
                      abs(self._y - other[1]) > 0.000001 )
+            # __pragma__ ('noopov')
         else:
-            return ( abs(self._x - other) > 0.000001 or
-                     abs(self._y - other) > 0.000001 )
+            return True
 
     def __gt__(self, other):
-        if not isinstance(other, VectorElementwiseProxy):
-            msg = 'This operation is not supported by vectors'
-            raise TypeError(msg)
+        if not hasattr(other, '_v'):
+            raise TypeError('operation not supported')
         return other.__lt__(self)
 
     def __ge__(self, other):
-        if not isinstance(other, VectorElementwiseProxy):
-            msg = 'This operation is not supported by vectors'
-            raise TypeError(msg)
+        if not hasattr(other, '_v'):
+            raise TypeError('operation not supported')
         return other.__le__(self)
 
     def __lt__(self, other):
-        if not isinstance(other, VectorElementwiseProxy):
-            msg = 'This operation is not supported by vectors'
-            raise TypeError(msg)
+        if not hasattr(other, '_v'):
+            raise TypeError('operation not supported')
         return other.__gt__(self)
 
     def __le__(self, other):
-        if not isinstance(other, VectorElementwiseProxy):
-            msg = 'This operation is not supported by vectors'
-            raise TypeError(msg)
+        if not hasattr(other, '_v'):
+            raise TypeError('operation not supported')
         return other.__ge__(self)
 
     def __radd__(self, other):
-        if hasattr(other, '_x'):
-            return Vector2(self._x + other._x, self._y + other._y)
-        elif hasattr(other, '__iter__'):
+        if hasattr(other, '__iter__'):
             return Vector2(self._x + other[0], self._y + other[1])
         else:
-            return Vector2(self._x + other, self._y + other)
+            raise TypeError('unsupported operand')
 
     def __rsub__(self, other):
-        if hasattr(other, '_x'):
-            return Vector2(other._x - self._x, other._y - self._y)
-        elif hasattr(other, '__iter__'):
+        if hasattr(other, '__iter__'):
             return Vector2(other[0] - self._x, other[1] - self._y)
         else:
-            return Vector2(other - self._x, other - self._y)
+            raise TypeError('unsupported operand')
 
     def __rmul__(self, other):
-        if hasattr(other, '_x'):
-            if not isinstance(other, VectorElementwiseProxy):
-                return (self._x * other._x) + (self._y * other._y)
-            else:
-                return Vector2(self._x * other._x, self._y * other._y)
-        elif hasattr(other, '__iter__'):
-            return Vector2(self._x * other[0], self._y * other[1])
+        if hasattr(other, '__iter__'):
+            return (self._x * other[0]) + (self._y * other[1])
         else:
             return Vector2(self._x * other, self._y * other)
 
     def __rdiv__(self, other):
-        if hasattr(other, '_x'):
-            return Vector2(other._x / self._x, other._y / self._y)
-        elif hasattr(other, '__iter__'):
-            return Vector2(other[0] / self._x, other[1] / self._y)
+        if not hasattr(other, '_v'):
+            raise TypeError('unsupported operand')
         else:
-            return Vector2(other / self._x, other / self._y)
+            return Vector2(other[0] / self._x, other[1] / self._y)
 
     def __rtruediv__(self, other):
-        if hasattr(other, '_x'):
-            return Vector2(other._x / self._x, other._y / self._y)
-        elif hasattr(other, '__iter__'):
-            return Vector2(other[0] / self._x, other[1] / self._y)
+        if not hasattr(other, '_v'):
+            raise TypeError('unsupported operand')
         else:
-            return Vector2(other / self._x, other / self._y)
+            return Vector2(other[0] / self._x, other[1] / self._y)
 
     def __rfloordiv__(self, other):
-        if hasattr(other, '_x'):
-            return Vector2(floor(other._x/self._x), floor(other._y/self._y))
-        elif hasattr(other, '__iter__'):
-            return Vector2(floor(other[0]/self._x), floor(other[1]/self._y))
+        if not hasattr(other, '_v'):
+            raise TypeError('unsupported operand')
         else:
-            return Vector2(floor(other/self._x), floor(other/self._y))
+            return Vector2(floor(other[0]/self._x), floor(other[1]/self._y))
 
     def __iadd__(self, other):
         if hasattr(other, '_x'):
             self._x += other._x
             self._y += other._y
         elif hasattr(other, '__iter__'):
-            self._x += other[0]
-            self._y += other[1]
+            self._x += other[0]    # __:opov
+            self._y += other[1]    # __:opov
         else:
-            self._x += other
-            self._y += other
+            raise TypeError('unsupported operand')
         return self
 
     def __isub__(self, other):
@@ -574,90 +566,73 @@ class Vector2:
             self._x -= other._x
             self._y -= other._y
         elif hasattr(other, '__iter__'):
-            self._x -= other[0]
-            self._y -= other[1]
+            self._x -= other[0]    # __:opov
+            self._y -= other[1]    # __:opov
         else:
-            self._x -= other
-            self._y -= other
+            raise TypeError('unsupported operand')
         return self
 
     def __imul__(self, other):
         if hasattr(other, '_x'):
-            self._x *= other._x
-            self._y *= other._y
+            return (self._x * other._x) + (self._y * other._y)
         elif hasattr(other, '__iter__'):
-            self._x *= other[0]
-            self._y *= other[1]
+            if not hasattr(other, '_v'):
+                return (self._x * other[0]) + (self._y * other[1])
+            else:
+                self._x *= other[0]    # __:opov
+                self._y *= other[1]    # __:opov
         else:
             self._x *= other
             self._y *= other
         return self
 
     def __idiv__(self, other):
-        if hasattr(other, '_x'):
-            self._x /= other._x
-            self._y /= other._y
-        elif hasattr(other, '__iter__'):
-            self._x /= other[0]
-            self._y /= other[1]
+        if hasattr(other, '__iter__'):
+            if not hasattr(other, '_v'):
+                raise TypeError('unsupported operand')
+            else:
+                self._x /= other[0]    # __:opov
+                self._y /= other[1]    # __:opov
         else:
             self._x /= other
             self._y /= other
         return self
 
     def __itruediv__(self, other):
-        if hasattr(other, '_x'):
-            self._x /= other._x
-            self._y /= other._y
-        elif hasattr(other, '__iter__'):
-            self._x /= other[0]
-            self._y /= other[1]
+        if hasattr(other, '__iter__'):
+            if not hasattr(other, '_v'):
+                raise TypeError('unsupported operand')
+            else:
+                self._x /= other[0]    # __:opov
+                self._y /= other[1]    # __:opov
         else:
             self._x /= other
             self._y /= other
         return self
 
     def __ifloordiv__(self, other):
-        if hasattr(other, '_x'):
-            self._x = float(floor(self._x / other._x))
-            self._y = float(floor(self._y / other._y))
-        elif hasattr(other, '__iter__'):
-            self._x = float(floor(self._x / other[0]))
-            self._y = float(floor(self._y / other[1]))
+        if hasattr(other, '__iter__'):
+            if not hasattr(other, '_v'):
+                raise TypeError('unsupported operand')
+            else:
+                self._x = float(floor(self._x / other[0]))    # __:opov
+                self._y = float(floor(self._y / other[1]))    # __:opov
         else:
             self._x = float(floor(self._x / other))
             self._y = float(floor(self._y / other))
         return self
+
+    def js_update(self, x=None, y=None):
+        self.update(x, y)
+
+    def toString(self):
+        return self.__str__()
 
 
 class VectorElementwiseProxy:
 
     def __init__(self, vector):
         self._v = vector
-
-    @property
-    def _x(self):
-        return self._v._x
-
-    @_x.setter
-    def _x(self, val):
-        raise TypeError('Cannot set the x attribute')
-
-    @_x.deleter
-    def _x(self):
-        raise TypeError('Cannot delete the x attribute')
-
-    @property
-    def _y(self):
-        return self._v._y
-
-    @_y.setter
-    def _y(self, val):
-        raise TypeError('Cannot set the y attribute')
-
-    @_y.deleter
-    def _y(self):
-        raise TypeError('Cannot delete the y attribute')
 
     def __getitem__(self, index):
         if index in (0, -2):
@@ -691,7 +666,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x + other._x, self._v._y + other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x + other[0], self._v._y + other[1])
+            return Vector2(self._v._x + other[0], self._v._y + other[1])    # __:opov
         else:
             return Vector2(self._v._x + other, self._v._y + other)
 
@@ -699,7 +674,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x - other._x, self._v._y - other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x - other[0], self._v._y - other[1])
+            return Vector2(self._v._x - other[0], self._v._y - other[1])    # __:opov
         else:
             return Vector2(self._v._x - other, self._v._y - other)
 
@@ -707,7 +682,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x * other._x, self._v._y * other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x * other[0], self._v._y * other[1])
+            return Vector2(self._v._x * other[0], self._v._y * other[1])    # __:opov
         else:
             return Vector2(self._v._x * other, self._v._y * other)
 
@@ -715,7 +690,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x / other._x, self._v._y / other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x / other[0], self._v._y / other[1])
+            return Vector2(self._v._x / other[0], self._v._y / other[1])    # __:opov
         else:
             return Vector2(self._v._x / other, self._v._y / other)
 
@@ -723,7 +698,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x / other._x, self._v._y / other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x / other[0], self._v._y / other[1])
+            return Vector2(self._v._x / other[0], self._v._y / other[1])    # __:opov
         else:
             return Vector2(self._v._x / other, self._v._y / other)
 
@@ -731,7 +706,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(floor(self._v._x/other._x), floor(self._v._y/other._y))
         elif hasattr(other, '__iter__'):
-            return Vector2(floor(self._v._x/other[0]), floor(self._v._y/other[1]))
+            return Vector2(floor(self._v._x/other[0]), floor(self._v._y/other[1]))    # __:opov
         else:
             return Vector2(floor(self._v._x/other), floor(self._v._y/other))
 
@@ -742,10 +717,12 @@ class VectorElementwiseProxy:
                     'negative number cannot be raised to a fractional power')
             return Vector2(self._v._x ** other._x, self._v._y ** other._y)
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             if (other[0]%1 and self._v._x<0) or (other[1]%1 and self._v._y<0):
                 raise ValueError(
                     'negative number cannot be raised to a fractional power')
             return Vector2(self._v._x ** other[0], self._v._y ** other[1])
+            # __pragma__ ('noopov')
         else:
             if other%1 and (self._v._x<0 or self._v._y<0):
                 raise ValueError(
@@ -756,7 +733,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x % other._x, self._v._y % other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x % other[0], self._v._y % other[1])
+            return Vector2(self._v._x % other[0], self._v._y % other[1])    # __:opov
         else:
             return Vector2(self._v._x % other, self._v._y % other)
 
@@ -765,8 +742,10 @@ class VectorElementwiseProxy:
             return ( abs(self._v._x - other._x) < 0.000001 and
                      abs(self._v._y - other._y) < 0.000001 )
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             return ( abs(self._v._x - other[0]) < 0.000001 and
                      abs(self._v._y - other[1]) < 0.000001 )
+            # __pragma__ ('noopov')
         else:
             return False
 
@@ -775,8 +754,10 @@ class VectorElementwiseProxy:
             return ( abs(self._v._x - other._x) > 0.000001 or
                      abs(self._v._y - other._y) > 0.000001 )
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             return ( abs(self._v._x - other[0]) > 0.000001 or
                      abs(self._v._y - other[1]) > 0.000001 )
+            # __pragma__ ('noopov')
         else:
             return True
 
@@ -784,7 +765,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return bool(self._v._x > other._x and self._v._y > other._y)
         elif hasattr(other, '__iter__'):
-            return bool(self._v._x > other[0] and self._v._y > other[1])
+            return bool(self._v._x > other[0] and self._v._y > other[1])    # __:opov
         else:
             return bool(self._v._x > other and self._v._y > other)
 
@@ -792,7 +773,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return bool(self._v._x >= other._x and self._v._y >= other._y)
         elif hasattr(other, '__iter__'):
-            return bool(self._v._x >= other[0] and self._v._y >= other[1])
+            return bool(self._v._x >= other[0] and self._v._y >= other[1])    # __:opov
         else:
             return bool(self._v._x >= other and self._v._y >= other)
 
@@ -800,7 +781,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return bool(self._v._x < other._x and self._v._y < other._y)
         elif hasattr(other, '__iter__'):
-            return bool(self._v._x < other[0] and self._v._y < other[1])
+            return bool(self._v._x < other[0] and self._v._y < other[1])    # __:opov
         else:
             return bool(self._v._x < other and self._v._y < other)
 
@@ -808,7 +789,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return bool(self._v._x <= other._x and self._v._y <= other._y)
         elif hasattr(other, '__iter__'):
-            return bool(self._v._x <= other[0] and self._v._y <= other[1])
+            return bool(self._v._x <= other[0] and self._v._y <= other[1])    # __:opov
         else:
             return bool(self._v._x <= other and self._v._y <= other)
 
@@ -816,7 +797,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x + other._x, self._v._y + other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x + other[0], self._v._y + other[1])
+            return Vector2(self._v._x + other[0], self._v._y + other[1])    # __:opov
         else:
             return Vector2(self._v._x + other, self._v._y + other)
 
@@ -824,7 +805,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(other._x - self._v._x, other._y - self._v._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(other[0] - self._v._x, other[1] - self._v._y)
+            return Vector2(other[0] - self._v._x, other[1] - self._v._y)    # __:opov
         else:
             return Vector2(other - self._v._x, other - self._v._y)
 
@@ -832,7 +813,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(self._v._x * other._x, self._v._y * other._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(self._v._x * other[0], self._v._y * other[1])
+            return Vector2(self._v._x * other[0], self._v._y * other[1])    # __:opov
         else:
             return Vector2(self._v._x * other, self._v._y * other)
 
@@ -840,7 +821,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(other._x / self._v._x, other._y / self._v._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(other[0] / self._v._x, other[1] / self._v._y)
+            return Vector2(other[0] / self._v._x, other[1] / self._v._y)    # __:opov
         else:
             return Vector2(other / self._v._x, other / self._v._y)
 
@@ -848,7 +829,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(other._x / self._v._x, other._y / self._v._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(other[0] / self._v._x, other[1] / self._v._y)
+            return Vector2(other[0] / self._v._x, other[1] / self._v._y)    # __:opov
         else:
             return Vector2(other / self._v._x, other / self._v._y)
 
@@ -856,7 +837,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(floor(other._x/self._v._x), floor(other._y/self._v._y))
         elif hasattr(other, '__iter__'):
-            return Vector2(floor(other[0]/self._v._x), floor(other[1]/self._v._y))
+            return Vector2(floor(other[0]/self._v._x), floor(other[1]/self._v._y))    # __:opov
         else:
             return Vector2(floor(other/self._v._x), floor(other/self._v._y))
 
@@ -867,10 +848,12 @@ class VectorElementwiseProxy:
                     'negative number cannot be raised to a fractional power')
             return Vector2(other._x ** self._v._x, other._y ** self._v._y)
         elif hasattr(other, '__iter__'):
+            # __pragma__ ('opov')
             if (other[0]<0 and self._v._x%1) or (other[1]<0 and self._v._y%1):
                 raise ValueError(
                     'negative number cannot be raised to a fractional power')
             return Vector2(other[0] ** self._v._x, other[1] ** self._v._y)
+            # __pragma__ ('noopov')
         else:
             if other<0 and (self._v._x%1 or self._v._y%1):
                 raise ValueError(
@@ -881,7 +864,7 @@ class VectorElementwiseProxy:
         if hasattr(other, '_x'):
             return Vector2(other._x % self._v._x, other._y % self._v._y)
         elif hasattr(other, '__iter__'):
-            return Vector2(other[0] % self._v._x, other[1] % self._v._y)
+            return Vector2(other[0] % self._v._x, other[1] % self._v._y)    # __:opov
         else:
             return Vector2(other % self._v._x, other % self._v._y)
 
