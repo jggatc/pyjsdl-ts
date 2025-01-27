@@ -16,6 +16,7 @@ class Mouse:
     * pyjsdl.mouse.get_pos
     * pyjsdl.mouse.get_rel
     * pyjsdl.mouse.set_visible
+    * pyjsdl.mouse.get_focused
     * pyjsdl.mouse.set_cursor
     * pyjsdl.mouse.get_cursor
     """
@@ -82,6 +83,12 @@ class Mouse:
             self._cursorVisible = False
         return visible_pre
 
+    def get_focused(self):
+        """
+        Check if mouse has focus.
+        """
+        return self.mousePos['x'] != -1
+
     def set_cursor(self, *cursor):
         """
         Set mouse cursor.
@@ -137,5 +144,4 @@ class Mouse:
 
     def _nonimplemented_methods(self):
         self.set_pos = lambda *arg: None
-        self.get_focused = lambda *arg: True
 
