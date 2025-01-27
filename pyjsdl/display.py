@@ -65,7 +65,6 @@ class Canvas(Surface):
         self.specialKeyCode = self.event.specialKeyCode
         self.keyRepeat = self.event.keyRepeat
         self.keyHeld = self.event.keyHeld
-        self.mouse_entered = True
         self.event._initiate_touch_listener(self)
         self._touch_callback = self.event.touchlistener.callback
         self._rect_list = []
@@ -87,40 +86,40 @@ class Canvas(Surface):
         _wnd = requestAnimationFrameInit()
 
     def onMouseMove(self, event):
+        self.event.mousePosPre['x'] = self.event.mousePos['x']
+        self.event.mousePosPre['y'] = self.event.mousePos['y']
+        self.event.mousePos['x'] = event.clientX
+        self.event.mousePos['y'] = event.clientY
         if event.js_type in self.event.events:
-            if not self.mouse_entered:
-                self.event.mouseMovePre['x'] = self.event.mouseMove['x']
-                self.event.mouseMovePre['y'] = self.event.mouseMove['y']
-            else:
-                self.event.mouseMovePre['x'] = event.clientX
-                self.event.mouseMovePre['y'] = event.clientY
-                self.mouse_entered = False
             self.event._updateQueue(self.evt[event.js_type](event))
-        self.event.mouseMove['x'] = event.clientX
-        self.event.mouseMove['y'] = event.clientY
 
     def onMouseDown(self, event):
+        self.event.mousePress[event.button] = True
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
-        self.event.mousePress[event.button] = True
 
     def onMouseUp(self, event):
+        self.event.mousePress[event.button] = False
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
-        self.event.mousePress[event.button] = False
 
     def onMouseEnter(self, event):
-        self.mouse_entered = True
+        x = event.clientX
+        y = event.clientY
+        self.event.mousePos['x'] = x
+        self.event.mousePos['y'] = y
+        self.event.mousePosPre['x'] = x
+        self.event.mousePosPre['y'] = y
+        self.event.mousePosRel['x'] = x
+        self.event.mousePosRel['y'] = y
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseLeave(self, event):
+        self.event.mousePos['x'] = -1
+        self.event.mousePos['y'] = -1
         self.event.mousePress[0] = False
         self.event.mousePress[1] = False
         self.event.mousePress[2] = False
-        self.event.mouseMove['x'] = -1
-        self.event.mouseMove['y'] = -1
-        self.event.mouseMoveRel['x'] = None
-        self.event.mouseMoveRel['y'] = None
         for keycode in self.modKeyCode:
             if self.event.keyPress[keycode]:
                 self.event.keyPress[keycode] = False

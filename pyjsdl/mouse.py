@@ -26,9 +26,10 @@ class Mouse:
         
         Module initialization creates pyjsdl.mouse instance.
         """
+        self.mousePos = env.event.mousePos
+        self.mousePosPre = env.event.mousePosPre
+        self.mousePosRel = env.event.mousePosRel
         self.mousePress = env.event.mousePress
-        self.mouseMove = env.event.mouseMove
-        self.mouseMoveRel = env.event.mouseMoveRel
         self._cursorVisible = True
         self._cursor = 'default'
         self._nonimplemented_methods()
@@ -46,28 +47,25 @@ class Mouse:
         Return x,y of mouse pointer.
         If the pointer is not in canvas, returns -1,-1
         """
-        if self.mouseMove['x'] != -1:
+        if self.mousePos['x'] != -1:
             r = env.canvas.getBoundingClientRect()
-            return (self.mouseMove['x'] - round(r.left),
-                    self.mouseMove['y'] - round(r.top))
+            return (self.mousePos['x'] - round(r.left),
+                    self.mousePos['y'] - round(r.top))
         else:
-            return (self.mouseMove['x'], self.mouseMove['y'])
+            return (self.mousePos['x'], self.mousePos['y'])
 
     def get_rel(self):
         """
         Return relative x,y change of mouse position since last call.
         """
-        if self.mouseMoveRel['x'] is not None:
-            rel = (self.mouseMove['x'] - self.mouseMoveRel['x'],
-                   self.mouseMove['y'] - self.mouseMoveRel['y'])
-            self.mouseMoveRel['x'] = self.mouseMove['x']
-            self.mouseMoveRel['y'] = self.mouseMove['y']
+        if self.mousePos['x'] != -1:
+            rel = (self.mousePos['x'] - self.mousePosRel['x'],
+                   self.mousePos['y'] - self.mousePosRel['y'])
+            self.mousePosRel['x'] = self.mousePos['x']
+            self.mousePosRel['y'] = self.mousePos['y']
+            return rel
         else:
-            rel = (0, 0)
-            if self.mouseMove['x'] != -1:
-                self.mouseMoveRel['x'] = self.mouseMove['x']
-                self.mouseMoveRel['y'] = self.mouseMove['y']
-        return rel
+            return (0, 0)
 
     def set_visible(self, visible):
         """
