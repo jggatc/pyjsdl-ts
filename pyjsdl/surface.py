@@ -161,7 +161,7 @@ class Surface(HTML5Canvas):
         Draw given surface on this surface at position.
         Optional area delimitates the region of given surface to draw.
         """
-        if not hasattr(position, '_width'):
+        if not hasattr(position, '_x'):
             x = position[0]
             y = position[1]
         else:
@@ -177,7 +177,7 @@ class Surface(HTML5Canvas):
             else:
                 return None
         else:
-            if not hasattr(area, '_width'):
+            if not hasattr(area, '_x'):
                 ax = area[0]
                 ay = area[1]
                 aw = area[2]
@@ -219,7 +219,7 @@ class Surface(HTML5Canvas):
         for blit in blit_sequence:
             surface = blit[0]
             position = blit[1]
-            if not hasattr(position, '_width'):
+            if not hasattr(position, '_x'):
                 x = position[0]
                 y = position[1]
             else:
@@ -227,7 +227,7 @@ class Surface(HTML5Canvas):
                 y = position.y
             if len(blit) > 2:
                 area = blit[2]
-                if not hasattr(area, '_width'):
+                if not hasattr(area, '_x'):
                     ax = area[0]
                     ay = area[1]
                     aw = area[2]
