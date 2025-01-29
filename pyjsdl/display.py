@@ -28,7 +28,7 @@ class Canvas(Surface):
             self._bufferedimage = buffered
         else:
             self._bufferedimage = True
-        if self.impl.canvasContext:
+        if self._ctx:
             self._isCanvas = True
         else:
             self._isCanvas = False
@@ -81,7 +81,7 @@ class Canvas(Surface):
     def _canvas_init(self):
         global _canvas, _ctx, _img, _wnd
         _canvas = self
-        _ctx = self.impl.canvasContext
+        _ctx = self._ctx
         _img = self.surface.canvas
         _wnd = requestAnimationFrameInit()
 
@@ -594,7 +594,7 @@ class Display:
         """
         Repaint display.
         """
-        self.canvas.impl.canvasContext.drawImage(self.surface.canvas, 0, 0)
+        self.canvas._ctx.drawImage(self.surface.canvas, 0, 0)
         return None
 
     def update(self, rect_list=None):

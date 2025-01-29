@@ -167,7 +167,7 @@ class Surface(HTML5Canvas):
         else:
             x = position.x
             y = position.y
-        ctx = self.impl.canvasContext
+        ctx = self._ctx
         ctx.globalAlpha = surface._alpha
         if not area:
             ctx.drawImage(surface.canvas, x, y)
@@ -207,7 +207,7 @@ class Surface(HTML5Canvas):
         Argument blit_sequence of (source, dest) or (source, dest, area).
         Optional doreturn (defaults to True) to return list of rects.
         """
-        ctx = self.impl.canvasContext
+        ctx = self._ctx
         if doreturn:
             rects = []
             if self._display:
@@ -256,14 +256,14 @@ class Surface(HTML5Canvas):
         return rects
 
     def _blits(self, surfaces):
-        ctx = self.impl.canvasContext
+        ctx = self._ctx
         for surface, rect in surfaces:
             ctx.globalAlpha = surface._alpha
             ctx.drawImage(surface.canvas, rect.x, rect.y)
         ctx.globalAlpha = 1.0
 
     def _blit_clear(self, surface, rect_list):
-        ctx = self.impl.canvasContext
+        ctx = self._ctx
         ctx.globalAlpha = surface._alpha
         for r in rect_list:
             ctx.drawImage(surface.canvas,

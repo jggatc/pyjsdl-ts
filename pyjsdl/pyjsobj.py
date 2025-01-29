@@ -290,7 +290,6 @@ class HTML5Canvas(FocusElement):
         self._element.style['vertical-align'] = 'bottom'
         self.canvas = self._element
         self._ctx = self._element.getContext('2d')
-        self.impl = CanvasImpl(self._ctx)
 
     def resize(self, width, height):
         self._element.width = width
@@ -408,12 +407,6 @@ class HTML5Canvas(FocusElement):
 
     def getElement(self):
         return self._element
-
-
-class CanvasImpl:
-
-    def __init__(self, ctx):
-        self.canvasContext = ctx
 
 
 class Panel(Element):
