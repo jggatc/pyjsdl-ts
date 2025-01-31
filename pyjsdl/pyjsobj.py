@@ -24,15 +24,8 @@ class Element:
             self._element = None
 
     @property
-    def style(self, attr):
+    def style(self):
         return self._element.style
-
-    @style.setter
-    def style(self, attr, value):
-        self._element.style[attr] = value
-
-    def style(self, attr):
-        pass
 
     def getElement(self):
         return self._element
