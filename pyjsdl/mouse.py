@@ -27,9 +27,7 @@ class Mouse:
         
         Module initialization creates pyjsdl.mouse instance.
         """
-        self.mousePos = env.event.mousePos
-        self.mousePosPre = env.event.mousePosPre
-        self.mousePosRel = env.event.mousePosRel
+        self.mouseEvt = env.event.mouseEvt
         self.mousePress = env.event.mousePress
         self._cursorVisible = True
         self._cursor = 'default'
@@ -48,22 +46,21 @@ class Mouse:
         Return x,y of mouse pointer.
         If the pointer is not in canvas, returns -1,-1
         """
-        if self.mousePos['x'] != -1:
+        if self.mouseEvt['pos']:
             r = env.canvas.getBoundingClientRect()
-            return (self.mousePos['x'] - round(r.left),
-                    self.mousePos['y'] - round(r.top))
+            return (self.mouseEvt['pos'].clientX - round(r.left),
+                    self.mouseEvt['pos'].clientY - round(r.top))
         else:
-            return (self.mousePos['x'], self.mousePos['y'])
+            return (-1, -1)
 
     def get_rel(self):
         """
         Return relative x,y change of mouse position since last call.
         """
-        if self.mousePos['x'] != -1:
-            rel = (self.mousePos['x'] - self.mousePosRel['x'],
-                   self.mousePos['y'] - self.mousePosRel['y'])
-            self.mousePosRel['x'] = self.mousePos['x']
-            self.mousePosRel['y'] = self.mousePos['y']
+        if self.mouseEvt['pos']:
+            rel = (self.mouseEvt['pos'].clientX - self.mouseEvt['rel'].clientX,
+                   self.mouseEvt['pos'].clientY - self.mouseEvt['rel'].clientY)
+            self.mouseEvt['rel'] = self.mouseEvt['pos']
             return rel
         else:
             return (0, 0)
@@ -87,7 +84,7 @@ class Mouse:
         """
         Check if mouse has focus.
         """
-        return self.mousePos['x'] != -1
+        return self.mouseEvt['pos'] != None
 
     def set_cursor(self, *cursor):
         """

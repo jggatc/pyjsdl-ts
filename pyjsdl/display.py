@@ -86,10 +86,8 @@ class Canvas(Surface):
         _wnd = requestAnimationFrameInit()
 
     def onMouseMove(self, event):
-        self.event.mousePosPre['x'] = self.event.mousePos['x']
-        self.event.mousePosPre['y'] = self.event.mousePos['y']
-        self.event.mousePos['x'] = event.clientX
-        self.event.mousePos['y'] = event.clientY
+        self.event.mouseEvt['pre'] = self.event.mouseEvt['pos']
+        self.event.mouseEvt['pos'] = event
         if event.js_type in self.event.events:
             self.event._updateQueue(self.evt[event.js_type](event))
 
@@ -104,19 +102,13 @@ class Canvas(Surface):
             self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseEnter(self, event):
-        x = event.clientX
-        y = event.clientY
-        self.event.mousePos['x'] = x
-        self.event.mousePos['y'] = y
-        self.event.mousePosPre['x'] = x
-        self.event.mousePosPre['y'] = y
-        self.event.mousePosRel['x'] = x
-        self.event.mousePosRel['y'] = y
+        self.event.mouseEvt['pos'] = event
+        self.event.mouseEvt['pre'] = event
+        self.event.mouseEvt['rel'] = event
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseLeave(self, event):
-        self.event.mousePos['x'] = -1
-        self.event.mousePos['y'] = -1
+        self.event.mouseEvt['pos'] = None
         self.event.mousePress[0] = False
         self.event.mousePress[1] = False
         self.event.mousePress[2] = False

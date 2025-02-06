@@ -41,9 +41,7 @@ class Event:
         self.queue = []
         self.queueNil = []
         self.queueTmp = []
-        self.mousePos = {'x':-1, 'y':-1}
-        self.mousePosPre = {'x':-1, 'y':-1}
-        self.mousePosRel = {'x':-1, 'y':-1}
+        self.mouseEvt = {'pos':None, 'pre':None, 'rel':None}
         self.mousePress = {0:False, 1:False, 2:False}
         self.keyPress = {Const.K_ALT: False,
                          Const.K_CTRL: False,
@@ -551,8 +549,8 @@ class MouseMoveEvent(MouseEvent):
         r = env.canvas.getBoundingClientRect()
         self.pos = (event.clientX - round(r.left),
                     event.clientY - round(r.top))
-        self.rel = (event.clientX - env.event.mousePosPre['x'],
-                    event.clientY - env.event.mousePosPre['y'])
+        self.rel = (event.clientX - env.event.mouseEvt['pre'].clientX,
+                    event.clientY - env.event.mouseEvt['pre'].clientY)
 
 
 class KeyEvent(JEvent):
