@@ -285,10 +285,12 @@ class HTML5Canvas(FocusElement):
         self._ctx = self._element.getContext('2d')
 
     def resize(self, width, height):
-        self._element.width = width
-        self._element.height = height
         self.width = width
         self.height = height
+        self._element.width = width
+        self._element.height = height
+        self._element.style.width = str(width)+'px'
+        self._element.style.height = str(height)+'px'
 
     def drawImage(self, image, *args):
         ln = len(args)
