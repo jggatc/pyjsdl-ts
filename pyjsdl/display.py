@@ -509,12 +509,12 @@ class Display:
             RootPanel().add(self.vpanel)
         return self.vpanel
 
-    def resize(self, size):
+    def resize(self, width, height):
         """
         Resize canvas display.
-        Argument size of display.
+        Arguments width and height of display.
         """
-        self.canvas.resize(size[0], size[1])
+        self.canvas.resize(width, height)
 
     def getAbsoluteLeft(self):
         """
