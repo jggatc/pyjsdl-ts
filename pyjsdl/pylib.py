@@ -1,11 +1,11 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-def int(number):
-    """
-    Return integer value of number.
-    """
-    return ~(~(number))
+"""
+**Pylib module**
+
+The module provides Python functionality.
+"""
 
 
 """
@@ -109,4 +109,11 @@ path = Mod()
 path.join = join
 path.normpath = normpath
 os.path = path
+
+
+def int(number):
+    """
+    Return integer value of number.
+    """
+    return ~(~(number))
 

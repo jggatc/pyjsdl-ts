@@ -3,6 +3,7 @@
 
 
 ver = None
+"Module version"
 
 
 def set_ver(version):

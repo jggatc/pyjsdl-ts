@@ -1,6 +1,12 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+"""
+**Pyjsobj module**
+
+The module provides JavaScript functionality.
+"""
+
 # __pragma__ ('skip')
 __pragma__ = lambda *arg:None
 class window:

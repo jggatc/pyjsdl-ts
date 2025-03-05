@@ -1,6 +1,12 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+"""
+**Util module**
+
+The module provides profiling functionality.
+"""
+
 from pyjsdl.time import Time
 from pyjsdl.rect import Rect
 from pyjsdl import env
@@ -9,12 +15,16 @@ from pyjsdl import env
 class Timer:
     """
     Simple profiling timer.
+
     Output log can be directed to 'console' or to 'textarea'.
     If output is to textarea, may specify log length.
     """
 
     # __pragma__ ('kwargs')
     def __init__(self, log='console', log_length=5):
+        """
+        Initialize timer object.
+        """
         self.time = Time()
         self.time_i = self.get_time()
         self.dtime = []
@@ -42,7 +52,9 @@ class Timer:
     def lap_time(self, time_i=None, time_f=None, number=100, print_result=True):
         """
         Time lapsed since previous set_time.
+
         Optional arguments time_i and time_f, number of calls to average, and print_results to output result.
+        Return lapsed time on completion.
         """
         if time_i is None:
             time_i = self.time_i
@@ -70,6 +82,7 @@ class Timer:
     def set_log(self, log, log_length=5):
         """
         Set log output.
+
         Argument log can be 'console' or 'textarea'.
         """
         if log in ('console','textarea'):
@@ -92,9 +105,15 @@ class Timer:
     # __pragma__ ('nokwargs')
 
     def onMouseDown(self, sender, x, y):
+        """
+        Control log scroll.
+        """
         self.log_scroll = False
 
     def onMouseLeave(self, sender):
+        """
+        Control log scroll.
+        """
         self.log_scroll = True
 
     def print_log(self, text):
@@ -115,6 +134,7 @@ class Timer:
 def call(obj, func, args=()):
     """
     Call unbound method.
+
     Argument obj is the object, func is the unbound method, and optional args is a tuple of arguments for the method.
     Returns the method's return value.
     """
@@ -143,7 +163,7 @@ def dispatchEvent(event, element=None):
     """
     Dispatch JavaScript event.
 
-    The event is dispatched to the element.
+    The event is dispatched from the element.
     Default element is the canvas.
     """
     if element is None:

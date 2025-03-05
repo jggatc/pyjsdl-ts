@@ -19,6 +19,10 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
 
+"""
+**Pyjsdl - Pyjs Canvas Library**
+"""
+
 __version__ = '0.27'
 
 from pyjsdl import env
@@ -44,6 +48,9 @@ from pyjsdl import sprite
 from pyjsdl import cursors
 from pyjsdl import version
 from pyjsdl.constants import *
+
+
+__docformat__ = 'restructuredtext'
 
 
 time = display = image = event = key = mouse = mixer = None
@@ -75,6 +82,7 @@ init()
 def setup(callback, images=None):
     """
     Initialize module for script execution.
+
     Argument include callback function to run and optional images list to preload.
     Callback function can also be an object with a run method to call.
     The images can be image URL, or base64 data in format (name.ext,data).
@@ -85,6 +93,7 @@ def setup(callback, images=None):
 def set_callback(callback):
     """
     Set callback function.
+
     Argument callback function to run.
     Callback function can also be an object with a run method to call.
     """
@@ -94,6 +103,7 @@ def set_callback(callback):
 def setup_images(images):
     """
     Add images to image preload list.
+
     The argument is an image or list of images representing an image URL, or base64 data in format (name.ext,data).
     Image preloading occurs at setup call.
     """
@@ -111,11 +121,16 @@ def quit():
 
 
 class error(Exception):
+    """
+    Exception object.
+    """
     pass
 
 
 def bounding_rect_return(setting):
     """
+    Bounding rect return.
+
     Set whether blit/draw return bounding Rect.
     Setting (bool) defaults to True on module initialization.
     """

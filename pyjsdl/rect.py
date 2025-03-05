@@ -1,44 +1,28 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-from pyjsdl.pylib import int
+"""
+**Rect module**
 
-__docformat__ = 'restructuredtext'
+The module provides rect object to store coordinates.
+"""
+
+from pyjsdl.pylib import int
 
 
 class Rect:
     """
-    **pyjsdl.Rect**
-    
-    * Rect.copy
-    * Rect.move
-    * Rect.move_ip
-    * Rect.inflate
-    * Rect.inflate_ip
-    * Rect.contains
-    * Rect.union
-    * Rect.union_ip
-    * Rect.unionall
-    * Rect.unionall_ip
-    * Rect.clamp
-    * Rect.clamp_ip
-    * Rect.clip
-    * Rect.collidepoint
-    * Rect.colliderect
-    * Rect.collidelist
-    * Rect.collidelistall
-    * Rect.collidedict
-    * Rect.collidedictall
+    Rect object.
     """
 
     __slots__ = ['_x', '_y', '_width', '_height']
 
     def __init__(self, *args):
         """
-        Return Rect object.
-        
+        Initialize Rect object.
+
         Alternative arguments:
-        
+
         * x, y, width, height
         * (x, y), (width, height)
         * (x, y, width, height)
@@ -46,7 +30,7 @@ class Rect:
         * Obj with rect attribute
 
         Rect has the attributes::
-        
+
         x, y, width, height
         top, left, bottom, right
         topleft, bottomleft, topright, bottomright
@@ -56,7 +40,7 @@ class Rect:
 
         Operator and index functionality requires __pragma__ ('opov').
 
-        Module initialization places pyjsdl.Rect in module's namespace.
+        Module initialization places Rect in module's namespace.
         """
         ln = len(args)
         if ln == 1:
@@ -392,6 +376,7 @@ class Rect:
     def set(self, *args):
         """
         Set rect x,y,width,height attributes to argument.
+
         Alternative arguments:
         * x,y,w,h
         * (x,y),(w,h)
@@ -694,20 +679,15 @@ class Rect:
 
 class RectPool:
     """
-    **pyjsdl.rect.rectPool**
-    
-    * rectPool.append
-    * rectPool.extend
-    * rectPool.get
-    * rectPool.copy
-
-    Rect pool accessed by rectPool instance through append method to
-    add Rect, extend method to add Rect list, get method to return Rect
-    set with x,y,width,height attributes, and copy method to return
-    copy of a given Rect. If pool is empty, return is a new Rect.
+    RectPool object.
     """
 
     def __init__(self):
+        """
+        Initialize RectPool object.
+
+        Rect pool accessed by rectPool instance through append method to add Rect, extend method to add Rect list, get method to return Rect set with x,y,width,height attributes, and copy method to return copy of a given Rect. If pool is empty, return is a new Rect.
+        """
         self._cache = []
         self._length = 0
         self.add = self.append
@@ -765,4 +745,5 @@ class RectPool:
             return Rect(r._x, r._y, r._width, r._height)
 
 rectPool = RectPool()
+"Module RectPool instance."
 

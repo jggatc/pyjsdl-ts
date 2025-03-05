@@ -1,35 +1,27 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+"""
+**Event module**
+
+The module manages events.
+"""
+
 from pyjsdl import env
 from pyjsdl import key
 from pyjsdl import constants as Const
 
-__docformat__ = 'restructuredtext'
-
 
 class Event:
     """
-    **pyjsdl.event**
-    
-    * pyjsdl.event.pump
-    * pyjsdl.event.get
-    * pyjsdl.event.poll
-    * pyjsdl.event.wait
-    * pyjsdl.event.peek
-    * pyjsdl.event.clear
-    * pyjsdl.event.event_name
-    * pyjsdl.event.set_blocked
-    * pyjsdl.event.set_allowed
-    * pyjsdl.event.get_blocked
-    * pyjsdl.event.post
-    * pyjsdl.event.Event
+    Event processing construct.
     """
 
     def __init__(self):
         """
+        Initialize Event object.
+
         Maintain events received from browser.
-        
         Module initialization creates pyjsdl.event instance.
         """
         self.eventQueue = [None for i in range(256)]
@@ -154,6 +146,8 @@ class Event:
 
     def pump(self):
         """
+        Process event queue.
+
         Process events to reduce queue overflow, unnecessary if processing with other methods.
         """
         if self.eventNum > 250:
@@ -171,6 +165,7 @@ class Event:
     def get(self, eventType=None):
         """
         Return list of events, and queue is reset.
+
         Optional eventType argument of single or list of event type(s) to return.
         """
         if not self.eventNum:
@@ -207,7 +202,9 @@ class Event:
 
     def poll(self):
         """
-        Return an event from the queue, or event type NOEVENT if none present.
+        Return an event from the queue.
+
+        Return event type NOEVENT if none present.
         """
         self._lock()
         if self.eventNum:
@@ -224,6 +221,9 @@ class Event:
     def wait(self):     #not implemented in js
         """
         Return an event from the queue.
+
+        Return None if queue is empty.
+        Waiting not implemented.
         """
         while True:
             if self.eventNum:
@@ -242,6 +242,7 @@ class Event:
     def peek(self, eventType=None):
         """
         Check if an event of given type is present.
+
         Optional eventType argument specifies event type or list, which defaults to all.
         """
         if not self.eventNum:
@@ -265,6 +266,7 @@ class Event:
     def clear(self, eventType=None):
         """
         Remove events of a given type from queue.
+
         Optional eventType argument specifies event type or list, which defaults to all.
         """
         if not self.eventNum:
@@ -305,6 +307,7 @@ class Event:
     def set_blocked(self, eventType):
         """
         Block specified event type(s) from queue.
+
         If None is argument, all event types are blocked.
         """
         if eventType is not None:
@@ -322,6 +325,7 @@ class Event:
     def set_allowed(self, eventType):
         """
         Set allowed event type(s) on queue.
+
         If None is argument, all event types are allowed.
         """
         if eventType is not None:
@@ -372,14 +376,14 @@ class Event:
             self.events = self.events.union(set([eventType]))
 
     def _nonimplemented_methods(self):
-        """
-        Non-implemented methods.
-        """
         self.set_grab = lambda *arg: None
         self.get_grab = lambda *arg: False
 
 
 class UserEvent:
+    """
+    UserEvent object.
+    """
 
     __slots__ = ['type', 'attr']
 
@@ -387,9 +391,11 @@ class UserEvent:
 
     def __init__(self, eventType, *args, **kwargs):
         """
-        Return user event.
+        UserEvent event object.
+
         Argument includes eventType (USEREVENT+num).
         Optional attribute argument as dictionary ({str:val}) or keyword arg(s).
+        Return user event.
         """
         if len(args) > 0:
             attr = args[0]
@@ -424,21 +430,15 @@ class UserEvent:
 
 class JEvent:
     """
-    Event object wraps browser event.
+    JEvent object.
 
-    Event object attributes:
-
-    * type: MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION,
-            KEYDOWN, KEYUP, ACTIVEEVENT, QUIT
-    * button: mouse button pressed (1-5)
-    * buttons: mouse buttons pressed (1,2,3)
-    * pos: mouse position (x,y)
-    * rel: mouse relative position change (x,y)
-    * key: keycode of key pressed (K_a-K_z...)
-    * unicode: char pressed ('a'-'z'...)
-    * mod: modifier pressed (KMOD_ALT | KMOD_CTRL | KMOD_SHIFT)
-    * state: focus state (APPFOCUSMOUSE | APPINPUTFOCUS | APPACTIVE)
-    * gain: focus gain (0,1)
+    Wrapper for:
+        * MouseEvent
+        * KeyEvent
+        * MouseFocusEvent
+        * InputFocusEvent
+        * VisibilityEvent
+        * PageHide
     """
 
     __slots__ = []
@@ -464,6 +464,15 @@ class JEvent:
 
 
 class MouseEvent(JEvent):
+    """
+    MouseEvent object.
+
+    JEvent wrapper for:
+        * MouseDownEvent
+        * MouseUpEvent
+        * MouseWheelEvent
+        * MouseMoveEvent
+    """
 
     _types = {'mousemove': Const.MOUSEMOTION,
               'mousedown': Const.MOUSEBUTTONDOWN,
@@ -479,10 +488,24 @@ class MouseEvent(JEvent):
 
 
 class MouseDownEvent(MouseEvent):
+    """
+    MouseDownEvent object.
+
+    JEvent wrapper with MOUSEBUTTONDOWN event interface.
+    """
 
     __slots__ = ['type', 'button', 'pos', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: MOUSEBUTTONDOWN
+            * button: mouse button pressed (1-3)
+            * pos: mouse position (x,y)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         self.button = event.button + 1
@@ -492,10 +515,24 @@ class MouseDownEvent(MouseEvent):
 
 
 class MouseUpEvent(MouseEvent):
+    """
+    MouseUpEvent object.
+
+    JEvent wrapper with MOUSEBUTTONUP event interface.
+    """
 
     __slots__ = ['type', 'button', 'pos', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: MOUSEBUTTONUP
+            * button: mouse button pressed (1-3)
+            * pos: mouse position (x,y)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         self.button = event.button + 1
@@ -505,10 +542,24 @@ class MouseUpEvent(MouseEvent):
 
 
 class MouseWheelEvent(MouseEvent):
+    """
+    MouseWheelEvent object.
+
+    JEvent wrapper with MOUSEBUTTONDOWN event interface.
+    """
 
     __slots__ = ['type', 'button', 'pos', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: MOUSEBUTTONDOWN
+            * button: mouse button pressed (4-5)
+            * pos: mouse position (x,y)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         if event.deltaY < 0:
@@ -537,10 +588,25 @@ class _MouseWheelEvent(MouseEvent):
 
 
 class MouseMoveEvent(MouseEvent):
+    """
+    MouseMoveEvent object.
+
+    JEvent wrapper with MOUSEMOTION event interface.
+    """
 
     __slots__ = ['type', 'buttons', 'pos', 'rel', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: MOUSEMOTION
+            * buttons: mouse buttons pressed (1-3)
+            * pos: mouse position (x,y)
+            * rel: mouse relative position change (x,y)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         self.buttons = (bool(event.buttons & 1),
@@ -554,6 +620,13 @@ class MouseMoveEvent(MouseEvent):
 
 
 class KeyEvent(JEvent):
+    """
+    KeyEvent object.
+
+    JEvent wrapper for:
+        * KeyDownEvent
+        * KeyUpEvent
+    """
 
     _types = {'keydown': Const.KEYDOWN,
               'keyup': Const.KEYUP,
@@ -568,10 +641,25 @@ class KeyEvent(JEvent):
 
 
 class KeyDownEvent(KeyEvent):
+    """
+    KeyDownEvent object.
+
+    JEvent wrapper with KEYDOWN event interface.
+    """
 
     __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: KEYDOWN
+            * key: keycode of key pressed (K_a-K_z...)
+            * mod: modifier pressed (KMOD_ALT | KMOD_CTRL | KMOD_SHIFT)
+            * unicode: keycode of key pressed
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         if event.key in self._specialKey:
@@ -592,10 +680,25 @@ class KeyDownEvent(KeyEvent):
 
 
 class KeyUpEvent(KeyEvent):
+    """
+    KeyUpEvent object.
+
+    JEvent wrapper with KEYUP event interface.
+    """
 
     __slots__ = ['type', 'key', 'mod', 'unicode', 'event']
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: KEYUP
+            * key: keycode of key pressed (K_a-K_z...)
+            * mod: modifier pressed (KMOD_ALT | KMOD_CTRL | KMOD_SHIFT)
+            * unicode: keycode of key pressed
+            * event: JavaScript event
+        """
         self.event = event
         self.type = self._types[event.js_type]
         if event.key in self._specialKey:
@@ -686,12 +789,26 @@ class _KeyPressEvent(KeyEvent):
 
 
 class MouseFocusEvent(JEvent):
+    """
+    MouseFocusEvent object.
+
+    JEvent wrapper with ACTIVEEVENT event interface.
+    """
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {'mouseenter': 1, 'mouseleave': 0}
     _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: ACTIVEEVENT
+            * state: focus state (APPFOCUSMOUSE)
+            * gain: focus gain (0,1)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = Const.ACTIVEEVENT
         self.state = Const.APPFOCUSMOUSE
@@ -699,12 +816,26 @@ class MouseFocusEvent(JEvent):
 
 
 class InputFocusEvent(JEvent):
+    """
+    InputFocusEvent object.
+
+    JEvent wrapper with ACTIVEEVENT event interface.
+    """
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {'focus': 1, 'blur': 0}
     _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: ACTIVEEVENT
+            * state: focus state (APPINPUTFOCUS)
+            * gain: focus gain (0,1)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = Const.ACTIVEEVENT
         self.state = Const.APPINPUTFOCUS
@@ -712,12 +843,26 @@ class InputFocusEvent(JEvent):
 
 
 class VisibilityEvent(JEvent):
+    """
+    VisibilityEvent object.
+
+    JEvent wrapper with ACTIVEEVENT event interface.
+    """
 
     __slots__ = ['type', 'state', 'gain', 'event']
     _gain = {True: 1, False: 0}
     _eventName = {Const.ACTIVEEVENT: 'ActiveEvent'}
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: ACTIVEEVENT
+            * state: focus state (APPACTIVE)
+            * gain: focus gain (0,1)
+            * event: JavaScript event
+        """
         self.event = event
         self.type = Const.ACTIVEEVENT
         self.state = Const.APPACTIVE
@@ -725,36 +870,49 @@ class VisibilityEvent(JEvent):
 
 
 class PageHide(JEvent):
+    """
+    PageHide object.
+
+    JEvent wrapper with QUIT event interface.
+    """
 
     __slots__ = ['type', 'event']
     _eventName = {Const.QUIT: 'Quit'}
 
     def __init__(self, event):
+        """
+        Initialize event.
+
+        Attributes:
+            * type: QUIT
+            * event: JavaScript event
+        """
         self.event = event
         self.type = Const.QUIT
 
 
 class TouchListener:
     """
-    **event.touchlistener**
+    TouchListener object.
 
-    * event.touchlistener.add_callback
-    * event.touchlistener.is_active
+        * The event.touches attribute is a list of touch objects.
+        * Use len(touches) for touch count and touches.item(<index>) to retrieve touch object.
+        * The touch attribute touch.clientX/touch.clientY provides touch position.
+        * Position offset checked by display getAbsoluteLeft/getAbsoluteTop/getScrollLeft/getScrollTop.
+        * Browser triggers delayed mousedown/mouseup event after touchstart/touchend event.
+
+    Refer to touch event api documentation:
+        * https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent.
+
+    Module initialization creates event.touchlistener instance.
     """
 
     def __init__(self, canvas):
         """
-        Touch event listener.
+        Initialize touch event listener.
 
-        Refer to touch event api documentation:
-          https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent.
-        Notes:
-          The event.touches attribute is a list of touch objects.
-          Use len(touches) for touch count and touches.item(<index>) to retrieve touch object.
-          The touch attribute touch.clientX/touch.clientY provides touch position.
-          Position offset checked by display getAbsoluteLeft/getAbsoluteTop/getScrollLeft/getScrollTop.
-          Browser triggers delayed mousedown/mouseup event after touchstart/touchend event.
-        Module initialization creates pyjsdl.event.touchlistener instance.
+        Add touchstart listener to detect initial touch.
+        The event.touchlistener has been instantiated on Canvas.
         """
         global _canvas
         _canvas = canvas
@@ -764,6 +922,12 @@ class TouchListener:
         self.callback = []
 
     def activate(self):
+        """
+        Touch event listeners activated.
+
+        Activation of touch events touchstart, touchend, touchmove and touchcancel.
+        The event.touchlistener activated on Canvas when initial touch detected.
+        """
         self.element.removeEventListener('touchstart', _touch_detect)
         self.element.addEventListener('touchstart', _touch_start)
         self.element.addEventListener('touchend', _touch_end)
@@ -774,8 +938,9 @@ class TouchListener:
     def add_callback(self, callback):
         """
         Add callback object to receive touch events.
-        The callback should have methods onTouchStart, onTouchEnd, onTouchMove, and onTouchCancel.
-        Optional callback method onTouchInitiate used to report initial touch event detection.
+
+        Callback requires methods onTouchStart, onTouchEnd, onTouchMove, and onTouchCancel.
+        Optional callback method onTouchInitiate to report initial touch event detection.
         Callback methods will be called with an event argument.
         """
         self.callback.append(callback)

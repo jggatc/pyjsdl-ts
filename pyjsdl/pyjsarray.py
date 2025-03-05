@@ -1,6 +1,10 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+"""
+**Pyjsarray - Numeric module**
+"""
+
 from math import ceil as _ceil, floor as _floor, sqrt as _sqrt
 from math import log as _log, sin as _sin, cos as _cos, pi as _pi
 from random import random as _random, randint as _randint
@@ -96,6 +100,9 @@ def Float64Array(*args):
 
 
 class Ndarray:
+    """
+    Ndarray object.
+    """
 
     _typedarray = {'uint8c':  window.Uint8ClampedArray,
                    'int8':    window.Int8Array,
@@ -122,6 +129,7 @@ class Ndarray:
     def __init__(self, dim, dtype='float64'):
         """
         Generate an N-dimensional array of TypedArray data.
+
         Argument can be size (int or tuple) or data (list or TypedArray).
         Optional argument dtype specifies TypedArray data type:
                 'uint8c'    Uint8ClampedArray
@@ -177,6 +185,7 @@ class Ndarray:
     def setshape(self, *dim):
         """
         Set shape of array.
+
         Argument is new shape.
         Raises TypeError if shape is not appropriate.
         """
@@ -932,6 +941,9 @@ class Ndarray:
 
     def matmul(self, other):
         """
+        Matrix multiplication.
+
+        Argument is an int or array.
         Return matrix multiplied array.
         """
         return self.__matmul__(other)
@@ -1158,6 +1170,7 @@ class Ndarray:
     def reshape(self, dim):
         """
         Return view of array with new shape.
+
         Argument is new shape.
         Raises TypeError if shape is not appropriate.
         """
@@ -1182,6 +1195,7 @@ class Ndarray:
     def set(self, data):
         """
         Set array elements.
+
         Data argument can be a 1d/2d array or number used to set Ndarray elements, data used repetitively if consists of fewer elements than Ndarray.
         """
         if isinstance(data, (list,tuple)):
@@ -1238,6 +1252,7 @@ class Ndarray:
     def astype(self, dtype):
         """
         Return copy of array.
+
         Argument dtype is TypedArray data type.
         """
         array = __new__(self._typedarray[self._dtypes[dtype]](self._data))
@@ -1259,6 +1274,7 @@ class Ndarray:
     def swapaxes(self, axis1, axis2):
         """
         Swap axes of array.
+
         Arguments are the axis to swap.
         Return view of array with axes changed.
         """
@@ -1304,6 +1320,9 @@ array = Ndarray
 
 
 class NP:
+    """
+    NP object.
+    """
 
     def __init__(self):
         self.uint8c = 'uint8c'
@@ -1319,8 +1338,9 @@ class NP:
 
     def array(self, obj, dtype=None):
         """
-        Return Ndarray from an obj iterable. If optional dtype is not provided,
-        an an appropriate array will be inferred.
+        Return Ndarray from an obj iterable.
+
+        If optional dtype is not provided, an an appropriate array will be inferred.
         """
         if dtype is None:
             dtype = self._get_dtype(obj)
@@ -1343,8 +1363,9 @@ class NP:
     # __pragma__ ('kwargs')
     def arange(self, start=0, stop=None, step=None, dtype=None):
         """
-        Return Ndarray in range start to stop in step interval. If optional
-        dtype is not provided, an an appropriate array will be inferred.
+        Return Ndarray in range start to stop in step interval.
+
+        If optional dtype is not provided, an an appropriate array will be inferred.
         """
         if stop is None:
             stop = start
@@ -1435,6 +1456,7 @@ class Random:
     def normal(self, mu, sigma, size=None):
         """
         Sample from gaussian distribution of mean mu and standard deviation sigma.
+
         Return as an array defined by size or a single value if None.
         """
         if size is None:
@@ -1459,6 +1481,7 @@ class Random:
     def random(self, size=None):
         """
         Sample from random values between 0.0 and 1.0.
+
         Return as an array defined by size or a single value if None.
         """
         if size is None:
@@ -1473,6 +1496,7 @@ class Random:
     def randint(self, low, high=None, size=None, dtype='int32'):
         """
         Sample from random integers between low and high.
+
         If high is None, values will be 0 to low.
         Return as an array defined by size or a single value if None.
         """
@@ -1494,6 +1518,7 @@ class Random:
     def choice(self, seq, size=None):
         """
         Sample from random values from seq iterable.
+
         If seq is an int, then values from range(seq).
         Return as an array defined by size or a single value if None.
         """
@@ -1534,6 +1559,7 @@ class Random:
     def permutation(self, seq):
         """
         Return array with permutated values from seq iterable.
+
         If seq is an int, then values from range(seq).
         """
         if Number.isInteger(seq):
@@ -1557,6 +1583,7 @@ class ImageData:
     def __init__(self, imagedata):
         """
         Provides an interface to canvas ImageData.
+
         The argument required is the ImageData instance to be accessed.
         """
         self._imagedata = imagedata
@@ -1576,6 +1603,7 @@ class ImageMatrix(Ndarray):
     def __init__(self, imagedata):
         """
         Provides an interface to canvas ImageData as an Ndarray array.
+
         The argument required is the ImageData instance to be accessed.
         """
         self._imagedata = ImageData(imagedata)
@@ -1597,6 +1625,7 @@ class ImageMatrix(Ndarray):
     def getPixel(self, index):
         """
         Get pixel RGBA.
+
         The index argument references the 2D array element.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1605,6 +1634,7 @@ class ImageMatrix(Ndarray):
     def setPixel(self, index, value):
         """
         Set pixel RGBA.
+
         The arguments index references the 2D array element and value is pixel RGBA.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1614,6 +1644,7 @@ class ImageMatrix(Ndarray):
     def getPixelRGB(self, index):
         """
         Get pixel RGB.
+
         The index argument references the 2D array element.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1622,6 +1653,7 @@ class ImageMatrix(Ndarray):
     def setPixelRGB(self, index, value):
         """
         Set pixel RGB.
+
         The arguments index references the 2D array element and value is pixel RGB.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1631,6 +1663,7 @@ class ImageMatrix(Ndarray):
     def getPixelAlpha(self, index):
         """
         Get pixel alpha.
+
         The index argument references the 2D array element.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1639,6 +1672,7 @@ class ImageMatrix(Ndarray):
     def setPixelAlpha(self, index, value):
         """
         Set pixel alpha.
+
         The arguments index references the 2D array element and value is pixel alpha.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1648,6 +1682,7 @@ class ImageMatrix(Ndarray):
     def getPixelInteger(self, index):
         """
         Get pixel integer color.
+
         The index argument references the 2D array element.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1656,6 +1691,7 @@ class ImageMatrix(Ndarray):
     def setPixelInteger(self, index, value):
         """
         Set pixel integer color.
+
         The arguments index references the 2D array element and value is pixel color.
         """
         i = (index[0]*self._indices[0]) + (index[1]*4)
@@ -1670,8 +1706,9 @@ class ImageMatrix(Ndarray):
 
 
 class BitSet:
-
     """
+    BitSet object.
+
     BitSet provides a bitset object to use in a Python-to-JavaScript application. The object stores data in a JavaScript Uint8Array 8-bit typedarray. BitSet16 and BitSet32 stores data in Uint16Array (16-bit) and Uint32Array (32-bit) typedarray. The BitSet will dynamically expand to hold the bits required, an optional width argument define number of bits the BitSet instance will initially hold.
     """
 
@@ -1725,6 +1762,7 @@ class BitSet:
     def get(self, index, toIndex=None):
         """
         Get bit by index.
+
         Arguments include index of bit, and optional toIndex that return a slice as a BitSet.
         """
         if index > self._width-1:
@@ -1755,6 +1793,7 @@ class BitSet:
     def set(self, index, value=1):
         """
         Set bit by index.
+
         Optional argument value is the bit state of 1(True) or 0(False). Default:1
         """
         if index > self._width-1:
@@ -1770,7 +1809,9 @@ class BitSet:
 
     def fill(self, index=None, toIndex=None):
         """
-        Set the bit. If no argument provided, all bits are set.
+        Set the bit.
+
+        If no argument provided, all bits are set.
         Optional argument index is bit index to set, and toIndex to set a range of bits.
         """
         if index is None and toIndex is None:
@@ -1785,7 +1826,9 @@ class BitSet:
 
     def clear(self, index=None, toIndex=None):
         """
-        Clear the bit. If no argument provided, all bits are cleared.
+        Clear the bit.
+
+        If no argument provided, all bits are cleared.
         Optional argument index is bit index to clear, and toIndex to clear a range of bits.
         """
         if index is None:
@@ -1805,6 +1848,7 @@ class BitSet:
     def flip(self, index, toIndex=None):
         """
         Flip the state of the bit.
+
         Argument index is the bit index to flip, and toIndex to flip a range of bits.
         """
         if toIndex is None:
@@ -1833,6 +1877,7 @@ class BitSet:
     def intersects(self, bitset):
         """
         Check if set bits in this BitSet are also set in the bitset argument.
+
         Return True if bitsets intersect, otherwise return False.
         """
         for dat in range(len(bitset._data)):
@@ -1893,6 +1938,7 @@ class BitSet:
     def isEmpty(self):
         """
         Check whether any bit is set.
+
         Return True if none set, otherwise return False.
         """
         for data in self._data:
@@ -1918,6 +1964,7 @@ class BitSet16(BitSet):
     """
     BitSet using Uint16Array typedarray.
     """
+
     _bit = 16
     _bitmask = None
     _typedarray = window.Uint16Array
@@ -1930,6 +1977,7 @@ class BitSet32(BitSet):
     """
     BitSet using Uint32Array typedarray.
     """
+
     _bit = 32
     _bitmask = None
     _typedarray = window.Uint32Array

@@ -1,13 +1,19 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
+"""
+**Vector module**
+
+The module provides vector object functionality.
+"""
+
 from math import sin, cos, atan2, pi, floor
 from pyjsdl.pyjsobj import hasattr_v2 as hasattr
 
 
 class Vector2:
     """
-    Vector2 - 2-dimensional vector.
+    Vector2 object.
 
     Operator and index functionality requires __pragma__ ('opov').
     """

@@ -1,32 +1,41 @@
 #Pyjsdl - Copyright (C) 2021 James Garnon <https://gatc.ca/>
 #Released under the MIT License <https://opensource.org/licenses/MIT>
 
-__docformat__ = 'restructuredtext'
+"""
+**Color module**
+
+The module provides a color object.
+"""
 
 
 class Color:
+    """
+    Color object.
+    """
 
     # __pragma__ ('opov')
 
     def __init__(self, *color):
         """
-        Return Color object.
-        
+        Initialize Color object.
+
         Alternative arguments:
-        
+
         * r,g,b,a
         * r,g,b
         * (r,g,b,a)
         * (r,g,b)
         * integer argb
+        * html string '#rrggbb[aa]'
+        * hex string '0xrrggbb[aa]'
         * Color
 
         Color has the attributes::
-        
+
             r, g, b, a
 
         Operator and index functionality requires __pragma__ ('opov').
-        Module initialization places pyjsdl.Color in module's namespace.
+        Module initialization places Color in module's namespace.
         """
         ln = len(color)
         if ln == 1:
