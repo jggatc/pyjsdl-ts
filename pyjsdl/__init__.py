@@ -43,7 +43,10 @@ from pyjsdl import transform
 from pyjsdl import surface
 from pyjsdl import surfarray
 from pyjsdl import mask
+from pyjsdl import rect
+from pyjsdl import color
 from pyjsdl import font
+from pyjsdl import vector
 from pyjsdl import sprite
 from pyjsdl import cursors
 from pyjsdl import version
@@ -53,7 +56,7 @@ from pyjsdl.constants import *
 __docformat__ = 'restructuredtext'
 
 
-time = display = image = event = key = mouse = mixer = None
+time = display = image = event = key = mouse = mixer = math = None
 
 _initialized = False
 
@@ -61,7 +64,7 @@ def init():
     """
     Initialize module.
     """
-    global time, display, image, event, key, mouse, mixer, _initialized
+    global time, display, image, event, key, mouse, mixer, math, _initialized
     if _initialized:
         return
     else:
@@ -74,6 +77,7 @@ def init():
     mixer = Mixer()
     mouse = Mouse()
     key = Key()
+    math = vector
     version.set_ver(__version__)
 
 init()
