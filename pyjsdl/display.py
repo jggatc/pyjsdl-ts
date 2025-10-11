@@ -13,8 +13,9 @@ from pyjsdl.time import Time
 from pyjsdl import env
 from pyjsdl import constants as Const
 from pyjsdl.pyjsobj import RootPanel, VerticalPanel, TextBox, TextArea
-from pyjsdl.pyjsobj import requestAnimationFrameInit, loadImages, Event
+from pyjsdl.pyjsobj import requestAnimationFrameInit, Event
 from pyjsdl import pyjsobj
+import pyjsdl
 
 
 _canvas = None
@@ -36,8 +37,6 @@ class Canvas(Surface):
             self.surface = Surface(size)
         else:
             self.surface = self
-        self.images = {}
-        self.image_list = []
         self.callback = None
         self.time = Time()
         self.event = env.event
@@ -259,34 +258,6 @@ class Canvas(Surface):
         else:
             self.callback = cb
 
-    def load_images(self, images):
-        if len(images) > 0:
-            image_list = []
-            for image in images:
-                if isinstance(image, str):
-                    image_list.append(image)
-                    self.image_list.append(image)
-                else:
-                    name = image[0]
-                    if isinstance(image[1], str):
-                        data = image[1]
-                    else:
-                        raise TypeError('provide image in base64-encoded data')
-                    if not data.startswith('data:'):
-                        ext = name.strip().split('.').reverse()[0]
-                        data = 'data:{};base64,{}'.format(ext, data)
-                        #data:[<mediatype>][;base64],<data>
-                    image_list.append(data)
-                    self.image_list.append(name)
-            loadImages(image_list, self)
-        else:
-            self.start()
-
-    def onImagesLoaded(self, images):
-        for i, image in enumerate(self.image_list):
-            self.images[image] = images[i]
-        self.start()
-
     def start(self):
         if not self.initialized:
             self.initialized = True
@@ -342,6 +313,32 @@ class Callback:
         self.run = cb
 
 
+class CallbackAF:
+
+    def __init__(self):
+        self.callback = None
+        self.wnd = requestAnimationFrameInit()
+        self.running = False
+        self.start()
+
+    def run(self):
+        if self.running:
+            self.wnd.requestAnimationFrame(self.run)
+            if self.callback:
+                self.callback()
+
+    def start(self):
+        if not self.running:
+            self.wnd.requestAnimationFrame(self.run)
+            self.running = True
+
+    def stop(self):
+        self.running = False
+
+    def set_callback(self, cb):
+        self.callback = cb
+
+
 class Display:
     """
     Display object.
@@ -362,9 +359,13 @@ class Display:
         """
         if not self._initialized:
             self.id = ''
-            self.canvas = None
             self.icon = None
+            self.canvas = None
+            self._callback = None
             self._image_list = []
+            self._image_loading = False
+            self._canvas_init = False
+            self._callbackAF = CallbackAF()
             self._initialized = True
 
     def set_mode(self, size, buffered=True, *args, **kwargs):
@@ -392,6 +393,11 @@ class Display:
         if not self.canvas._bufferedimage:
             self.flip = lambda: None
             self.update = lambda *arg: None
+        if self._canvas_init and not self._image_loading:
+            self.canvas.set_callback(self._callback)
+            self._callback = None
+            self.canvas.start()
+            self._callbackAF.stop()
         return self.surface
 
     def setup(self, callback, images=None):
@@ -402,14 +408,28 @@ class Display:
         Callback function can also be an object with a run method to call.
         The images can be image URL, or base64 data in format (name.ext,data).
         """
-        self.canvas.set_callback(callback)
-        image_list = []
-        if len(self._image_list) > 0:
-            image_list.extend(self._image_list)
-            self._image_list[:] = []
-        if len(images) > 0:
-            image_list.extend(images)
-        self.canvas.load_images(image_list)
+        if not self._canvas_init:
+            if images is not None:
+                self._image_list.extend(images)
+            if len(self._image_list) > 0:
+                pyjsdl.image.preload_images(self._image_list, self._images_loaded)
+                self._image_list = None
+                self._image_loading = True
+            self._canvas_init = True
+        if self.canvas:
+            if not self._image_loading:
+                self.canvas.set_callback(callback)
+                if not self.canvas.initialized:
+                    self.canvas.start()
+                    self._callbackAF.stop()
+            else:
+                self._callback = callback
+        else:
+            if not self._image_loading:
+                self._callback = callback
+                self._callbackAF.set_callback(self._callback)
+            else:
+                self._callback = callback
 
     def set_callback(self, callback):
         """
@@ -418,7 +438,7 @@ class Display:
         Argument callback function to run.
         Callback function can also be an object with a run method to call.
         """
-        if self.canvas.initialized:
+        if self.canvas and self.canvas.initialized:
             self.canvas.set_callback(callback)
         else:
             self.setup(callback)
@@ -433,6 +453,16 @@ class Display:
         if isinstance(images, str):
             images = [images]
         self._image_list.extend(images)
+
+    def _images_loaded(self):
+        self._image_loading = False
+        if self.canvas:
+            self.canvas.set_callback(self._callback)
+            self._callback = None
+            self.canvas.start()
+            self._callbackAF.stop()
+        else:
+            self._callbackAF.set_callback(self._callback)
 
     def textbox_init(self):
         """
