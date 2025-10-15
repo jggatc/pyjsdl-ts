@@ -26,17 +26,10 @@ _wnd = None
 
 class Canvas(Surface):
 
-    def __init__(self, size, buffered):
+    def __init__(self, size):
         Surface.__init__(self, size)
         self.setID('__canvas__')
-        if isinstance(buffered, bool):
-            self._bufferedimage = buffered
-        else:
-            self._bufferedimage = True
-        if self._bufferedimage:
-            self.surface = Surface(size)
-        else:
-            self.surface = self
+        self.surface = Surface(size)
         self.callback = None
         self.time = Time()
         self.event = env.event
@@ -248,8 +241,7 @@ class Canvas(Surface):
 
     def resize(self, width, height):
         Surface.resize(self, width, height)
-        if self._bufferedimage:
-            self.surface.resize(width, height)
+        self.surface.resize(width, height)
         self.surface._display._surface_rect = self.surface.get_rect()
 
     def set_callback(self, cb):
@@ -368,14 +360,14 @@ class Display:
             self._callbackAF = CallbackAF()
             self._initialized = True
 
-    def set_mode(self, size, buffered=True, *args, **kwargs):
+    def set_mode(self, size, flags=None, *args, **kwargs):
         """
         Setup the display Surface.
 
-        Argument include size (width, height) of surface and optional buffered surface.
+        Argument size (width, height) of surface.
         Return a reference to the display Surface.
         """
-        self.canvas = Canvas(size, buffered)
+        self.canvas = Canvas(size)
         env.set_env('canvas', self.canvas)
         self.frame = document.body
         env.set_env('frame', self.frame)
@@ -390,9 +382,6 @@ class Display:
         self.surface = self.canvas.surface
         self.surface._display = self
         self._surface_rect = self.surface.get_rect()
-        if not self.canvas._bufferedimage:
-            self.flip = lambda: None
-            self.update = lambda *arg: None
         if self._canvas_init and not self._image_loading:
             self.canvas.set_callback(self._callback)
             self._callback = None
