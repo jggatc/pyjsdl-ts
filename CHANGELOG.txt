@@ -4,6 +4,7 @@
 -revise surface methods for vector arg.
 -add display resize method.
 -revise canvas initialization.
+-add surface clear_rect method.
 
 0.27    2025-01-18
 -revise to permit import in python.

@@ -11,6 +11,7 @@ from pyjsdl.pyjsobj import HTML5Canvas
 from pyjsdl.rect import Rect, rectPool
 from pyjsdl.color import Color
 from pyjsdl.pyjsobj import hasattr_v1 as hasattr
+from pyjsdl import env
 
 
 _return_rect = True
@@ -261,6 +262,22 @@ class Surface(HTML5Canvas):
                           r.x, r.y, r.width, r.height,
                           r.x, r.y, r.width, r.height)
         ctx.globalAlpha = 1.0
+
+    def clear_rect(self, rect=None):
+        """
+        Clear surface with transparency.
+
+        Optional rect to specify region to clear.
+        """
+        if rect is None:
+            self._ctx.clearRect(0, 0, self.width, self.height)
+            if self._display:
+                env.canvas._ctx.clearRect(0, 0, self.width, self.height)
+        else:
+            self._ctx.clearRect(rect[0], rect[1], rect[2], rect[3])    # __:opov
+            if self._display:
+                env.canvas._ctx.clearRect(rect[0], rect[1], rect[2], rect[3])    # __:opov
+        return None
 
     def set_alpha(self, alpha):
         """
