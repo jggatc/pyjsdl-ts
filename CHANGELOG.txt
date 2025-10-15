@@ -5,6 +5,7 @@
 -add display resize method.
 -revise canvas initialization.
 -add surface clear_rect method.
+-revise surface initialization.
 
 0.27    2025-01-18
 -revise to permit import in python.

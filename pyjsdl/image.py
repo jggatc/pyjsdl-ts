@@ -10,6 +10,7 @@ The module provides function to load images and convert them to surface objects.
 from pyjsdl.pylib import os
 from pyjsdl.surface import Surface, Surf
 from pyjsdl.pyjsobj import loadImages
+from pyjsdl import constants as Const
 from pyjsdl import env
 import pyjsdl
 
@@ -56,7 +57,7 @@ class Image:
         """
         Return the image as a Surface.
         """
-        surface = Surface((image.width,image.height))
+        surface = Surface((image.width,image.height), Const.SRCALPHA)
         surface.drawImage(image, 0, 0)
         return surface
 

@@ -11,6 +11,7 @@ from math import ceil as _ceil
 from pyjsdl.surface import Surface
 from pyjsdl.color import Color
 from pyjsdl.pyjsobj import HTML5Canvas
+from pyjsdl import constants as Const
 
 
 _initialized = False
@@ -205,7 +206,7 @@ Example of font file declaration:
         """
         if not surface:
             w,h = self.size(text)
-            surf = Surface((w,h))
+            surf = Surface((w,h), Const.SRCALPHA)
         else:
             surf = surface
             w,h = surface.width, surface.height

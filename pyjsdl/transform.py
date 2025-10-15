@@ -11,6 +11,7 @@ from math import pi as _pi, sin as _sin, cos as _cos, ceil as _ceil
 from pyjsdl.pyjsobj import fabs as _fabs
 from pyjsdl.pylib import int
 from pyjsdl.surface import Surface
+from pyjsdl import constants as Const
 
 
 _deg_rad = _pi/180.0
@@ -29,7 +30,7 @@ def rotate(surface, angle):
     sin_theta = _fabs(_sin(theta))
     width_f = int((width_i * cos_theta) + (height_i * sin_theta))
     height_f = int((width_i * sin_theta) + (height_i * cos_theta))
-    surf = Surface((width_f, height_f))
+    surf = Surface((width_f, height_f), Const.SRCALPHA)
     surf.saveContext()
     surf.translate(width_f/2.0, height_f/2.0)
     surf.rotate(-theta)
@@ -59,7 +60,7 @@ def rotozoom(surface, angle, size):
     height_f = int(_ceil((width_i * sin_theta) + (height_i * cos_theta)))
     if height_f % 2:
         height_f += 1
-    surf = Surface((width_f, height_f))
+    surf = Surface((width_f, height_f), Const.SRCALPHA)
     surf.saveContext()
     surf.translate(width_f/2.0, height_f/2.0)
     surf.rotate(-theta)
@@ -79,7 +80,7 @@ def scale(surface, size, dest=None):
     An optional destination surface can be provided.
     """
     if not dest:
-        surf = Surface(size)
+        surf = Surface(size, Const.SRCALPHA)
     else:
         surf = dest
     surf.drawImage(surface.canvas,
@@ -115,7 +116,7 @@ def flip(surface, xbool=True, ybool=False):
     """
     Return Surface that is flipped horizontally, vertically, or both.
     """
-    surf = Surface((surface.width, surface.height))
+    surf = Surface((surface.width, surface.height), Const.SRCALPHA)
     surf.saveContext()
     if xbool and ybool:
         surf.translate(surface.width, surface.height)
