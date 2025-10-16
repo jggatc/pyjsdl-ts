@@ -96,6 +96,7 @@ class Canvas(Surface):
         self.event.mouseEvt['pos'] = event
         self.event.mouseEvt['pre'] = event
         self.event.mouseEvt['rel'] = event
+        self.event._updateQueue(self.evt['mousefocus'](event))
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseLeave(self, event):
@@ -106,6 +107,7 @@ class Canvas(Surface):
         for keycode in self.modKeyCode:
             if self.event.keyPress[keycode]:
                 self.event.keyPress[keycode] = False
+        self.event._updateQueue(self.evt['mousefocus'](event))
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseWheel(self, event):
