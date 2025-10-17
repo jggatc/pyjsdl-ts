@@ -33,7 +33,7 @@ class Event:
         self.queue = []
         self.queueNil = []
         self.queueTmp = []
-        self.mouseEvt = {'pos':None, 'pre':None, 'rel':None}
+        self.mouseEvt = {'pos':None, 'pre':None, 'rel':None, 'focus':False}
         self.mousePress = {0:False, 1:False, 2:False}
         self.keyPress = {Const.K_ALT: False,
                          Const.K_CTRL: False,
@@ -370,6 +370,12 @@ class Event:
             self._append(event)
         self._unlock()
         return None
+
+    def _set_mouse_event(self, canvas):
+        event = _Evt(canvas)
+        self.mouseEvt['pos'] = event
+        self.mouseEvt['pre'] = event
+        self.mouseEvt['rel'] = event
 
     def _set_key_event(self):
         self.eventObj['keydown'] = _KeyDownEvent
@@ -947,6 +953,14 @@ class PageHide(JEvent):
         """
         self.event = event
         self.type = Const.QUIT
+
+
+class _Evt:
+
+    def __init__(self, canvas):
+        clientRect = canvas.getBoundingClientRect()
+        self.clientX = round(clientRect.left) - 1
+        self.clientY = round(clientRect.top) - 1
 
 
 class TouchListener:

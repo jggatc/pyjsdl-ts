@@ -40,27 +40,19 @@ class Mouse:
     def get_pos(self):
         """
         Return x,y of mouse pointer.
-
-        If the pointer is not in canvas, returns -1,-1
         """
-        if self.mouseEvt['pos']:
-            r = env.canvas.getBoundingClientRect()
-            return (self.mouseEvt['pos'].clientX - round(r.left),
-                    self.mouseEvt['pos'].clientY - round(r.top))
-        else:
-            return (-1, -1)
+        r = env.canvas.getBoundingClientRect()
+        return (self.mouseEvt['pos'].clientX - round(r.left),
+                self.mouseEvt['pos'].clientY - round(r.top))
 
     def get_rel(self):
         """
         Return relative x,y change of mouse position since last call.
         """
-        if self.mouseEvt['pos']:
-            rel = (self.mouseEvt['pos'].clientX - self.mouseEvt['rel'].clientX,
-                   self.mouseEvt['pos'].clientY - self.mouseEvt['rel'].clientY)
-            self.mouseEvt['rel'] = self.mouseEvt['pos']
-            return rel
-        else:
-            return (0, 0)
+        rel = (self.mouseEvt['pos'].clientX - self.mouseEvt['rel'].clientX,
+               self.mouseEvt['pos'].clientY - self.mouseEvt['rel'].clientY)
+        self.mouseEvt['rel'] = self.mouseEvt['pos']
+        return rel
 
     def set_visible(self, visible):
         """
@@ -83,7 +75,7 @@ class Mouse:
         """
         Check if mouse has focus.
         """
-        return self.mouseEvt['pos'] != None
+        return self.mouseEvt['focus']
 
     def set_cursor(self, *cursor):
         """

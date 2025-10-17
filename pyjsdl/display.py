@@ -65,16 +65,19 @@ class Canvas(Surface):
         self._frametime = 0
         self._rendertime = self.time.time()
         self._pause = False
-        self._canvas_init()
         self.run = None
         self.initialized = False
 
-    def _canvas_init(self):
+    def _initiate(self):
         global _canvas, _ctx, _img, _wnd
+        panel = RootPanel()
+        panel.add(self)
         _canvas = self
         _ctx = self._ctx
         _img = self.surface.canvas
         _wnd = requestAnimationFrameInit()
+        self.event._set_mouse_event(self)
+        return panel
 
     def onMouseMove(self, event):
         self.event.mouseEvt['pre'] = self.event.mouseEvt['pos']
@@ -100,7 +103,6 @@ class Canvas(Surface):
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onMouseLeave(self, event):
-        self.event.mouseEvt['pos'] = None
         self.event.mousePress[0] = False
         self.event.mousePress[1] = False
         self.event.mousePress[2] = False
@@ -171,9 +173,11 @@ class Canvas(Surface):
         event.preventDefault()
 
     def onFocus(self, event):
+        self.event.mouseEvt['focus'] = True
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onBlur(self, event):
+        self.event.mouseEvt['focus'] = False
         self.event._updateQueue(self.evt[event.js_type](event))
 
     def onVisibilityChange(self, event):
@@ -373,9 +377,7 @@ class Display:
         env.set_env('canvas', self.canvas)
         self.frame = document.body
         env.set_env('frame', self.frame)
-        panel = RootPanel()
-        panel.add(self.canvas)
-        self.panel = panel
+        self.panel = self.canvas._initiate()
         self.vpanel = None
         self.textbox = None
         self.textarea = None

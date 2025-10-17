@@ -7,6 +7,7 @@
 -add surface clear_rect method.
 -revise surface initialization.
 -add canvas enter/leave events.
+-revise mouse position methods.
 
 0.27    2025-01-18
 -revise to permit import in python.
