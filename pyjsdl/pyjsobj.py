@@ -142,7 +142,6 @@ class Element:
 
 
 class FocusElement(Element):
-
     _event_type = None
 
     def __init__(self):
@@ -156,12 +155,14 @@ class FocusElement(Element):
         element.addEventListener('mouseup', self.onMouseUp)
         element.addEventListener('mouseenter', self.onMouseEnter)
         element.addEventListener('mouseleave', self.onMouseLeave)
-        if hasattr(element, 'onwheel'):
-            element.addEventListener('wheel', self.onMouseWheel)
-        elif hasattr(element, 'onmousewheel'):
-            element.addEventListener('mousewheel', self.onMouseWheel)
+        if hasattr(document, 'onwheel') or window.WheelEvent:
+            mouseevent = 'wheel'
+        elif hasattr(document, 'onmousewheel'):
+            mouseevent = 'mousewheel'
         else:
-            element.addEventListener('DOMMouseScroll', self.onMouseWheel)
+            mouseevent = 'DOMMouseScroll'
+        listener = self.onMouseWheel
+        __pragma__ ('js', {}, "element.addEventListener(mouseevent, listener, {passive: false});")
 
     def addKeyboardListener(self, obj):
         element = obj.getElement()
