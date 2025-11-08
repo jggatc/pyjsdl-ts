@@ -38,6 +38,8 @@ class Canvas(Surface):
         self.addFocusListener(self)
         self.addVisibilityChangeListener()
         self.addPageHideListener()
+        self.addResizeListener()
+        self.addScrollListener()
         self.sinkEvents(Event.ONMOUSEDOWN |
                         Event.ONMOUSEUP |
                         Event.ONMOUSEMOVE |
@@ -58,6 +60,8 @@ class Canvas(Surface):
         self.keyHeld = self.event.keyHeld
         self.event._initiate_touch_listener(self)
         self._touch_callback = self.event.touchlistener.callback
+        self._clientRect = None
+        self._clientRect_update_timeout = False
         self._rect_list = []
         self._rect_len = 0
         self._rect_num = 0
@@ -76,6 +80,7 @@ class Canvas(Surface):
         _ctx = self._ctx
         _img = self.surface.canvas
         _wnd = requestAnimationFrameInit()
+        self._clientRect_update()
         self.event._set_mouse_event(self)
         return panel
 
@@ -199,6 +204,15 @@ class Canvas(Surface):
 
     def onPageHide(self, event):
         self.event._updateQueue(self.evt[event.js_type](event))
+
+    def onPageChange(self, event):
+        if not self._clientRect_update_timeout:
+            window.setTimeout(self._clientRect_update, 20)
+            self._clientRect_update_timeout = True
+
+    def _clientRect_update(self):
+        self._clientRect = self.getBoundingClientRect()
+        self._clientRect_update_timeout = False
 
     def _isPaused(self, keycode):
         if keycode not in self.keyHeld:
@@ -525,6 +539,18 @@ class Display:
         Arguments width and height of display.
         """
         self.canvas.resize(width, height)
+
+    def clientRect_update(self, element=None):
+        """
+        Update client rect.
+
+        Refresh bounding client rect if manually change canvas positioning.
+        Optional element, such as scrollable div, to attach scroll event listener.
+        """
+        if not element:
+            self.canvas._clientRect_update()
+        else:
+            self.canvas.addDivScrollListener(element)
 
     def getAbsoluteLeft(self):
         """

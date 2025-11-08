@@ -41,9 +41,8 @@ class Mouse:
         """
         Return x,y of mouse pointer.
         """
-        r = env.canvas.getBoundingClientRect()
-        return (self.mouseEvt['pos'].clientX - round(r.left),
-                self.mouseEvt['pos'].clientY - round(r.top))
+        return (self.mouseEvt['pos'].clientX - env.canvas._clientRect.left,
+                self.mouseEvt['pos'].clientY - env.canvas._clientRect.top)
 
     def get_rel(self):
         """

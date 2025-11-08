@@ -530,9 +530,9 @@ class MouseDownEvent(MouseEvent):
         self.event = event
         self.type = self._types[event.js_type]
         self.button = event.button + 1
-        r = env.canvas.getBoundingClientRect()
-        self.pos = (event.clientX - round(r.left),
-                    event.clientY - round(r.top))
+        r = env.canvas._clientRect
+        self.pos = (event.clientX - r.left,
+                    event.clientY - r.top)
 
 
 class MouseUpEvent(MouseEvent):
@@ -557,9 +557,9 @@ class MouseUpEvent(MouseEvent):
         self.event = event
         self.type = self._types[event.js_type]
         self.button = event.button + 1
-        r = env.canvas.getBoundingClientRect()
-        self.pos = (event.clientX - round(r.left),
-                    event.clientY - round(r.top))
+        r = env.canvas._clientRect
+        self.pos = (event.clientX - r.left,
+                    event.clientY - r.top)
 
 
 class MouseMoveEvent(MouseEvent):
@@ -587,9 +587,9 @@ class MouseMoveEvent(MouseEvent):
         self.buttons = (bool(event.buttons & 1),
                         bool(event.buttons & 4),
                         bool(event.buttons & 2))
-        r = env.canvas.getBoundingClientRect()
-        self.pos = (event.clientX - round(r.left),
-                    event.clientY - round(r.top))
+        r = env.canvas._clientRect
+        self.pos = (event.clientX - r.left,
+                    event.clientY - r.top)
         self.rel = (event.clientX - env.event.mouseEvt['pre'].clientX,
                     event.clientY - env.event.mouseEvt['pre'].clientY)
 
@@ -621,9 +621,9 @@ class MouseWheelDownEvent(JEvent):
             self.button = 4
         else:
             self.button = 5
-        r = env.canvas.getBoundingClientRect()
-        self.pos = (event.clientX - round(r.left),
-                    event.clientY - round(r.top))
+        r = env.canvas._clientRect
+        self.pos = (event.clientX - r.left,
+                    event.clientY - r.top)
 
 
 class MouseWheelUpEvent(JEvent):
@@ -653,9 +653,9 @@ class MouseWheelUpEvent(JEvent):
             self.button = 4
         else:
             self.button = 5
-        r = env.canvas.getBoundingClientRect()
-        self.pos = (event.clientX - round(r.left),
-                    event.clientY - round(r.top))
+        r = env.canvas._clientRect
+        self.pos = (event.clientX - r.left,
+                    event.clientY - r.top)
 
 
 class MouseWheelEvent(JEvent):
@@ -1022,9 +1022,9 @@ class PageHide(JEvent):
 class _Evt:
 
     def __init__(self, canvas):
-        clientRect = canvas.getBoundingClientRect()
-        self.clientX = round(clientRect.left) - 1
-        self.clientY = round(clientRect.top) - 1
+        clientRect = canvas._clientRect
+        self.clientX = clientRect.left - 1
+        self.clientY = clientRect.top - 1
 
 
 class TouchListener:

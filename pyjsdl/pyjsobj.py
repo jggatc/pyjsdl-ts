@@ -203,6 +203,15 @@ class FocusElement(Element):
     def addPageHideListener(self):
         window.addEventListener('pagehide', self.onPageHide)
 
+    def addResizeListener(self):
+        window.addEventListener('resize', self.onPageChange)
+
+    def addScrollListener(self):
+        window.addEventListener('scroll', self.onPageChange)
+
+    def addDivScrollListener(self, element):
+        element.addEventListener('scroll', self.onPageChange)
+
     def sinkEvents(self, events):
         self._sink_events = events
 
@@ -258,6 +267,9 @@ class FocusElement(Element):
         pass
 
     def onPageHide(self, event):
+        pass
+
+    def onPageChange(self, event):
         pass
 
     def focus(self):
