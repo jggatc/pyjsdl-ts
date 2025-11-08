@@ -205,7 +205,12 @@ class Canvas(Surface):
     def onPageHide(self, event):
         self.event._updateQueue(self.evt[event.js_type](event))
 
-    def onPageChange(self, event):
+    def onResize(self, event):
+        if not self._clientRect_update_timeout:
+            window.setTimeout(self._clientRect_update, 20)
+            self._clientRect_update_timeout = True
+
+    def onScroll(self, event):
         if not self._clientRect_update_timeout:
             window.setTimeout(self._clientRect_update, 20)
             self._clientRect_update_timeout = True
