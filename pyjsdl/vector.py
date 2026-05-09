@@ -301,12 +301,9 @@ class Vector2:
         else:
             a = 1.0
             b = 0.0
-        v = self.__class__((sx * a) + (vx * b),
-                           (sy * a) + (vy * b))
         smag = ((1.0-t) * smag) + (t * vmag)
-        v.x *= smag
-        v.y *= smag
-        return v
+        return self.__class__(((sx * a) + (vx * b)) * smag,
+                              ((sy * a) + (vy * b)) * smag)
 
     def elementwise(self):
         """
